@@ -44,17 +44,24 @@ Appendix C: To Be Determined List	6
 1.	Introduction
 
 1.1	Purpose 
-<Identify the product whose software requirements are specified in this document, including the revision or release number. 
+<The Graphical User Interface for the Dotson Lab Alaska Water Sewage Challenge acts as a way for a homeowner to interact with the Alaska Water Sewage Challenge project that is being created in Dotson Lab. The User Interface for the Dotson Lab Alaska Water Sewage Challenge is hereafter refered to as "Interface". The Dotson Lab Alaska Water Sewage Challenge is hereafter refered to as "water/wastewater system". The Interface will:
+  (a) Maintain Serial Communication and Control
+  (b) Display features
+  (c) Datalogging and Modeling
+  (d) Produce good data
+Identify the product whose software requirements are specified in this document, including the revision or release number. 
 Describe the scope of the product that is covered by this SRS, particularly if this SRS describes only part of the system 
 or a single subsystem.>
 
 1.2	Document Conventions
-<Describe any standards or typographical conventions that were followed when writing this SRS, such as fonts or 
+<
+Describe any standards or typographical conventions that were followed when writing this SRS, such as fonts or 
 highlighting that have special significance. For example, state whether priorities  for higher-level requirements are 
 assumed to be inherited by detailed requirements, or whether every requirement statement is to have its own priority.>
 
 1.3	Intended Audience and Reading Suggestions
-<Describe the different types of reader that the document is intended for, such as developers, project managers, marketing 
+<This document is for the developers and client.
+Describe the different types of reader that the document is intended for, such as developers, project managers, marketing 
 staff, users, testers, and documentation writers. Describe what the rest of this SRS contains and how it is organized. 
 Suggest a sequence for reading the document, beginning with the overview sections and proceeding through the sections 
 that are most pertinent to each reader type.>
