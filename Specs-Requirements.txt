@@ -169,8 +169,14 @@ information is not yet available.>
 
 REQ-1:	
 REQ-2:	
+REQ-3:	
+REQ-4:	
 
-4.2	System Feature 2 (and so on)
+4.2	System Feature 2
+
+4.3	System Feature 3
+
+4.4	System Feature 4
 
 5.	Other Nonfunctional Requirements
 
