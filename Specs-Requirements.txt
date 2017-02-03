@@ -149,7 +149,9 @@ class, functional hierarchy, or combinations of these, whatever makes the most l
 4.1	Serial Communication and Control
 
 4.1.1	Description and Priority
-The serial communication allows the interface running on the Raspberry Pi to communicate with the Arduino that controls the water/wastewater system. The interface will be able to control and request information from the water/wastewater system. This feature has a very high priority as without it the interface cannot operate.
+The serial communication allows the interface running on the Raspberry Pi to communicate with the Arduino that controls the 
+water/wastewater system. The interface will be able to control and request information from the water/wastewater system.
+This feature has a very high priority as without it the interface cannot operate.
 
 4.1.2	Stimulus/Response Sequences
 
