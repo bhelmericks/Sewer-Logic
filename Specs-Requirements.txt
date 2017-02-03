@@ -44,7 +44,10 @@ Appendix C: To Be Determined List	6
 1.	Introduction
 
 1.1	Purpose 
-//The Graphical User Interface for the Dotson Lab Alaska Water Sewage Challenge acts as a way for a homeowner to interact with the Alaska Water Sewage Challenge project that is being created in Dotson Lab. The User Interface for the Dotson Lab Alaska Water Sewage Challenge is hereafter refered to as "Interface". The Dotson Lab Alaska Water Sewage Challenge is hereafter refered to as "water/wastewater system". The Interface will:
+//The Graphical User Interface for the Dotson Lab Alaska Water Sewage Challenge acts as a way for a homeowner to interact with the 
+Alaska Water Sewage Challenge project that is being created in Dotson Lab. The User Interface for the Dotson Lab Alaska Water Sewage 
+Challenge is hereafter refered to as "Interface". The Dotson Lab Alaska Water Sewage Challenge is hereafter refered to as 
+"water/wastewater system". The Interface will:
   (a) Maintain Serial Communication and Control
   (b) Display features
   (c) Datalogging and Modeling
@@ -67,7 +70,10 @@ Suggest a sequence for reading the document, beginning with the overview section
 that are most pertinent to each reader type.>
 
 1.4	Product Scope
-//The Interface will connect the user to the control and monitering arduino chip in the water/wastewater system. From this arduino chip the Interface will allow a user to view water levels and flow as well as if the wastewater system needs to be emptied. The Interface will allow monitoring and data logging to users. It also acts so that users do not need to press mechanical buttons to manage the system. The data logging feature is specifically designed for research purposes of the user.
+//The Interface will connect the user to the control and monitering arduino chip in the water/wastewater system. 
+From this arduino chip the Interface will allow a user to view water levels and flow as well as if the wastewater system needs 
+to be emptied. The Interface will allow monitoring and data logging to users. It also acts so that users do not need to press 
+mechanical buttons to manage the system. The data logging feature is specifically designed for research purposes of the user.
 Provide a short description of the software being specified and its purpose, including relevant benefits, objectives, 
 and goals. Relate the software to corporate goals or business strategies. If a separate vision and scope document is 
 available, refer to it rather than duplicating its contents here.>
