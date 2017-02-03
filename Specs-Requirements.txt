@@ -1,6 +1,6 @@
 Software Specification and Requirements for
 Sewer Logic
-Version 1.0 approved
+Version 0 unapproved
 Prepared by Brandon Helmericks and Hannah Tsunemori
 University of Alaska Anchorage
 02/02/2017
