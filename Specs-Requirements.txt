@@ -9,26 +9,28 @@ Table of Contents	ii
 Revision History	ii
 1.	Introduction	1
 1.1	Purpose	1
-1.2	Document Conventions	1
-1.3	Intended Audience and Reading Suggestions	1
-1.4	Product Scope	1
-1.5	References	1
-2.	Overall Description	2
-2.1	Product Perspective	2
-2.2	Product Functions	2
-2.3	User Classes and Characteristics	2
-2.4	Operating Environment	2
-2.5	Design and Implementation Constraints	2
+1.2	Document Conventions	1                       //unknown
+1.3	Intended Audience and Reading Suggestions	1   //please proof read and correct
+1.4	Product Scope	1                               //please proof read
+1.5	References	1                                 //unknown
+2.	Overall Description	2                         //please proof read
+2.1	Product Perspective	2                         //requires technical review
+2.2	Product Functions	2                           //please proof read
+2.3	User Classes and Characteristics	2           //please proof read
+2.4	Operating Environment	2                       //requires technical review - I don't have the pi board
+2.5	Design and Implementation Constraints	2       
 2.6	User Documentation	2
 2.7	Assumptions and Dependencies	3
 3.	External Interface Requirements	3
-3.1	User Interfaces	3
-3.2	Hardware Interfaces	3
+3.1	User Interfaces	3                             //requires technical review - I don't have the touchscreen
+3.2	Hardware Interfaces	3                         //requires technical review
 3.3	Software Interfaces	3
-3.4	Communications Interfaces	3
+3.4	Communications Interfaces	3                   //unknown
 4.	System Features	4
-4.1	System Feature 1	4
-4.2	System Feature 2 (and so on)	4
+4.1	Serial Communication and Control	4
+4.2	Datalogging and Modeling	4
+4.2	Digital Display 	4
+4.2	Consulting 	4
 5.	Other Nonfunctional Requirements	4
 5.1	Performance Requirements	4
 5.2	Safety Requirements	5
@@ -51,9 +53,9 @@ Challenge is hereafter refered to as "Interface". The Dotson Lab Alaska Water Se
   (a) Maintain Serial Communication and Control
   (b) Datalogging and Modeling
   (c) Display features
-  (d) Produce good data
+  (d) Produce good data (Consulting)
   
-  //INSERT PARAGRAPH ABOUT EACH INDIVIDUAL FEATURE HERE
+  //INSERT PARAGRAPH ABOUT EACH INDIVIDUAL FEATURE HERE?
   
 Identify the product whose software requirements are specified in this document, including the revision or release number. 
 Describe the scope of the product that is covered by this SRS, particularly if this SRS describes only part of the system 
@@ -69,6 +71,11 @@ assumed to be inherited by detailed requirements, or whether every requirement s
 
 1.3	Intended Audience and Reading Suggestions
 //This document is for the developers and Dotson Lab hereaftere "the user".
+  The developers will be able to determine how to meet the requirements from this document. The user will be able to determine
+  what to expect they can do with this product and how it works to meet their needs.
+  
+  The document is orgainzed in the following order: introductory infomrmation, product creation, external interactions, product
+  features, and non-functional requirements.
 
   //What is most useful for us developers to refer back to? For the user?
   
@@ -83,11 +90,6 @@ From this arduino chip the Interface will allow a user to view water levels and 
 to be emptied. The Interface will allow monitoring and data logging to users. It also acts so that users do not need to press 
 mechanical buttons to manage the system. The data logging feature is specifically designed for research purposes of the user.
 
-  //are there business goals?
-
-Provide a short description of the software being specified and its purpose, including relevant benefits, objectives, 
-and goals. Relate the software to corporate goals or business strategies. If a separate vision and scope document is 
-available, refer to it rather than duplicating its contents here.>
 
 1.5	References
 <
@@ -113,6 +115,18 @@ subsystem interconnections, and external interfaces can be helpful.>
 2.2	Product Functions
 <
   //Bullet list of features. I think this is in intro too.
+  (a) Maintain Serial Communication and Control
+      This is needed so that the Interface can present and store data.
+  (b) Datalogging and Modeling
+      This is a requirement for the user who may have other research uses for previous data.
+      The datalogs will be accessable through an SD card provided by the user.
+      This also will alow data to be presented in a readable format to the reader.
+  (c) Display features
+      This will allow users to interact and read the data on the touch screen device.
+      This will include determining what information to show by selecting a user type.
+  (d) Produce good data (Consulting)
+      This will be achieved through consulting for the client as the code on the Arduino the Interface reads from will
+      be corrected as needed.
 
 Summarize the major functions the product must perform or must let the user perform. Details will be provided in 
 Section 3, so only a high level summary (such as a bullet list) is needed here. Organize the functions to make them 
@@ -121,7 +135,29 @@ such as a top level data flow diagram or object class diagram, is often effectiv
 
 2.3	User Classes and Characteristics
 <
-  //there is a "homeowner" and "advanced homeowner" as well as our research group users. Most important is undefined currently.
+  //there is a "homeowner" and "advanced homeowner" as well as our research group users. Most important may need to be changed.
+  
+  There are three classes of users that will use the Interface. These users will be refered to as "basic user", "advanced user",
+  and "research user".
+  
+  Basic User Needs:
+    (1) Notification of when to empty waste
+    (2) Notification when there is a problem identified
+  Advanced User Needs:
+    (1) All Basic User Needs
+    (2) Display of all water levels measured in system
+    (3) Display of all valve positions in system
+    (4) Display of pressures measured in system
+    (5) Display of power to components
+    (6) Button sequence
+    (7) Clear annoations (?)
+  Research User Needs:
+    (1) All Basic User Needs
+    (2) Datalogging of measured data in text files
+    (3) Consulting on code written for system
+    
+  For the purposes of this document the basic user needs are of the highest importance as all other user needs include those of the
+  basic user.
 
 Identify the various user classes that you anticipate will use this product. User classes may be differentiated based 
 on frequency of use, subset of product functions used, technical expertise, security or privilege levels, educational 
@@ -140,10 +176,12 @@ versions, and any other software components or applications with which it must p
 <
   //issues include unknown code interactions, working in parallel with water/wastewater system that is still in design
   //must interact with arduino
+  //connected via cord as given
   //memory to sd card
   //NO DATABASES as per client request
+  //Server available
   //this allows client to maintain software as needed
-  //client side will need modification as per request of client
+  //client side will need modification as per request of client (consulting)
 
 Describe any items or issues that will limit the options available to the developers. These might include: corporate or 
 regulatory policies; hardware limitations (timing requirements, memory requirements); interfaces to other applications; 
@@ -154,6 +192,7 @@ organization will be responsible for maintaining the delivered software).>
 2.6	User Documentation
 <
   //user manuals?? We didn't ask if they wanted this, but probably should have
+  //comments in code
   //minimum readme files for user
 
 List the user documentation components (such as user manuals, on-line help, and tutorials) that will be delivered along 
@@ -163,6 +202,7 @@ with the software. Identify any known user documentation delivery formats or sta
 <
   //assumed time constraint on advising client per week
   //assumed the interface takes priority
+  //assumed data read in is good
 
 List any assumed factors (as opposed to known facts) that could affect the requirements stated in the SRS. These could 
 include third-party or commercial components that you plan to use, issues around the development or operating environment, 
@@ -176,7 +216,18 @@ project, unless they are already documented elsewhere (for example, in the visio
 <
   //What kind of gui? It must fit in the touchscreen, what are its demensions?
   //What kind of buttons? Should there be a help? We already know we need a "normal" and "advanced" button
-  //Graphs? of what? I should have the list but am not looking at it yet.
+  //Data needing to be displayed and modeled:
+  Under Basic User Tab:
+    (1) Notification of when to empty waste
+    (2) Notification when there is a problem identified
+  Under Advanced User Tab:
+    (1) All Basic User Needs
+    (2) Display of all water levels measured in system
+    (3) Display of all valve positions in system
+    (4) Display of pressures measured in system
+    (5) Display of power to components
+    (6) Button sequence
+    (7) Clear annoations (?)
 
 Describe the logical characteristics of each interface between the software product and the users. This may include 
 sample screen images, any GUI standards or product family style guides that are to be followed, screen layout constraints, 
@@ -187,6 +238,8 @@ design should be documented in a separate user interface specification.>
 3.2	Hardware Interfaces
 <
   //how are we communicating with the arduino? what language are we using? what languages are supported by our hardware?
+  The touchscreen device is connected to the raspberry pi board that acts as the Interface. The interface is connect by cord (ethernet?)
+  to the Arduino chip in the water/wastewater system.
 
 Describe the logical and physical characteristics of each interface between the software product and the hardware 
 components of the system. This may include the supported device types, the nature of the data and control interactions 
@@ -194,7 +247,7 @@ between the software and the hardware, and communication protocols to be used.>
 
 3.3	Software Interfaces
 <
-  //How is it interacting with the software written on the Arduino? Readonly? Read/Write? What kind of data? What is the purpose?
+  //How is it interacting with the software written on the Arduino? Read/Write? What kind of data? What is the purpose?
 
 Describe the connections between this product and other specific software components (name and version), including 
 databases, operating systems, tools, libraries, and integrated commercial components. Identify the data items or messages 
