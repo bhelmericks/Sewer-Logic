@@ -49,8 +49,8 @@ Alaska Water Sewage Challenge project that is being created in Dotson Lab. The U
 Challenge is hereafter refered to as "Interface". The Dotson Lab Alaska Water Sewage Challenge is hereafter refered to as 
 "water/wastewater system". The Interface will:
   (a) Maintain Serial Communication and Control
-  (b) Display features
-  (c) Datalogging and Modeling
+  (b) Datalogging and Modeling
+  (c) Display features
   (d) Produce good data
   
   //INSERT PARAGRAPH ABOUT EACH INDIVIDUAL FEATURE HERE
@@ -213,7 +213,10 @@ formatting. Identify any communication standards that will be used, such as FTP 
 security or encryption issues, data transfer rates, and synchronization mechanisms.>
 
 4.	System Features
-<This template illustrates organizing the functional requirements for the product by system features, the major services 
+<
+  //we can basically organize this how we want. probably by features for us.
+
+This template illustrates organizing the functional requirements for the product by system features, the major services 
 provided by the product. You may prefer to organize this section by use case, mode of operation, user class, object 
 class, functional hierarchy, or combinations of these, whatever makes the most logical sense for your product.>
 
@@ -222,7 +225,7 @@ class, functional hierarchy, or combinations of these, whatever makes the most l
 4.1.1	Description and Priority
 The serial communication allows the interface running on the Raspberry Pi to communicate with the Arduino that controls the 
 water/wastewater system. The interface will be able to control and request information from the water/wastewater system.
-This feature has a very high priority as without it the interface cannot operate.
+This feature has a high priority as without it the interface cannot operate.
 
 4.1.2	Stimulus/Response Sequences
 
@@ -245,7 +248,11 @@ REQ-2:
 <Don’t really say “System Feature 1.” State the feature name in just a few words.>
 
 4.2.1	Description and Priority
-<Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
+<
+    //I think this is also of high priority since it allows something to be displayed. 
+    //Client may not feel this is as high depending upon what they can code.
+    
+Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
 include specific priority component ratings, such as benefit, penalty, cost, and risk (each rated on a relative scale 
 from a low of 1 to a high of 9).>
 
@@ -269,7 +276,10 @@ REQ-2:
 <Don’t really say “System Feature 1.” State the feature name in just a few words.>
 
 4.3.1	Description and Priority
-<Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
+<
+  //This seems like a Medium priority as it can be done in a purely functional way or in a more "user friendly" way
+
+Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
 include specific priority component ratings, such as benefit, penalty, cost, and risk (each rated on a relative scale 
 from a low of 1 to a high of 9).>
 
@@ -293,7 +303,10 @@ REQ-2:
 <Don’t really say “System Feature 1.” State the feature name in just a few words.>
 
 4.4.1	Description and Priority
-<Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
+<
+  // this is our lowest Priority. This may even fit better under section 5, Nonfucntional Requirements.
+
+Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
 include specific priority component ratings, such as benefit, penalty, cost, and risk (each rated on a relative scale 
 from a low of 1 to a high of 9).>
 
@@ -316,7 +329,10 @@ REQ-2:
 5.	Other Nonfunctional Requirements
 
 5.1	Performance Requirements
-<If there are performance requirements for the product under various circumstances, state them here and explain their 
+<
+  //We require the data that is being read be good data
+  
+If there are performance requirements for the product under various circumstances, state them here and explain their 
 rationale, to help the developers understand the intent and make suitable design choices. Specify the timing 
 relationships for real time systems. Make such requirements as specific as possible. You may need to state performance 
 requirements for individual functional requirements or features.>
