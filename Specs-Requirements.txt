@@ -75,7 +75,7 @@ product features, and non-functional requirements.
 //What is most useful for us developers to refer back to? For the user?
 
 1.4	Product Scope
-//The Interface will connect the user to the control and monitoring Arduino in the water/wastewater system. 
+The Interface will connect the user to the control and monitoring Arduino in the water/wastewater system. 
 From this arduino chip the Interface will allow a user to view water levels and flow as well as if the water/wastewater 
 system needs to be emptied. The Interface will allow monitoring and data logging to users. It also acts so that users do not 
 need to press mechanical buttons to manage the system. The data logging feature is specifically designed for research 
@@ -118,27 +118,27 @@ a Raspberry Pi.
   //there is a "homeowner" and "advanced homeowner" as well as our research group users. Most important may need to 
   be changed.
   
-  There are three classes of users that will use the Interface. These users will be refered to as "basic user", "advanced 
-  user", and "research user".
+There are three classes of users that will use the Interface. These users will be refered to as "basic user", "advanced 
+user", and "research user".
   
-  Basic User Needs:
-    (1) Notification of when to empty waste
-    (2) Notification when there is a problem identified
-  Advanced User Needs:
-    (1) All Basic User Needs
-    (2) Display of all water levels measured in system
-    (3) Display of all valve positions in system
-    (4) Display of pressures measured in system
-    (5) Display of power to components
-    (6) Button sequence
-    (7) Clear annoations (?)
-  Research User Needs:
-    (1) All Basic User Needs
-    (2) Datalogging of measured data in text files
-    (3) Consulting on code written for system
+Basic User Needs:
+  (1) Notification of when to empty waste
+  (2) Notification when there is a problem identified
+Advanced User Needs:
+  (1) All Basic User Needs
+  (2) Display of all water levels measured in system
+  (3) Display of all valve positions in system
+  (4) Display of pressures measured in system
+  (5) Display of power to components
+  (6) Button sequence
+  (7) Clear annoations (?)
+Research User Needs:
+  (1) All Basic User Needs
+  (2) Datalogging of measured data in text files
+  (3) Consulting on code written for system
     
-  For the purposes of this document the basic user needs are of the highest importance as all other user needs include 
-  those of the basic user.
+For the purposes of this document the basic user needs are of the highest importance as all other user needs include 
+those of the basic user.
 
 2.4	Operating Environment
 
@@ -195,17 +195,17 @@ The primary user interface will be the 7" Raspberry Pi Touchscreen. The dimensio
   //What kind of gui? It must fit in the touchscreen
   //What kind of buttons? Should there be a help? We already know we need a "normal" and "advanced" button
   //Data needing to be displayed and modeled:
-  Under Basic User Tab:
-    (1) Notification of when to empty waste
-    (2) Notification when there is a problem identified
-  Under Advanced User Tab:
-    (1) All Basic User Needs
-    (2) Display of all water levels measured in system
-    (3) Display of all valve positions in system
-    (4) Display of pressures measured in system
-    (5) Display of power to components
-    (6) Button sequence
-    (7) Clear annoations (?)
+Under Basic User Tab:
+  (1) Notification of when to empty waste
+  (2) Notification when there is a problem identified
+Under Advanced User Tab:
+  (1) All Basic User Needs
+  (2) Display of all water levels measured in system
+  (3) Display of all valve positions in system
+  (4) Display of pressures measured in system
+  (5) Display of power to components
+  (6) Button sequence
+  (7) Clear annoations (?)
 
 3.2	Hardware Interfaces
 Serial connection between the Arduino and Raspberry Pi (USB?, GPIO?) used to send data/commands. Perfered code language 
