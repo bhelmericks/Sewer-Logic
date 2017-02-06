@@ -42,6 +42,9 @@ Appendix A: Glossary...............................................0
 Appendix B: Analysis Models........................................0
 Appendix C: To Be Determined List..................................0
 
+
+
+
 1.	Introduction
 
 1.1	Purpose 
@@ -80,7 +83,12 @@ purposes of the user.
 
   There are currently no references for this document.
 
+
+
+
+
 2.	Overall Description
+
 2.1	Product Perspective
 The Interface is to be used with the water/wastewater system. It is to read information from the Arduino chip that will 
 control and monitor the system on a hardware level. The interface will be constructed on a touchscreen interface attached to 
@@ -157,6 +165,10 @@ the user running on the Arduino through a serial connection.
   Therefore, consulting hours per week will be less during Interface developement.
   It is assumed data read into the Interface is correct data. Any adjustments can be taken care of in consulting.
 
+
+
+
+
 3.	External Interface Requirements
 
 3.1	User Interfaces
@@ -198,7 +210,12 @@ displayed on a 7" touchscreen display connected to the Raspberry Pi via a DSI ri
 
   There aren't any communication interfaces that we are aware of at this time.
 
+
+
+
+
 4.	System Features
+
 4.1	Serial Communication and Control
 
 4.1.1	Description and Priority
@@ -282,6 +299,10 @@ information is not yet available.>
 
 REQ-1:	
 REQ-2:
+
+
+
+
 
 5.	Other Nonfunctional Requirements
 
