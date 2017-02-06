@@ -28,7 +28,7 @@ Revision History...................................................0
 	3.4	Communications Interfaces..........................0		
 4.	System Features............................................0
 	4.1	Serial Communication and Control...................0
-	4.2	Datalogging and Modeling...........................0
+	4.2	Data logging and Modeling...........................0
 	4.2	Digital Display....................................0
 	4.2	Consulting.........................................0
 5.	Other Nonfunctional Requirements...........................0
@@ -50,10 +50,10 @@ Appendix C: To Be Determined List..................................0
 1.1	Purpose 
 The Graphical User Interface for the Dotson Lab Alaska Water Sewage Challenge acts as a way for a homeowner to interact 
 with the Alaska Water Sewage Challenge project that is being created in Dotson Lab. The User Interface for the Dotson Lab 
-Alaska Water Sewage Challenge is hereafter refered to as "Interface". The Dotson Lab Alaska Water Sewage Challenge is 
-hereafter refered to as "water/wastewater system". The Interface will:
+Alaska Water Sewage Challenge is hereafter referred to as "Interface". The Dotson Lab Alaska Water Sewage Challenge is 
+hereafter referred to as "water/wastewater system". The Interface will:
   (a) Maintain Serial Communication and Control
-  (b) Datalogging and Modeling
+  (b) Data logging and Modeling
   (c) Display features
   (d) Produce good data (Consulting)
   
@@ -67,14 +67,14 @@ This document is for the developers and Dotson Lab hereinafter referred to as "t
 The developers will be able to determine how to meet the requirements from this document. The user will be able to 
 determine what to expect they can do with this product and how it works to meet their needs.
   
-The document is orgainzed in the following order: introductory infomrmation, product creation, external interactions, 
+The document is organized in the following order: introductory information, product creation, external interactions, 
 product features, and non-functional requirements.
 
 
 1.4	Product Scope
 The Interface will connect the user to the control and monitoring Arduino in the water/wastewater system. 
-From this arduino chip the Interface will allow a user to view water levels and flow as well as if the water/wastewater 
-system needs to be emptied. The Interface will allow monitoring and data logging to users. It also acts so that users do not 
+From this Arduino chip the Interface will allow a user to view water levels and flow as well as if the water/wastewater 
+System needs to be emptied. The Interface will allow monitoring and data logging to users. It also acts so that users do not 
 need to press mechanical buttons to manage the system. The data logging feature is specifically designed for research 
 purposes of the user.
 
@@ -98,10 +98,10 @@ a Raspberry Pi.
 2.2	Product Functions
   (a) Maintain Serial Communication and Control
       This is needed so that the Interface can present and store data.
-  (b) Datalogging and Modeling
+  (b) Data logging and Modeling
       This is a requirement for the user who may have other research uses for previous data.
-      The datalogs will be accessable through an SD card provided by the user.
-      This also will alow data to be presented in a readable format to the reader.
+      The data logs will be accessible through an SD card provided by the user.
+      This also will allow data to be presented in a readable format to the reader.
   (c) Display features
       This will allow users to interact and read the data on the touch screen device.
       This will include determining what information to show by selecting a user type.
@@ -111,7 +111,7 @@ a Raspberry Pi.
 
 2.3	User Classes and Characteristics
   
-There are three classes of users that will use the Interface. These users will be refered to as "basic user", "advanced 
+There are three classes of users that will use the Interface. These users will be referred to as "basic user", "advanced 
 user", and "research user".
   
 Basic User Needs:
@@ -124,10 +124,10 @@ Advanced User Needs:
   (4) Display of pressures measured in system
   (5) Display of power to components
   (6) Button sequence
-  (7) Clear annoations (?)
+  (7) Clear annotations (?)
 Research User Needs:
   (1) All Basic User Needs
-  (2) Datalogging of measured data in text files
+  (2) Data logging of measured data in text files
   (3) Consulting on code written for system
     
 For the purposes of this document the basic user needs are of the highest importance as all other user needs include 
@@ -143,9 +143,9 @@ the user running on the Arduino through a serial connection.
 2.5	Design and Implementation Constraints
 
   Problems include unknown code interactions in working in parallel with water/wastewater system that is still in design.
-  The Interface must interact with Arduino code written for the water/wastwater system.
+  The Interface must interact with Arduino code written for the water/wastewater system.
   The Interface will be connected via cord to the Arduino as provided by user.
-  Datalogging will be stored to memory in user provided SD card.
+  Data logging will be stored to memory in user provided SD card.
   There will be no databases as per client request. Data is to be stored in text files.
   A client side server has been made available at dotson.uaa.alaska.edu.
   User must be able to maintain and modify code as needed.
@@ -154,15 +154,15 @@ the user running on the Arduino through a serial connection.
 
 2.6	User Documentation
 
-  Comments in code are required for future maitnence by user.
+  Comments in code are required for future maintenance by user.
   Readme files for user must also be included.
 
 2.7	Assumptions and Dependencies
 
   There is an assumed time constraint on advising client per week. This will be up to a maximum number of hours per week.
   The time constraint cannot be rolled over into the next week in the event it is not used.
-  It is assumed the Interface developement takes priority over consulting hours.
-  Therefore, consulting hours per week will be less during Interface developement.
+  It is assumed the Interface development takes priority over consulting hours.
+  Therefore, consulting hours per week will be less during Interface development.
   It is assumed data read into the Interface is correct data. Any adjustments can be taken care of in consulting.
 
 
@@ -176,7 +176,7 @@ the user running on the Arduino through a serial connection.
 The primary user interface will be the 7" Raspberry Pi Touchscreen. The dimensions of the touchscreen are 
 194mm x 110mm x 20mm (800 x 480 pixels).
 
-  //What kind of gui? It must fit in the touchscreen
+  //What kind of GUI? It must fit in the touchscreen
   //What kind of buttons? Should there be a help? We already know we need a "normal" and "advanced" button
 
 Data will be displayed and modeled:
@@ -190,10 +190,10 @@ Under Advanced User Tab:
   (4) Display of pressures measured in system
   (5) Display of power to components
   (6) Button sequence
-  (7) Clear annoations (?)
+  (7) Clear annotations (?)
 
 3.2	Hardware Interfaces
-Serial connection between the Arduino and Raspberry Pi (USB?, GPIO?) used to send data/commands. Perfered code language 
+Serial connection between the Arduino and Raspberry Pi (USB?, GPIO?) used to send data/commands. Preferred code language 
 is Java and Python for user readability but still TBD depending on hardware support. The GUI for the interface will be 
 displayed on a 7" touchscreen display connected to the Raspberry Pi via a DSI ribbon cable.
 
