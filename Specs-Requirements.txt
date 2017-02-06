@@ -3,50 +3,49 @@ Sewer Logic
 Version 0 unapproved
 Prepared by Brandon Helmericks and Hannah Tsunemori
 University of Alaska Anchorage
-02/02/2017
+02/05/2017
 
-Table of Contents	ii
-Revision History	ii
-1.	Introduction	1
-1.1	Purpose	1
-1.2	Document Conventions	1                       //unknown
-1.3	Intended Audience and Reading Suggestions	1   
-1.4	Product Scope	1                               
-1.5	References	1                                 //unknown
-2.	Overall Description	2                         
-2.1	Product Perspective	2                         
-2.2	Product Functions	2                           
-2.3	User Classes and Characteristics	2           
-2.4	Operating Environment	2                       
-2.5	Design and Implementation Constraints	2       
-2.6	User Documentation	2
-2.7	Assumptions and Dependencies	3
-3.	External Interface Requirements	3
-3.1	User Interfaces	3                             
-3.2	Hardware Interfaces	3                         
-3.3	Software Interfaces	3
-3.4	Communications Interfaces	3                   //unknown
-4.	System Features	4
-4.1	Serial Communication and Control	4
-4.2	Datalogging and Modeling	4
-4.2	Digital Display 	4
-4.2	Consulting 	4
-5.	Other Nonfunctional Requirements	4
-5.1	Performance Requirements	4
-5.2	Safety Requirements	5
-5.3	Security Requirements	5
-5.4	Software Quality Attributes	5
-5.5	Business Rules	5
-6.	Other Requirements	5
-Appendix A: Glossary	5
-Appendix B: Analysis Models	5
-Appendix C: To Be Determined List	6
-
+Table of Contents..................................................0
+Revision History...................................................0
+1.	Introduction...............................................0
+	1.1	Purpose............................................0
+	1.2	Document Conventions...............................0		//unknown
+	1.3	Intended Audience and Reading Suggestions..........0   
+	1.4	Product Scope......................................0                               
+	1.5	References.........................................0		//unknown
+2.	Overall Description........................................0                         
+	2.1	Product Perspective................................0                         
+	2.2	Product Functions..................................0                           
+	2.3	User Classes and Characteristics...................0           
+	2.4	Operating Environment..............................0                       
+	2.5	Design and Implementation Constraints..............0       
+	2.6	User Documentation.................................0
+	2.7	Assumptions and Dependencies.......................0
+3.	External Interface Requirements............................0
+	3.1	User Interfaces....................................0                             
+	3.2	Hardware Interfaces................................0                         
+	3.3	Software Interfaces................................0
+	3.4	Communications Interfaces..........................0		//unknown
+4.	System Features............................................0
+	4.1	Serial Communication and Control...................0
+	4.2	Datalogging and Modeling...........................0
+	4.2	Digital Display....................................0
+	4.2	Consulting.........................................0
+5.	Other Nonfunctional Requirements...........................0
+	5.1	Performance Requirements...........................0
+	5.2	Safety Requirements................................0
+	5.3	Security Requirements..............................0
+	5.4	Software Quality Attributes........................0
+	5.5	Business Rules.....................................0
+6.	Other Requirements.........................................0
+Appendix A: Glossary...............................................0
+Appendix B: Analysis Models........................................0
+Appendix C: To Be Determined List..................................0
 
 1.	Introduction
 
 1.1	Purpose 
-//The Graphical User Interface for the Dotson Lab Alaska Water Sewage Challenge acts as a way for a homeowner to interact 
+The Graphical User Interface for the Dotson Lab Alaska Water Sewage Challenge acts as a way for a homeowner to interact 
 with the Alaska Water Sewage Challenge project that is being created in Dotson Lab. The User Interface for the Dotson Lab 
 Alaska Water Sewage Challenge is hereafter refered to as "Interface". The Dotson Lab Alaska Water Sewage Challenge is 
 hereafter refered to as "water/wastewater system". The Interface will:
@@ -56,21 +55,17 @@ hereafter refered to as "water/wastewater system". The Interface will:
   (d) Produce good data (Consulting)
   
   //INSERT PARAGRAPH ABOUT EACH INDIVIDUAL FEATURE HERE?
-  
-Identify the product whose software requirements are specified in this document, including the revision or release number. 
-Describe the scope of the product that is covered by this SRS, particularly if this SRS describes only part of the system 
-or a single subsystem.>
 
 1.2	Document Conventions
-<
+
   //Unknown
 
-Describe any standards or typographical conventions that were followed when writing this SRS, such as fonts or 
+<Describe any standards or typographical conventions that were followed when writing this SRS, such as fonts or 
 highlighting that have special significance. For example, state whether priorities  for higher-level requirements are 
 assumed to be inherited by detailed requirements, or whether every requirement statement is to have its own priority.>
 
 1.3	Intended Audience and Reading Suggestions
-//This document is for the developers and Dotson Lab hereinafter referred to as "the user".
+This document is for the developers and Dotson Lab hereinafter referred to as "the user".
 The developers will be able to determine how to meet the requirements from this document. The user will be able to 
 determine what to expect they can do with this product and how it works to meet their needs.
   
@@ -78,14 +73,9 @@ The document is orgainzed in the following order: introductory infomrmation, pro
 product features, and non-functional requirements.
 
 //What is most useful for us developers to refer back to? For the user?
-  
-Describe the different types of reader that the document is intended for, such as developers, project managers, marketing 
-staff, users, testers, and documentation writers. Describe what the rest of this SRS contains and how it is organized. 
-Suggest a sequence for reading the document, beginning with the overview sections and proceeding through the sections 
-that are most pertinent to each reader type.>
 
 1.4	Product Scope
-//The Interface will connect the user to the control and monitoring Arduino in the water/wastewater system. 
+The Interface will connect the user to the control and monitoring Arduino in the water/wastewater system. 
 From this arduino chip the Interface will allow a user to view water levels and flow as well as if the water/wastewater 
 system needs to be emptied. The Interface will allow monitoring and data logging to users. It also acts so that users do not 
 need to press mechanical buttons to manage the system. The data logging feature is specifically designed for research 
@@ -93,31 +83,23 @@ purposes of the user.
 
 
 1.5	References
-<
+
   //Unknown
 
-List any ther documents or Web addresses to which this SRS refers. These may include user interface style guides, 
+<List any ther documents or Web addresses to which this SRS refers. These may include user interface style guides, 
 contracts, standards, system requirements specifications, use case documents, or a vision and scope document. Provide 
 enough information so that the reader could access a copy of each reference, including title, author, version number, 
 date, and source or location.>
 
 2.	Overall Description
 2.1	Product Perspective
-//The Interface is to be used with the water/wastewater system. It is to read information from the Arduino chip that will 
+The Interface is to be used with the water/wastewater system. It is to read information from the Arduino chip that will 
 control and monitor the system on a hardware level. The interface will be constructed on a touchscreen interface attached to 
 a Raspberry Pi.
 
   //anything else it connects to/interactions?
 
-Describe the context and origin of the product being specified in this SRS. For example, state whether this product is 
-a follow-on member of a product family, a replacement for certain existing systems, or a new, self-contained product. If 
-the SRS defines a component of a larger system, relate the requirements of the larger system to the functionality of this 
-software and identify interfaces between the two. A simple diagram that shows the major components of the overall system, 
-subsystem interconnections, and external interfaces can be helpful.>
-
 2.2	Product Functions
-<
-  //Bullet list of features. I think this is in intro too.
   (a) Maintain Serial Communication and Control
       This is needed so that the Interface can present and store data.
   (b) Datalogging and Modeling
@@ -131,43 +113,32 @@ subsystem interconnections, and external interfaces can be helpful.>
       This will be achieved through consulting for the client as the code on the Arduino the Interface reads from will
       be corrected as needed.
 
-Summarize the major functions the product must perform or must let the user perform. Details will be provided in 
-Section 3, so only a high level summary (such as a bullet list) is needed here. Organize the functions to make them 
-understandable to any reader of the SRS. A picture of the major groups of related requirements and how they relate, 
-such as a top level data flow diagram or object class diagram, is often effective.>
-
 2.3	User Classes and Characteristics
-<
+
   //there is a "homeowner" and "advanced homeowner" as well as our research group users. Most important may need to 
   be changed.
   
-  There are three classes of users that will use the Interface. These users will be refered to as "basic user", "advanced 
-  user", and "research user".
+There are three classes of users that will use the Interface. These users will be refered to as "basic user", "advanced 
+user", and "research user".
   
-  Basic User Needs:
-    (1) Notification of when to empty waste
-    (2) Notification when there is a problem identified
-  Advanced User Needs:
-    (1) All Basic User Needs
-    (2) Display of all water levels measured in system
-    (3) Display of all valve positions in system
-    (4) Display of pressures measured in system
-    (5) Display of power to components
-    (6) Button sequence
-    (7) Clear annoations (?)
-  Research User Needs:
-    (1) All Basic User Needs
-    (2) Datalogging of measured data in text files
-    (3) Consulting on code written for system
+Basic User Needs:
+  (1) Notification of when to empty waste
+  (2) Notification when there is a problem identified
+Advanced User Needs:
+  (1) All Basic User Needs
+  (2) Display of all water levels measured in system
+  (3) Display of all valve positions in system
+  (4) Display of pressures measured in system
+  (5) Display of power to components
+  (6) Button sequence
+  (7) Clear annoations (?)
+Research User Needs:
+  (1) All Basic User Needs
+  (2) Datalogging of measured data in text files
+  (3) Consulting on code written for system
     
-  For the purposes of this document the basic user needs are of the highest importance as all other user needs include 
-  those of the basic user.
-
-Identify the various user classes that you anticipate will use this product. User classes may be differentiated based 
-on frequency of use, subset of product functions used, technical expertise, security or privilege levels, educational 
-level, or experience. Describe the pertinent characteristics of each user class. Certain requirements may pertain only 
-to certain user classes. Distinguish the most important user classes for this product from those who are less important 
-to satisfy.>
+For the purposes of this document the basic user needs are of the highest importance as all other user needs include 
+those of the basic user.
 
 2.4	Operating Environment
 
@@ -177,7 +148,7 @@ the user running on the Arduino through a serial connection.
 
 
 2.5	Design and Implementation Constraints
-<
+
   //issues include unknown code interactions, working in parallel with water/wastewater system that is still in design
   //must interact with arduino
   //connected via cord as given
@@ -187,28 +158,28 @@ the user running on the Arduino through a serial connection.
   //this allows client to maintain software as needed
   //client side will need modification as per request of client (consulting)
 
-Describe any items or issues that will limit the options available to the developers. These might include: corporate or 
+<Describe any items or issues that will limit the options available to the developers. These might include: corporate or 
 regulatory policies; hardware limitations (timing requirements, memory requirements); interfaces to other applications; 
 specific technologies, tools, and databases to be used; parallel operations; language requirements; communications 
 protocols; security considerations; design conventions or programming standards (for example, if the customer’s 
 organization will be responsible for maintaining the delivered software).>
 
 2.6	User Documentation
-<
+
   //user manuals?? We didn't ask if they wanted this, but probably should have
   //comments in code
   //minimum readme files for user
 
-List the user documentation components (such as user manuals, on-line help, and tutorials) that will be delivered along 
+<List the user documentation components (such as user manuals, on-line help, and tutorials) that will be delivered along 
 with the software. Identify any known user documentation delivery formats or standards.>
 
 2.7	Assumptions and Dependencies
-<
+
   //assumed time constraint on advising client per week
   //assumed the interface takes priority
   //assumed data read in is good
 
-List any assumed factors (as opposed to known facts) that could affect the requirements stated in the SRS. These could 
+<List any assumed factors (as opposed to known facts) that could affect the requirements stated in the SRS. These could 
 include third-party or commercial components that you plan to use, issues around the development or operating environment, 
 or constraints. The project could be affected if these assumptions are incorrect, are not shared, or change. Also identify 
 any dependencies the project has on external factors, such as software components that you intend to reuse from another 
@@ -221,30 +192,20 @@ project, unless they are already documented elsewhere (for example, in the visio
 The primary user interface will be the 7" Raspberry Pi Touchscreen. The dimensions of the touchscreen are 
 194mm x 110mm x 20mm (800 x 480 pixels).
 
-<Describe the logical characteristics of each interface between the software product and the users. This may include 
-
-<
   //What kind of gui? It must fit in the touchscreen
   //What kind of buttons? Should there be a help? We already know we need a "normal" and "advanced" button
   //Data needing to be displayed and modeled:
-  Under Basic User Tab:
-    (1) Notification of when to empty waste
-    (2) Notification when there is a problem identified
-  Under Advanced User Tab:
-    (1) All Basic User Needs
-    (2) Display of all water levels measured in system
-    (3) Display of all valve positions in system
-    (4) Display of pressures measured in system
-    (5) Display of power to components
-    (6) Button sequence
-    (7) Clear annoations (?)
-
-Describe the logical characteristics of each interface between the software product and the users. This may include 
-
-sample screen images, any GUI standards or product family style guides that are to be followed, screen layout constraints, 
-standard buttons and functions (e.g., help) that will appear on every screen, keyboard shortcuts, error message display 
-standards, and so on. Define the software components for which a user interface is needed. Details of the user interface 
-design should be documented in a separate user interface specification.>
+Under Basic User Tab:
+  (1) Notification of when to empty waste
+  (2) Notification when there is a problem identified
+Under Advanced User Tab:
+  (1) All Basic User Needs
+  (2) Display of all water levels measured in system
+  (3) Display of all valve positions in system
+  (4) Display of pressures measured in system
+  (5) Display of power to components
+  (6) Button sequence
+  (7) Clear annoations (?)
 
 3.2	Hardware Interfaces
 Serial connection between the Arduino and Raspberry Pi (USB?, GPIO?) used to send data/commands. Perfered code language 
@@ -252,10 +213,10 @@ is Java and Python for user readability but still TBD depending on hardware supp
 displayed on a 7" touchscreen display connected to the Raspberry Pi via a DSI ribbon cable.
 
 3.3	Software Interfaces
-<
+
   //How is it interacting with the software written on the Arduino? Read/Write? What kind of data? What is the purpose?
 
-Describe the connections between this product and other specific software components (name and version), including 
+<Describe the connections between this product and other specific software components (name and version), including 
 databases, operating systems, tools, libraries, and integrated commercial components. Identify the data items or messages 
 coming into the system and going out and describe the purpose of each. Describe the services needed and the nature of 
 communications. Refer to documents that describe detailed application programming interface protocols. Identify data that 
@@ -263,22 +224,15 @@ will be shared across software components. If the data sharing mechanism must be
 (for example, use of a global data area in a multitasking operating system), specify this as an implementation constraint.>
 
 3.4	Communications Interfaces
-<
+
   //There aren't any communication interfaces, or at least not that I'm aware of.
 
-Describe the requirements associated with any communications functions required by this product, including e-mail, 
+<Describe the requirements associated with any communications functions required by this product, including e-mail, 
 web browser, network server communications protocols, electronic forms, and so on. Define any pertinent message 
 formatting. Identify any communication standards that will be used, such as FTP or HTTP. Specify any communication 
 security or encryption issues, data transfer rates, and synchronization mechanisms.>
 
 4.	System Features
-<
-  //we can basically organize this how we want. probably by features for us.
-
-This template illustrates organizing the functional requirements for the product by system features, the major services 
-provided by the product. You may prefer to organize this section by use case, mode of operation, user class, object 
-class, functional hierarchy, or combinations of these, whatever makes the most logical sense for your product.>
-
 4.1	Serial Communication and Control
 
 4.1.1	Description and Priority
@@ -287,9 +241,7 @@ The serial communication allows the interface running on the Raspberry Pi to com
 the Arduino that controls the water/wastewater system.
 This feature has a very high priority as without it the interface cannot operate.
 
-
 4.1.2	Stimulus/Response Sequences
-
 <List the sequences of user actions and system responses that stimulate the behavior defined for this feature. These will 
 correspond to the dialog elements associated with use cases.>
 
@@ -322,7 +274,6 @@ REQ-2:  Log all operational commands (valve open/close, pump on/off) issued by t
 4.3	Display Features (GUI)
 
 4.3.1	Description and Priority
-
 The GUI will be the primary way for the user to interact with the interface through the Raspberry Pi touchscreen. The GUI
 will present all relevant information about the system and allow the user to issue commands to the system.
 This feature has a medium priority.
@@ -343,10 +294,10 @@ REQ-2:  Provide a graphical interface allowing the user to control the water/was
 4.4	Consulting
 
 4.4.1	Description and Priority
-<
+
   // this is our lowest Priority. This may even fit better under section 5, Nonfucntional Requirements.
 
-Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
+<Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
 include specific priority component ratings, such as benefit, penalty, cost, and risk (each rated on a relative scale 
 from a low of 1 to a high of 9).>
 
@@ -369,10 +320,10 @@ REQ-2:
 5.	Other Nonfunctional Requirements
 
 5.1	Performance Requirements
-<
+
   //We require the data that is being read be good data
   
-If there are performance requirements for the product under various circumstances, state them here and explain their 
+<If there are performance requirements for the product under various circumstances, state them here and explain their 
 rationale, to help the developers understand the intent and make suitable design choices. Specify the timing 
 relationships for real time systems. Make such requirements as specific as possible. You may need to state performance 
 requirements for individual functional requirements or features.>
