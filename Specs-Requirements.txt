@@ -107,8 +107,9 @@ to certain user classes. Distinguish the most important user classes for this pr
 to satisfy.>
 
 2.4	Operating Environment
-<Describe the environment in which the software will operate, including the hardware platform, operating system and 
-versions, and any other software components or applications with which it must peacefully coexist.>
+The interface will be running on a Raspberry Pi 3 Model B with a 7" touchscreen display (800 x 480 pixels). The Raspberry Pi
+will be running the Raspbian version ??? operating system. The Raspberry Pi will need to communicate with code written by
+the user running on the Arduino.
 
 2.5	Design and Implementation Constraints
 <Describe any items or issues that will limit the options available to the developers. These might include: corporate or 
@@ -131,6 +132,9 @@ project, unless they are already documented elsewhere (for example, in the visio
 3.	External Interface Requirements
 
 3.1	User Interfaces
+The primary user interface will be the 7" Raspberry Pi Touchscreen. The dimensions of the touchscreen are 
+194mm x 110mm x 20mm (800 x 480 pixels).
+
 <Describe the logical characteristics of each interface between the software product and the users. This may include 
 sample screen images, any GUI standards or product family style guides that are to be followed, screen layout constraints, 
 standard buttons and functions (e.g., help) that will appear on every screen, keyboard shortcuts, error message display 
@@ -199,29 +203,22 @@ REQ-2:  Log all operational commands (valve open/close, pump on/off) issued by t
 4.3	Display Features (GUI)
 
 4.3.1	Description and Priority
-
-<Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
-include specific priority component ratings, such as benefit, penalty, cost, and risk (each rated on a relative scale 
-from a low of 1 to a high of 9).>
+The GUI will be the primary way for the user to interact with the interface through the Raspberry Pi touchscreen. The GUI
+will present all relevant information about the system and allow the user to issue commands to the system.
+This feature has a medium priority.
 
 4.3.2	Stimulus/Response Sequences
 <List the sequences of user actions and system responses that stimulate the behavior defined for this feature. These will 
 correspond to the dialog elements associated with use cases.>
 
 4.3.3	Functional Requirements
-<Itemize the detailed functional requirements associated with this feature. These are the software capabilities that 
-must be present in order for the user to carry out the services provided by the feature, or to execute the use case. 
-Include how the product should respond to anticipated error conditions or invalid inputs. Requirements should be 
-concise, complete, unambiguous, verifiable, and necessary. Use “TBD” as a placeholder to indicate when necessary 
-information is not yet available.>
-
-<Each requirement should be uniquely identified with a sequence number or a meaningful tag of some kind.>
-
-REQ-1:	
-REQ-2:
+REQ-1:	Display relevant information depending on the mode (Specifics TBD):
+          (a) Homeowner Mode: High level information (system status, notify when to empty waste tank)
+          (b) Advanced Mode: Detailed information about the system (valve positions, flow rates, temperatures, tank levels)
+REQ-2:  Provide a graphical interface allowing the user to control the water/wastewater system (valves, stepper motors,
+        pump) when in advanced mode.
 
 4.4	Consulting
-<Don’t really say “System Feature 1.” State the feature name in just a few words.>
 
 4.4.1	Description and Priority
 <Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
