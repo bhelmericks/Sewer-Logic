@@ -9,10 +9,10 @@ Table of Contents..................................................0
 Revision History...................................................0
 1.	Introduction...............................................0
 	1.1	Purpose............................................0
-	1.2	Document Conventions...............................0		//unknown
+	1.2	Document Conventions...............................0		
 	1.3	Intended Audience and Reading Suggestions..........0   
 	1.4	Product Scope......................................0                               
-	1.5	References.........................................0		//unknown
+	1.5	References.........................................0		
 2.	Overall Description........................................0                         
 	2.1	Product Perspective................................0                         
 	2.2	Product Functions..................................0                           
@@ -25,7 +25,7 @@ Revision History...................................................0
 	3.1	User Interfaces....................................0                             
 	3.2	Hardware Interfaces................................0                         
 	3.3	Software Interfaces................................0
-	3.4	Communications Interfaces..........................0		//unknown
+	3.4	Communications Interfaces..........................0		
 4.	System Features............................................0
 	4.1	Serial Communication and Control...................0
 	4.2	Datalogging and Modeling...........................0
@@ -42,6 +42,9 @@ Appendix A: Glossary...............................................0
 Appendix B: Analysis Models........................................0
 Appendix C: To Be Determined List..................................0
 
+
+
+
 1.	Introduction
 
 1.1	Purpose 
@@ -54,15 +57,10 @@ hereafter refered to as "water/wastewater system". The Interface will:
   (c) Display features
   (d) Produce good data (Consulting)
   
-  //INSERT PARAGRAPH ABOUT EACH INDIVIDUAL FEATURE HERE?
 
 1.2	Document Conventions
 
-  //Unknown
-
-<Describe any standards or typographical conventions that were followed when writing this SRS, such as fonts or 
-highlighting that have special significance. For example, state whether priorities  for higher-level requirements are 
-assumed to be inherited by detailed requirements, or whether every requirement statement is to have its own priority.>
+  There are no document conventions to note at this time.
 
 1.3	Intended Audience and Reading Suggestions
 This document is for the developers and Dotson Lab hereinafter referred to as "the user".
@@ -72,7 +70,6 @@ determine what to expect they can do with this product and how it works to meet 
 The document is orgainzed in the following order: introductory infomrmation, product creation, external interactions, 
 product features, and non-functional requirements.
 
-//What is most useful for us developers to refer back to? For the user?
 
 1.4	Product Scope
 The Interface will connect the user to the control and monitoring Arduino in the water/wastewater system. 
@@ -84,20 +81,19 @@ purposes of the user.
 
 1.5	References
 
-  //Unknown
+  There are currently no references for this document.
 
-<List any ther documents or Web addresses to which this SRS refers. These may include user interface style guides, 
-contracts, standards, system requirements specifications, use case documents, or a vision and scope document. Provide 
-enough information so that the reader could access a copy of each reference, including title, author, version number, 
-date, and source or location.>
+
+
+
 
 2.	Overall Description
+
 2.1	Product Perspective
 The Interface is to be used with the water/wastewater system. It is to read information from the Arduino chip that will 
 control and monitor the system on a hardware level. The interface will be constructed on a touchscreen interface attached to 
 a Raspberry Pi.
 
-  //anything else it connects to/interactions?
 
 2.2	Product Functions
   (a) Maintain Serial Communication and Control
@@ -114,9 +110,6 @@ a Raspberry Pi.
       be corrected as needed.
 
 2.3	User Classes and Characteristics
-
-  //there is a "homeowner" and "advanced homeowner" as well as our research group users. Most important may need to 
-  be changed.
   
 There are three classes of users that will use the Interface. These users will be refered to as "basic user", "advanced 
 user", and "research user".
@@ -149,41 +142,32 @@ the user running on the Arduino through a serial connection.
 
 2.5	Design and Implementation Constraints
 
-  //issues include unknown code interactions, working in parallel with water/wastewater system that is still in design
-  //must interact with arduino
-  //connected via cord as given
-  //memory to sd card
-  //NO DATABASES as per client request
-  //Server available
-  //this allows client to maintain software as needed
-  //client side will need modification as per request of client (consulting)
+  Problems include unknown code interactions in working in parallel with water/wastewater system that is still in design.
+  The Interface must interact with Arduino code written for the water/wastwater system.
+  The Interface will be connected via cord to the Arduino as provided by user.
+  Datalogging will be stored to memory in user provided SD card.
+  There will be no databases as per client request. Data is to be stored in text files.
+  A client side server has been made available at dotson.uaa.alaska.edu.
+  User must be able to maintain and modify code as needed.
+  Client side code will need modification as per request of user (consulting) during implementation of the Interface.
 
-<Describe any items or issues that will limit the options available to the developers. These might include: corporate or 
-regulatory policies; hardware limitations (timing requirements, memory requirements); interfaces to other applications; 
-specific technologies, tools, and databases to be used; parallel operations; language requirements; communications 
-protocols; security considerations; design conventions or programming standards (for example, if the customer’s 
-organization will be responsible for maintaining the delivered software).>
 
 2.6	User Documentation
 
-  //user manuals?? We didn't ask if they wanted this, but probably should have
-  //comments in code
-  //minimum readme files for user
-
-<List the user documentation components (such as user manuals, on-line help, and tutorials) that will be delivered along 
-with the software. Identify any known user documentation delivery formats or standards.>
+  Comments in code are required for future maitnence by user.
+  Readme files for user must also be included.
 
 2.7	Assumptions and Dependencies
 
-  //assumed time constraint on advising client per week
-  //assumed the interface takes priority
-  //assumed data read in is good
+  There is an assumed time constraint on advising client per week. This will be up to a maximum number of hours per week.
+  The time constraint cannot be rolled over into the next week in the event it is not used.
+  It is assumed the Interface developement takes priority over consulting hours.
+  Therefore, consulting hours per week will be less during Interface developement.
+  It is assumed data read into the Interface is correct data. Any adjustments can be taken care of in consulting.
 
-<List any assumed factors (as opposed to known facts) that could affect the requirements stated in the SRS. These could 
-include third-party or commercial components that you plan to use, issues around the development or operating environment, 
-or constraints. The project could be affected if these assumptions are incorrect, are not shared, or change. Also identify 
-any dependencies the project has on external factors, such as software components that you intend to reuse from another 
-project, unless they are already documented elsewhere (for example, in the vision and scope document or the project plan).>
+
+
+
 
 3.	External Interface Requirements
 
@@ -194,7 +178,8 @@ The primary user interface will be the 7" Raspberry Pi Touchscreen. The dimensio
 
   //What kind of gui? It must fit in the touchscreen
   //What kind of buttons? Should there be a help? We already know we need a "normal" and "advanced" button
-  //Data needing to be displayed and modeled:
+
+Data will be displayed and modeled:
 Under Basic User Tab:
   (1) Notification of when to empty waste
   (2) Notification when there is a problem identified
@@ -214,25 +199,23 @@ displayed on a 7" touchscreen display connected to the Raspberry Pi via a DSI ri
 
 3.3	Software Interfaces
 
-  //How is it interacting with the software written on the Arduino? Read/Write? What kind of data? What is the purpose?
+  This section cannot be fully defined until approximately 2/10/17 when the Arduino is programmed.
+  Questions to answer in this section include:
+  How is the Interface interacting with the software written on the Arduino? 
+  What are Read/Write conventions? 
+  What kind of data format will be Read/Written?
 
-<Describe the connections between this product and other specific software components (name and version), including 
-databases, operating systems, tools, libraries, and integrated commercial components. Identify the data items or messages 
-coming into the system and going out and describe the purpose of each. Describe the services needed and the nature of 
-communications. Refer to documents that describe detailed application programming interface protocols. Identify data that 
-will be shared across software components. If the data sharing mechanism must be implemented in a specific way 
-(for example, use of a global data area in a multitasking operating system), specify this as an implementation constraint.>
 
 3.4	Communications Interfaces
 
-  //There aren't any communication interfaces, or at least not that I'm aware of.
+  There aren't any communication interfaces that we are aware of at this time.
 
-<Describe the requirements associated with any communications functions required by this product, including e-mail, 
-web browser, network server communications protocols, electronic forms, and so on. Define any pertinent message 
-formatting. Identify any communication standards that will be used, such as FTP or HTTP. Specify any communication 
-security or encryption issues, data transfer rates, and synchronization mechanisms.>
+
+
+
 
 4.	System Features
+
 4.1	Serial Communication and Control
 
 4.1.1	Description and Priority
@@ -258,8 +241,6 @@ Sensor data and control operations need to be logged to files as clear text at r
 monitored in order to determine the health and status of the water/wastewater system.
 This feature has a high priority considering the water/wastewater system is an academic project.
 
-    //I think this is also of high priority since it allows something to be displayed. 
-    //Client may not feel this is as high depending upon what they can code.
 
 4.2.2	Stimulus/Response Sequences
 <List the sequences of user actions and system responses that stimulate the behavior defined for this feature. These will 
@@ -278,7 +259,6 @@ The GUI will be the primary way for the user to interact with the interface thro
 will present all relevant information about the system and allow the user to issue commands to the system.
 This feature has a medium priority.
 
-  //This seems like a Medium priority as it can be done in a purely functional way or in a more "user friendly" way
 
 4.3.2	Stimulus/Response Sequences
 <List the sequences of user actions and system responses that stimulate the behavior defined for this feature. These will 
@@ -295,7 +275,10 @@ REQ-2:  Provide a graphical interface allowing the user to control the water/was
 
 4.4.1	Description and Priority
 
-  // this is our lowest Priority. This may even fit better under section 5, Nonfucntional Requirements.
+  This is the lowest Priority. This covers any consulting help the user may need during the developement of the Interface.
+  The user will be allocated a specified number of hours per week to ask for consulting help on code that the user is writing
+  for the water/wastewater system.
+  At the end date of this project, these hours will cease to be available by this contract.
 
 <Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
 include specific priority component ratings, such as benefit, penalty, cost, and risk (each rated on a relative scale 
@@ -317,11 +300,15 @@ information is not yet available.>
 REQ-1:	
 REQ-2:
 
+
+
+
+
 5.	Other Nonfunctional Requirements
 
 5.1	Performance Requirements
 
-  //We require the data that is being read be good data
+The Interface must present data in a way the user can understand what they are reading.
   
 <If there are performance requirements for the product under various circumstances, state them here and explain their 
 rationale, to help the developers understand the intent and make suitable design choices. Specify the timing 
