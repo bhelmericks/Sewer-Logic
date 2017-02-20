@@ -89,7 +89,7 @@ There are currently no references for this document.
 
 2.1	Product Perspective
 The Interface is to be used with the reuse system. It is to read information from the Arduino Mega chip that will 
-control and monitor and control the system on a hardware level. The interface will be constructed on a touchscreen 
+control and monitor the system on a hardware level. The interface will be constructed on a touchscreen 
 interface attached to a Raspberry Pi.
 
 
