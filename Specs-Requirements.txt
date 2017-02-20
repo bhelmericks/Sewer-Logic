@@ -139,12 +139,11 @@ the user running on the Arduino Mega through a serial connection.
 
 2.5	Design and Implementation Constraints
 
-Problems include unknown code interactions in working in parallel with reuse system that is still in design.
+Problems include unknown code interactions in working in parallel with reuse system that is still in design phase.
 The Interface must interact with Arduino Mega code written for the reuse system.
 The Interface will communicate to the Arduino Mega through the GPIO ports on the Raspberry Pi.
 Data logging will be stored to memory in user provided SD card.
 There will be no databases as per client request. Data is to be stored in text files.
-A client side server has been made available at dotson.uaa.alaska.edu.
 User must be able to maintain and modify code as needed.
 Client side code will need modification as per request of user (consulting) during implementation of the Interface.
 
