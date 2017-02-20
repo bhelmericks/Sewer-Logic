@@ -76,7 +76,7 @@ The Interface will allow a user to view water levels, flow rates, valve position
 reuse system has an issue that needs to be addressed and trigger an alarm. The Interface will log all data to daily files
 as clear text. The data logging feature is specifically designed for research purposes of the user or in further
 troubleshooting of maintenance company. It also allows advanced users to manually control the valve positions, stepper
-motors and power relays.
+motors and electrical relays. A schematic of this system can be seen in the SystemSchematic.png figure.
 
 
 1.5	References
