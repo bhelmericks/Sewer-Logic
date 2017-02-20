@@ -1,9 +1,9 @@
 Software Specification and Requirements for
 Sewer Logic
-Version 0 unapproved
+Version 1 unapproved
 Prepared by Brandon Helmericks and Hannah Tsunemori
 University of Alaska Anchorage
-02/05/2017
+02/09/2017
 
 Table of Contents..................................................0
 Revision History...................................................0
@@ -28,9 +28,9 @@ Revision History...................................................0
 	3.4	Communications Interfaces..........................0		
 4.	System Features............................................0
 	4.1	Serial Communication and Control...................0
-	4.2	Data logging and Modeling...........................0
+	4.2	Data Logging and Modeling..........................0
 	4.2	Digital Display....................................0
-	4.2	Consulting.........................................0
+	4.2	Streamline Reuse System Software...................0
 5.	Other Nonfunctional Requirements...........................0
 	5.1	Performance Requirements...........................0
 	5.2	Safety Requirements................................0
@@ -51,11 +51,11 @@ Appendix C: To Be Determined List..................................0
 The Graphical User Interface for the Dotson Lab Alaska Water Sewage Challenge acts as a way for a homeowner to interact 
 with the Alaska Water Sewage Challenge project that is being created in Dotson Lab. The User Interface for the Dotson Lab 
 Alaska Water Sewage Challenge is hereafter referred to as "Interface". The Dotson Lab Alaska Water Sewage Challenge is 
-hereafter referred to as "water/wastewater system". The Interface will:
+hereafter referred to as "reuse system". The Interface will:
   (a) Maintain Serial Communication and Control
   (b) Data logging and Modeling
   (c) Display features
-  (d) Produce good data (Consulting)
+  (d) Streamline reuse system software
   
 
 1.2	Document Conventions
@@ -72,11 +72,11 @@ product features, and non-functional requirements.
 
 
 1.4	Product Scope
-The Interface will connect the user to the control and monitoring Arduino in the water/wastewater system. 
-From this Arduino chip the Interface will allow a user to view water levels and flow as well as if the water/wastewater 
-System needs to be emptied. The Interface will allow monitoring and data logging to users. It also acts so that users do not 
-need to press mechanical buttons to manage the system. The data logging feature is specifically designed for research 
-purposes of the user.
+The Interface will connect the user to the control and monitoring Arduino Mega in the reuse system. 
+From this Arduino Mega the Interface will allow a user to view water levels, flow and operational status as well as if the reuse system
+has an alarm that needs to be addressed. The Interface will allow monitoring and data logging to users. It also acts so that users do
+not need to press mechanical buttons to manage the system. The data logging feature is specifically designed for research purposes of
+the user or in further troubleshooting of maintenance company.
 
 
 1.5	References
@@ -90,7 +90,7 @@ purposes of the user.
 2.	Overall Description
 
 2.1	Product Perspective
-The Interface is to be used with the water/wastewater system. It is to read information from the Arduino chip that will 
+The Interface is to be used with the reuse system. It is to read information from the Arduino Mega chip that will 
 control and monitor the system on a hardware level. The interface will be constructed on a touchscreen interface attached to 
 a Raspberry Pi.
 
@@ -100,33 +100,34 @@ a Raspberry Pi.
       This is needed so that the Interface can present and store data.
   (b) Data logging and Modeling
       This is a requirement for the user who may have other research uses for previous data.
-      The data logs will be accessible through an SD card provided by the user.
+      The data logs will be accessible through an SD card on the Raspberry Pi.
       This also will allow data to be presented in a readable format to the reader.
   (c) Display features
       This will allow users to interact and read the data on the touch screen device.
       This will include determining what information to show by selecting a user type.
-  (d) Produce good data (Consulting)
-      This will be achieved through consulting for the client as the code on the Arduino the Interface reads from will
+  (d) Streamline reuse software
+      This will be achieved through consulting for the client as the code on the Arduino Mega the Interface reads from will
       be corrected as needed.
 
 2.3	User Classes and Characteristics
   
 There are three classes of users that will use the Interface. These users will be referred to as "basic user", "advanced 
-user", and "research user".
+user", and "admin user".
   
 Basic User Needs:
   (1) Notification of when to empty waste
-  (2) Notification when there is a problem identified
+  (2) Notification when, how much, and where water needs to be added to the system
+  (3) Notification when there is a problem identified including alarm
 Advanced User Needs:
   (1) All Basic User Needs
   (2) Display of all water levels measured in system
   (3) Display of all valve positions in system
   (4) Display of pressures measured in system
   (5) Display of power to components
-  (6) Button sequence
-  (7) Clear annotations (?)
-Research User Needs:
-  (1) All Basic User Needs
+  (6) Display of teperature of control panels and reuse system building
+  (7) Display of and acess to run relays
+Admin User Needs:
+  (1) All Advanced User Needs
   (2) Data logging of measured data in text files
   (3) Consulting on code written for system
     
@@ -136,15 +137,15 @@ those of the basic user.
 2.4	Operating Environment
 
 The interface will be running on a Raspberry Pi 3 Model B with a 7" touchscreen display (800 x 480 pixels). The Raspberry Pi
-will be running the Raspbian version ??? operating system. The Raspberry Pi will need to communicate with code written by
-the user running on the Arduino through a serial connection.
+will be running the Raspbian operating system. The Raspberry Pi will need to communicate with code written by
+the user running on the Arduino Mega through a serial connection.
 
 
 2.5	Design and Implementation Constraints
 
-  Problems include unknown code interactions in working in parallel with water/wastewater system that is still in design.
-  The Interface must interact with Arduino code written for the water/wastewater system.
-  The Interface will be connected via cord to the Arduino as provided by user.
+  Problems include unknown code interactions in working in parallel with reuse system that is still in design.
+  The Interface must interact with Arduino Mega code written for the reuse system.
+  The Interface will be connected via cord to the Arduino Mega as provided by user.
   Data logging will be stored to memory in user provided SD card.
   There will be no databases as per client request. Data is to be stored in text files.
   A client side server has been made available at dotson.uaa.alaska.edu.
@@ -176,39 +177,36 @@ the user running on the Arduino through a serial connection.
 The primary user interface will be the 7" Raspberry Pi Touchscreen. The dimensions of the touchscreen are 
 194mm x 110mm x 20mm (800 x 480 pixels).
 
-  //What kind of GUI? It must fit in the touchscreen
-  //What kind of buttons? Should there be a help? We already know we need a "normal" and "advanced" button
-
-Data will be displayed and modeled:
-Under Basic User Tab:
+Data will be displayed and modeled as can be seen in the User_Views Figure.
+Basic User Needs:
   (1) Notification of when to empty waste
-  (2) Notification when there is a problem identified
-Under Advanced User Tab:
+  (2) Notification when, how much, and where water needs to be added to the system
+  (3) Notification when there is a problem identified including alarm
+Advanced User Needs:
   (1) All Basic User Needs
   (2) Display of all water levels measured in system
   (3) Display of all valve positions in system
   (4) Display of pressures measured in system
   (5) Display of power to components
-  (6) Button sequence
-  (7) Clear annotations (?)
-
+  (6) Display of teperature of control panels and reuse system building
+  (7) Display of and acess to run relays
+  
 3.2	Hardware Interfaces
-Serial connection between the Arduino and Raspberry Pi (USB?, GPIO?) used to send data/commands. Preferred code language 
-is Java and Python for user readability but still TBD depending on hardware support. The GUI for the interface will be 
-displayed on a 7" touchscreen display connected to the Raspberry Pi via a DSI ribbon cable.
+Serial connection between the Arduino Mega and Raspberry Pi (USB) used to send data/commands. Preferred code language 
+is Java and Python for user readability. The GUI for the interface will be displayed on a 7" touchscreen display connected to the Raspberry Pi via a DSI ribbon cable.
 
 3.3	Software Interfaces
 
-  This section cannot be fully defined until approximately 2/10/17 when the Arduino is programmed.
+  This section cannot be fully defined until approximately 2/10/17 when the Arduino Mega is programmed.
   Questions to answer in this section include:
-  How is the Interface interacting with the software written on the Arduino? 
+  How is the Interface interacting with the software written on the Arduino Mega? 
   What are Read/Write conventions? 
   What kind of data format will be Read/Written?
 
 
 3.4	Communications Interfaces
 
-  There aren't any communication interfaces that we are aware of at this time.
+  There aren't any communication interfaces in the scope of this project.
 
 
 
@@ -221,33 +219,33 @@ displayed on a 7" touchscreen display connected to the Raspberry Pi via a DSI ri
 4.1.1	Description and Priority
 
 The serial communication allows the interface running on the Raspberry Pi to communicate and send commands/requests to 
-the Arduino that controls the water/wastewater system.
+the Arduino Mega that controls the reuse system.
 This feature has a very high priority as without it the interface cannot operate.
 
 4.1.2	Stimulus/Response Sequences
-<List the sequences of user actions and system responses that stimulate the behavior defined for this feature. These will 
-correspond to the dialog elements associated with use cases.>
+This feature collects and processes data so that it can be formatted for basic and advanced user viewing. It also formats data for
+storage on the SD card for admin user usage. In addition, it sends commands to the Arduino Mega based on input data from users.
 
 4.1.3	Functional Requirements
 REQ-1:	Allow the interface running on the Raspberry Pi to control valve positions, stepper motors, and pumps through
-        the Arduino.
-REQ-2:	Allow the Raspberry Pi to request sensor data from the Arduino (flow rates, temperatures, potentiometers) at
+        the Arduino Mega.
+REQ-2:	Allow the Raspberry Pi to read in sensor data sent from the Arduino Mega (flow rates, temperatures, potentiometers) at
         regular intervals.
 
 4.2	Data Logging and Monitoring
 
 4.2.1	Description and Priority
-Sensor data and control operations need to be logged to files as clear text at regular intervals. Some data will also be
-monitored in order to determine the health and status of the water/wastewater system.
-This feature has a high priority considering the water/wastewater system is an academic project.
+Sensor data and control operations need to be logged to files as clear text at regular intervals in order to be visualized graphically.
+Some data will also be monitored in order to determine the health and status of the reuse system.
+This feature has a high priority considering the reuse system is an academic project.
 
 
 4.2.2	Stimulus/Response Sequences
-<List the sequences of user actions and system responses that stimulate the behavior defined for this feature. These will 
-correspond to the dialog elements associated with use cases.>
+This feature allows the admin users to collect data in a pre-defined file format on the reuse system. The files will allow the admin
+users to study the reuse system through data collected.
 
 4.2.3	Functional Requirements
-REQ-1:	Periodically request sensor data (flow rates, temperatures, potentiometers) from water/wastewater system's Arduino
+REQ-1:	Periodically request sensor data (flow rates, temperatures, potentiometers) from reuse system's Arduino Mega
         and log them to a file as clear text on the Raspberry Pi's SD card.
 REQ-2:  Log all operational commands (valve open/close, pump on/off) issued by the interface to a file as clear text on the
         Raspberry Pi's SD card.
@@ -255,29 +253,30 @@ REQ-2:  Log all operational commands (valve open/close, pump on/off) issued by t
 4.3	Display Features (GUI)
 
 4.3.1	Description and Priority
-The GUI will be the primary way for the user to interact with the interface through the Raspberry Pi touchscreen. The GUI
+The GUI will be the primary way for the user classes to interact with the interface through the Raspberry Pi touchscreen. The GUI
 will present all relevant information about the system and allow the user to issue commands to the system.
 This feature has a medium priority.
 
 
 4.3.2	Stimulus/Response Sequences
-<List the sequences of user actions and system responses that stimulate the behavior defined for this feature. These will 
-correspond to the dialog elements associated with use cases.>
+A basic user will use the default "Homeowner" tab and be able to view if the system requires maintence, if some action is required to
+keep the system running normally, or if the system requires no attention. They will also be able to view approximate water levels.
+The advanced user will use the "Advanced User" tab and be able to view specifics of the system, such as valve postions, what relays are
+active, accurate water levels, pressure and flows measured by sensors, and monitor power and tempratures of the system. In addition, the advanced user will be able to enter "Manual" mode under the "System Status" tab to turn on/off valves on or off and run relays.
 
 4.3.3	Functional Requirements
-REQ-1:	Display relevant information depending on the mode (Specifics TBD):
-          (a) Homeowner Mode: High level information (system status, notify when to empty waste tank)
+REQ-1:	Display relevant information depending on the mode:
+          (a) Basic Mode: High level information (system status, notify when to empty waste tank)
           (b) Advanced Mode: Detailed information about the system (valve positions, flow rates, temperatures, tank levels)
-REQ-2:  Provide a graphical interface allowing the user to control the water/wastewater system (valves, stepper motors,
-        pump) when in advanced mode.
+REQ-2:  Provide a graphical interface allowing the user to control the reuse system (valves, relays) when in advanced mode.
 
-4.4	Consulting
+4.4	Streamline Reuse System Software
 
 4.4.1	Description and Priority
 
   This is the lowest Priority. This covers any consulting help the user may need during the developement of the Interface.
   The user will be allocated a specified number of hours per week to ask for consulting help on code that the user is writing
-  for the water/wastewater system.
+  for the reuse system.
   At the end date of this project, these hours will cease to be available by this contract.
 
 <Provide a short description of the feature and indicate whether it is of High, Medium, or Low priority. You could also 
