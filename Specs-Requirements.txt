@@ -4,81 +4,87 @@ Prepared by Brandon Helmericks and Hannah Tsunemori
 University of Alaska Anchorage
 02/09/2017
 
-Table of Contents..................................................1
-Revision History...................................................1
-1.	Introduction...............................................2
+Table of Contents..........................................1
+1.	Introduction...........................................2
 	1.1	Purpose............................................2
 	1.2	Document Conventions...............................2
 	1.3	Intended Audience and Reading Suggestions..........2   
-	1.4	Product Scope......................................3                               
-	1.5	References.........................................	3	
-2.	Overall Description........................................3                        
-	2.1	Product Perspective................................3                         
+	1.4	Product Scope......................................2                          
+	1.5	References.........................................2	
+2.	Overall Description....................................2                     
+	2.1	Product Perspective................................2                         
 	2.2	Product Functions..................................3                          
-	2.3	User Classes and Characteristics...................4           
-	2.4	Operating Environment..............................5                       
-	2.5	Design and Implementation Constraints..............5       
-	2.6	User Documentation.................................5
-	2.7	Assumptions and Dependencies.......................5
-3.	External Interface Requirements............................6
-	3.1	User Interfaces....................................6                             
-	3.2	Hardware Interfaces................................6                         
-	3.3	Software Interfaces................................6
-	3.4	Communications Interfaces..........................7		
-4.	System Features............................................7
-	4.1	Serial Communication and Control...................7
-	4.2	Data Logging and Modeling..........................7
-	4.3	Digital Display....................................8
-	4.4	Streamline Reuse System Software...................9
-5.	Other Nonfunctional Requirements...........................9
-	5.1	Performance Requirements...........................9
-	5.2	Safety Requirements................................10
-	5.3	Software Quality Attributes........................10
-	5.4	Business Rules.....................................10
-6.	Other Requirements.........................................10
-Appendix A: Glossary...............................................10
-Appendix B: Analysis Models........................................10
-Appendix C: To Be Determined List..................................10
+	2.3	User Classes and Characteristics...................3           
+	2.4	Operating Environment..............................4                       
+	2.5	Design and Implementation Constraints..............4       
+	2.6	User Documentation.................................4
+	2.7	Assumptions and Dependencies.......................4
+3.	External Interface Requirements........................4
+	3.1	User Interfaces....................................4                             
+	3.2	Hardware Interfaces................................5                         
+	3.3	Software Interfaces................................5
+	3.4	Communications Interfaces..........................5		
+4.	System Features........................................5
+	4.1	Serial Communication and Control...................5
+	4.2	Data Logging and Modeling..........................6
+	4.3	Digital Display....................................6
+	4.4	Streamline Reuse System Software...................7
+5.	Other Nonfunctional Requirements.......................7
+	5.1	Performance Requirements...........................7
+	5.2	Safety Requirements...............................7
+	5.3	Software Quality Attributes.......................7
+	5.4	Business Rules....................................7
+Appendix A: Glossary......................................7
+Appendix B: Analysis Models...............................8
+
+
+
+
 
 1.	Introduction
 1.1	Purpose 
-The Graphical User Interface for the Dotson Lab Alaska Water Sewage Challenge acts as a way for a homeowner to interact 
-with the Alaska Water Sewage Challenge project that is being created in Dotson Lab. The User Interface for the Dotson Lab 
-Alaska Water Sewage Challenge is hereafter referred to as "Interface". The Dotson Lab Alaska Water Sewage Challenge is 
-hereafter referred to as "reuse system". The Interface will:
+The Graphical User Interface for the Dotson Lab Alaska Water Sewage Challenge acts as a way
+for a homeowner to interact with the Alaska Water Sewage Challenge project that is being
+created in Dotson Lab. The User Interface for the Dotson Lab 
+Alaska Water Sewage Challenge is hereafter referred to as "Interface". The Dotson Lab Alaska
+Water Sewage Challenge is hereafter referred to as "reuse system". The Interface will:
   (a) Maintain Serial Communication and Control
   (b) Data logging and Modeling
   (c) Display features
   (d) Streamline reuse system software
   
 1.2	Document Conventions
-This document assumes there are no other graphical user interfaces used in conjunction with the reuse system.
-At time of writing, this is the singular graphical user interface that will be used for typical interactions with the reuse system.
+This document assumes there are no other graphical user interfaces used in conjunction with the
+reuse system.
+At time of writing, this is the singular graphical user interface that will be used for typical
+interactions with the reuse system.
 
 1.3	Intended Audience and Reading Suggestions
 This document is for the developers and Dotson Lab hereinafter referred to as "the user".
-The developers will be able to determine how to meet the requirements from this document. The user will be able to 
-determine what to expect they can do with this product and how it works to meet their needs.  
+The developers will be able to determine how to meet the requirements from this document. 
+The user will be able to determine what to expect they can do with this product and how it works
+to meet their needs.  
 
-The document is organized in the following order: introductory information, product creation, external interactions, 
-product features, and non-functional requirements.
+The document is organized in the following order: introductory information, product creation,
+external interactions, product features, and non-functional requirements.
 
 1.4	Product Scope
-The Interface will connect the user to the control and monitoring Arduino Mega in the reuse system. 
-The Interface will allow a user to view water levels, flow rates, valve positions and operational status as well as if the
-reuse system has an issue that needs to be addressed and trigger an alarm. The Interface will log all data to daily files
-as clear text. The data logging feature is specifically designed for research purposes of the user or in further
-troubleshooting of maintenance company. It also allows advanced users to manually control the valve positions, stepper
-motors and power relays.
+The Interface will connect the user to the control and monitoring Arduino Mega in the reuse
+system. 
+The Interface will allow a user to view water levels, flow rates, valve positions and operational
+status as well as if the reuse system has an issue that needs to be addressed and trigger an alarm.
+The Interface will log all data to daily files as clear text. The data logging feature is specifically
+designed for research purposes of the user or in further troubleshooting of maintenance. It also
+allows advanced users to manually control the valve positions, stepper motors and power relays.
 
 1.5	References
 There are currently no references for this document.
 
 2.	Overall Description
 2.1	Product Perspective
-The Interface is to be used with the reuse system. It is to read information from the Arduino Mega chip that will 
-control and monitor the system on a hardware level. The interface will be constructed on a touchscreen 
-interface attached to a Raspberry Pi.
+The Interface is to be used with the reuse system. It is to read information from the Arduino
+Mega chip that will control and monitor the system on a hardware level. The interface will be
+constructed on a touchscreen interface attached to a Raspberry Pi.
 
 
 2.2	Product Functions
@@ -92,12 +98,12 @@ interface attached to a Raspberry Pi.
       This will allow users to interact and read the data on the touch screen device.
       This will include determining what information to show by selecting a user type.
   (d) Streamline reuse software
-      This will be achieved through consulting for the client as the code on the Arduino Mega the Interface reads from will
-      be corrected as needed.
+      This will be achieved through consulting for the client as the code on the Arduino Mega the
+      Interface reads from will be corrected as needed.
 
 2.3	User Classes and Characteristics
-There are three classes of users that will use the Interface. These users will be referred to as "basic user", "advanced 
-user", and "admin user".
+There are three classes of users that will use the Interface. These users will be referred to as
+"basic user", "advanced user", and "admin user".
   
 Basic User Needs:
   (1) Notification of when to empty waste
@@ -109,29 +115,33 @@ Advanced User Needs:
   (3) Display of all valve positions in system
   (4) Display of pressures measured in system
   (5) Display of power to components
-  (6) Display of teperature of control panels and reuse system building
-  (7) Display of and acess to run relays
+  (6) Display of temperature of control panels and reuse system building
+  (7) Display of and access to run relays
 Admin User Needs:
   (1) All Advanced User Needs
   (2) Data logging of measured data in text files
   (3) Consulting on code written for system
     
-For the purposes of this document the basic user needs are of the highest importance as all other user needs include 
-those of the basic user.
+For the purposes of this document the basic user needs are of the highest importance as all other
+user needs include those of the basic user.
 
 2.4	Operating Environment
-The interface will be running on a Raspberry Pi 3 Model B with a 7" touchscreen display (800 x 480 pixels). The Raspberry Pi
-will be running the Raspbian operating system. The Raspberry Pi will need to communicate with code written by
-the user running on the Arduino Mega through a serial connection.
+The interface will be running on a Raspberry Pi 3 Model B with a 7" touchscreen display (800x
+480 pixels). The Raspberry Pi will be running the Raspbian operating system. The Raspberry Pi
+will need to communicate with code written by the user running on the Arduino Mega through a
+serial connection.
 
 2.5	Design and Implementation Constraints
-Problems include unknown code interactions in working in parallel with reuse system that is still in design phase.
+Problems include unknown code interactions in working in parallel with reuse system that is still
+in design phase.
 The Interface must interact with Arduino Mega code written for the reuse system.
-The Interface will communicate to the Arduino Mega through the GPIO ports on the Raspberry Pi.
+The Interface will communicate to the Arduino Mega through the GPIO ports on the Raspberry
+Pi.
 Data logging will be stored to memory in user provided SD card.
 There will be no databases as per client request. Data is to be stored in text files.
 User must be able to maintain and modify code as needed.
-Client side code will need modification as per request of user (consulting) during implementation of the Interface.
+Client side code will need modification as per request of user (consulting) during implementation
+of the Interface.
 
 2.6	User Documentation
 Comments in code are required for future maintenance by user.
@@ -140,15 +150,18 @@ Readme files for user must also be included.
 2.7	Assumptions and Dependencies
 It is assumed the Interface development takes priority over consulting hours.
 It is assumed data read into the Interface is correct data.
-It is assumed the admin user will be able to pull information from the SD card without further instructions.
-It is assumed the basic user will not attempt to use the "Manual" option in the "Advanced User" tab.
+It is assumed the admin user will be able to pull information from the SD card without further
+instructions.
+It is assumed the basic user will not attempt to use the "Manual" option in the "Advanced User"
+tab.
 
 3.	External Interface Requirements
 3.1	User Interfaces
-The primary user interface will be the 7" Raspberry Pi Touchscreen. The dimensions of the touchscreen are 
+The primary user interface will be the 7" Raspberry Pi Touchscreen. The dimensions of the
+touchscreen are 
 194mm x 110mm x 20mm (800 x 480 pixels).
 
-Data will be displayed and modeled as can be seen in the User_Views Figure.
+Data will be displayed and modeled as can be seen in the User Views in Appendix B.
 Basic User Needs:
   (1) Notification of when to empty waste
   (2) Notification when, how much, and where water needs to be added to the system
@@ -159,19 +172,20 @@ Advanced User Needs:
   (3) Display of all valve positions in system
   (4) Display of pressures measured in system
   (5) Display of power to components
-  (6) Display of teperature of control panels and reuse system building
-  (7) Display of and acess to electrical relays
+  (6) Display of temperature of control panels and reuse system building
+  (7) Display of and access to electrical relays
   
 3.2	Hardware Interfaces
-Serial connection between the Arduino Mega and Raspberry Pi (GPIO) used to send data/commands. Preferred code language 
-is Python for user readability. The GUI for the interface will be displayed on a 7" touchscreen display connected
-to the Raspberry Pi via a DSI ribbon cable.
+Serial connection between the Arduino Mega and Raspberry Pi (GPIO) used to send
+data/commands. Preferred code language is Python for user readability. The GUI for the
+interface will be displayed on a 7" touchscreen display connected to the Raspberry Pi via a DSI ribbon cable.
 
 3.3	Software Interfaces
-This section cannot be fully defined until approximately 2/24/17 when the Arduino Mega is programmed.
+This section cannot be fully defined until approximately 2/24/17 when the Arduino Mega is
+programmed.
 Questions to answer in this section include:
-The Interface will be recieving information pushed from the Arduino Mega at set intervals.
-The Interface will also be sending informations back to the Arduion Mega in the form of controls.
+The Interface will be receiving information pushed from the Arduino Mega at set intervals.
+The Interface will also be sending information back to the Arduino Mega in the form of controls.
 The data will be stored in text documents and processed using Python.
 
 3.4	Communications Interfaces
@@ -180,69 +194,78 @@ The communications to and from the Arduino Mega will be through GPIO.
 4.	System Features
 4.1	Serial Communication and Control
 4.1.1	Description and Priority
-The serial communication allows the interface running on the Raspberry Pi to receive sensor data and send commands to 
-the Arduino Mega in the reuse system. This connection will be made via the GPIO ports on the Raspberri Pi This feature has
-a very high priority as without it the interface cannot operate.
+The serial communication allows the interface running on the Raspberry Pi to receive sensor data
+and send commands to the Arduino Mega in the reuse system. This connection will be made via
+the GPIO ports on the Raspberry Pi This feature has a very high priority as without it the
+interface cannot operate.
 
 4.1.2	Stimulus/Response Sequences
-This feature collects and processes data so that it can be formatted for basic and advanced user viewing. It also formats
-data for storage on the SD card for admin user usage. In addition, it sends commands to the Arduino Mega based on input 
-data from users.
+This feature collects and processes data so that it can be formatted for basic and advanced user
+viewing. It also formats data for storage on the SD card for admin user usage. In addition, it
+sends commands to the Arduino Mega based on input data from users.
 
 4.1.3	Functional Requirements
-REQ-1:	Allow the interface running on the Raspberry Pi to control valve positions, stepper motors, and power relays through
-        the Arduino Mega.
-REQ-2:	Allow the Raspberry Pi to read in sensor data sent from the Arduino Mega (water levels, flow rates, temperatures, 
-	potentiometers, valve positions, pressures) at regular intervals.
+REQ-1:	Allow the interface running on the Raspberry Pi to control valve positions,
+stepper motors, and power relays through the Arduino Mega.
+REQ-2:	Allow the Raspberry Pi to read in sensor data sent from the Arduino Mega (water
+levels, flow rates, temperatures, potentiometers, valve positions, pressures) at regular intervals.
 
 4.2	Data Logging and Monitoring
 4.2.1	Description and Priority
-Sensor data and control operations need to be logged to files as clear text at regular intervals in order to be visualized
-graphically. Some data will also be monitored in order to determine the health and status of the reuse system.
+Sensor data and control operations need to be logged to files as clear text at regular intervals in
+order to be visualized graphically. Some data will also be monitored in order to determine the
+health and status of the reuse system.
 This feature has a high priority considering the reuse system is an academic project.
 
 4.2.2	Stimulus/Response Sequences
-This feature allows the admin users to collect data in a pre-defined file format on the reuse system. The files will allow
-the admin users to study the reuse system through data collected.
+This feature allows the admin users to collect data in a pre-defined file format on the reuse
+system. The files will allow the admin users to study the reuse system through data collected.
 
 4.2.3	Functional Requirements
-REQ-1:	Periodically logs sensor data (flow rates, temperatures, potentiometers) sent from reuse system's Arduino Mega
-        and log them to a file as clear text on the Raspberry Pi's SD card.
-REQ-2:  Log all operational commands (valve open/close, electrical relays open/close) issued by the interface to a file as 
-	clear text on the Raspberry Pi's SD card.
+REQ-1:	Periodically logs sensor data (flow rates, temperatures, potentiometers) sent from
+reuse system's Arduino Mega and log them to a file as clear text on the Raspberry Pi's SD card.
+REQ-2:  Log all operational commands (valve open/close, electrical relays open/close) issued by
+the interface to a file as clear text on the Raspberry Pi's SD card.
 
 4.3	Display Features (GUI)
 4.3.1	Description and Priority
-The GUI will be the primary way for the user classes to interact with the interface through the Raspberry Pi touchscreen. 
-The GUI will present all relevant information about the system and allow the user to issue commands to the system.
+The GUI will be the primary way for the user classes to interact with the interface through the
+Raspberry Pi touchscreen. 
+The GUI will present all relevant information about the system and allow the user to issue
+commands to the system.
 This feature has a medium priority.
 
 4.3.2	Stimulus/Response Sequences
-A basic user will use the default "Homeowner" tab and be able to view if the system requires maintence, if some action is 
-required to keep the system running normally, or if the system requires no attention. They will also be able to view 
-approximate water levels. The advanced user will use the "Advanced User" tab and be able to view specifics of the system, 
-such as valve postions, which relays are active, accurate water levels, pressure and flows measured by sensors, and monitor 
-power and tempratures of the system. In addition, the advanced user will be able to enter "Manual" mode under the "System 
+A basic user will use the default "Homeowner" tab and be able to view if the system requires
+maintenance, if some action is required to keep the system running normally, or if the system
+requires no attention. They will also be able to view approximate water levels. The advanced
+user will use the "Advanced User" tab and be able to view specifics of the system, such as valve
+positions, which relays are active, accurate water levels, pressure and flows measured by sensors,
+and monitor power and temperatures of the system. In addition, the advanced user will be able to
+enter "Manual" mode under the "System 
 Status" tab to open or close valves and open or close electrical relays.
 
 4.3.3	Functional Requirements
 REQ-1:	Display relevant information depending on the mode:
-          (a) Basic Mode: High level information (system status, notify when to empty waste tank, if maintenance is 
-	  required)
-          (b) Advanced Mode: Detailed information about the system (valve positions, flow rates, temperatures, tank levels, 
-	  relay positions)
-REQ-2:  Provide a graphical interface allowing the user to control the reuse system (valves, relays) when in advanced mode.
+(a)	Basic Mode: High level information (system status, notify when to empty waste tank, 
+if maintenance is required)
+(b)	Advanced Mode: Detailed information about the system (valve positions, flow rates, 
+temperatures, tank levels, relay positions)
+REQ-2:  Provide a graphical interface allowing the user to control the reuse system (valves,
+relays) when in advanced mode.
 
 4.4	Streamline Reuse System Software
 4.4.1	Description and Priority
-This is the lowest Priority. This covers any consulting help the user may need during the developement of the Interface.
-The user will be allocated a specified number of hours per week to ask for consulting help on code that the user is writing
-for the reuse system. The consulting hours cannot be rolled over into the next week in the event it is not used. At the end date of this
-project, these hours will cease to be available by this contract.
+This is the lowest Priority. This covers any consulting help the user may need during the
+development of the Interface.
+The user will be allocated a specified number of hours per week to ask for consulting help on
+code that the user is writing for the reuse system. The consulting hours cannot be rolled over into
+the next week in the event it is not used. At the end date of this project, these hours will cease to
+be available by this contract.
 
 4.4.2	Stimulus/Response Sequences
-In the event the admin user runs into errors while programming the Arduino Mega or in extracting data from the Interface they will be
-given assistance.
+In the event the admin user runs into errors while programming the Arduino Mega or in 
+extracting data from the Interface they will be given assistance.
 
 4.4.3	Functional Requirements
 This feature will allow the Reuse System Software to be integrated with the reuse system.
@@ -250,29 +273,26 @@ This feature will allow the Reuse System Software to be integrated with the reus
 5.	Other Nonfunctional Requirements
 5.1	Performance Requirements
 The Interface must present data in a way the user can understand what they are reading.
-The Interface will be formatted in a manner as shown in the "Homeowner View", "Advanced User System Status", "Advanced User Water
-Levels", "Advanced User Pressure and Flow", and "Advanced User Monitoring: Power and Temperature" Figures found in Section 4.3.
+The Interface will be formatted in a manner as shown in the "Homeowner View", "Advanced
+User System Status", "Advanced User Water Levels", "Advanced User Pressure and Flow", and
+"Advanced User Monitoring: Power and Temperature" Figures found in Appendix B.
 
 5.2	Safety Requirements
 It is assumed that the basic user does not attempt to enter "Manual" mode of advanced users.
-In the event of required maintence, an alarm will be sounded and "Error: Maintence Required" will appear on the "Homeowner" screen.
+In the event of required maintenance, an alarm will be sounded and "Error: Maintenance
+Required" will appear on the "Homeowner" screen.
 
 5.3	Software Quality Attributes
-The software will be written by admin user approved languages for future readability and modification.
-There will be an blank tab available for formatting at in a later version so that updates to the Interface can be made easily.
+The software will be written by admin user approved languages for future readability and
+modification. There will be a blank tab available for formatting at in a later version so that
+updates to the Interface can be made easily.
 
 5.4	Business Rules
 Basic users should not enter the "Manual" mode under the "Advanced User" tab.
 
 Appendix A: Glossary
-<Define all the terms necessary to properly interpret the SRS, including acronyms and abbreviations. You may wish to 
-build a separate glossary that spans multiple projects or the entire organization, and just include terms specific to 
+<Define all the terms necessary to properly interpret the SRS, including acronyms and abbreviations. You may wish to build a separate glossary that spans multiple projects or the entire organization, and just include terms specific to 
 a single project in each SRS.>
 
 Appendix B: Analysis Models
-<Optionally, include any pertinent analysis models, such as data flow diagrams, class diagrams, state-transition 
-diagrams, or entity-relationship diagrams.>
-
-Appendix C: To Be Determined List
-<Collect a numbered list of the TBD (to be determined) references that remain in the SRS so they can be tracked to closure.>
-
+<Optionally, include any pertinent analysis models, such as data flow diagrams, class diagrams, state-transition diagrams, or entity-relationship diagrams.>
