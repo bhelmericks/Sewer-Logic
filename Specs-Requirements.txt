@@ -81,8 +81,12 @@ motors and power relays.
 
 1.5	References
 
-There are currently no references for this document.
-
+AdvancedUserView_MonitoringPowerAndTemperature.png
+AdvancedUserView_PressureAndFlow.png
+AdvancedUserView_SystemStatus.png
+AdvancedUserView_WaterLevels.png
+HomeownerView.png
+SystemSchematic.png
 
 2.	Overall Description
 
