@@ -73,7 +73,8 @@ The Interface will connect the user to the control and monitoring Arduino Mega i
 The Interface will allow a user to view water levels, flow rates, valve positions and operational
 status as well as if the reuse system has an issue that needs to be addressed and trigger an alarm.
 The Interface will log all data to daily files as clear text. The data logging feature is specifically
-designed for research purposes of the user or in further troubleshooting of maintenance company. It also allows advanced users to manually control the valve positions, stepper motors and
+designed for research purposes of the user or in further troubleshooting of maintenance company.
+It also allows advanced users to manually control the valve positions, stepper motors and
 electrical relays. 
 A schematic of this system can be seen in the SystemSchematic.png figure.
 
@@ -301,5 +302,4 @@ Interface – A graphical user interface that can be seen and interacted with vi
 has been connected to the reuse system via a Raspberry Pi board.
 
 Appendix B: Analysis Models
-<Optionally, include any pertinent analysis models, such as data flow diagrams, class diagrams, state-transition diagrams, or entity-relationship diagrams.>
-
+This contains pictures listed in 1.5 in printable versions of this document
