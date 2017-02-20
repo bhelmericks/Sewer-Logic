@@ -33,8 +33,8 @@ Table of Contents..........................................1
 	5.1	Performance Requirements...........................7
 	5.2	Safety Requirements...............................7
 	5.3	Software Quality Attributes.......................7
-	5.4	Business Rules....................................7
-Appendix A: Glossary......................................7
+	5.4	Business Rules....................................8
+Appendix A: Glossary......................................8
 Appendix B: Analysis Models...............................8
 
 
@@ -80,13 +80,16 @@ A schematic of this system can be seen in the SystemSchematic.png figure.
 
 
 1.5	References
+SystemSchematic.png
+
+User Views:
 Inserted in Appendix B on printable versions:
 AdvancedUserView_MonitoringPowerAndTemperature.png
 AdvancedUserView_PressureAndFlow.png
 AdvancedUserView_SystemStatus.png
 AdvancedUserView_WaterLevels.png
 HomeownerView.png
-SystemSchematic.png
+
 
 2.	Overall Description
 2.1	Product Perspective
@@ -209,7 +212,8 @@ interface cannot operate.
 4.1.2	Stimulus/Response Sequences
 This feature collects and processes data so that it can be formatted for basic and advanced user
 viewing. It also formats data for storage on the SD card for admin user usage. In addition, it
-sends commands to the Arduino Mega based on input data from users.
+sends commands to the Arduino Mega based on input data from users. It also allows the Raspberry Pi
+to initiate the automated processing after seven treatment cycles.
 
 4.1.3	Functional Requirements
 REQ-1:	Allow the interface running on the Raspberry Pi to control valve positions,
@@ -221,7 +225,8 @@ levels, flow rates, temperatures, potentiometers, valve positions, pressures) at
 4.2.1	Description and Priority
 Sensor data and control operations need to be logged to files as clear text at regular intervals in
 order to be visualized graphically. Some data will also be monitored in order to determine the
-health and status of the reuse system.
+health and status of the reuse system. This also will allow the Interface to keep record of the
+number of treatment cycles until the reuse system requires processing.
 This feature has a high priority considering the reuse system is an academic project.
 
 4.2.2	Stimulus/Response Sequences
@@ -243,14 +248,15 @@ commands to the system.
 This feature has a medium priority.
 
 4.3.2	Stimulus/Response Sequences
+The following references the User View images referenced in section 5.1 of this document.
 A basic user will use the default "Homeowner" tab and be able to view if the system requires
 maintenance, if some action is required to keep the system running normally, or if the system
 requires no attention. They will also be able to view approximate water levels. The advanced
 user will use the "Advanced User" tab and be able to view specifics of the system, such as valve
 positions, which relays are active, accurate water levels, pressure and flows measured by sensors,
 and monitor power and temperatures of the system. In addition, the advanced user will be able to
-enter "Manual" mode under the "System 
-Status" tab to open or close valves and open or close electrical relays.
+enter "Manual" mode under the "System Status" tab to open or close valves and open or close 
+electrical relays.
 
 4.3.3	Functional Requirements
 REQ-1:	Display relevant information depending on the mode:
@@ -282,7 +288,7 @@ This feature will allow the Reuse System Software to be integrated with the reus
 The Interface must present data in a way the user can understand what they are reading.
 The Interface will be formatted in a manner as shown in the "Homeowner View", "Advanced
 User System Status", "Advanced User Water Levels", "Advanced User Pressure and Flow", and
-"Advanced User Monitoring: Power and Temperature" Figures found in Appendix B.
+"Advanced User Monitoring: Power and Temperature" Figures referenced in section 5.1.
 
 5.2	Safety Requirements
 It is assumed that the basic user does not attempt to enter "Manual" mode of advanced users.
