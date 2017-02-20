@@ -69,16 +69,24 @@ The document is organized in the following order: introductory information, prod
 external interactions, product features, and non-functional requirements.
 
 1.4	Product Scope
-The Interface will connect the user to the control and monitoring Arduino Mega in the reuse
-system. 
+
+The Interface will connect the user to the control and monitoring Arduino Mega in the reuse system. 
 The Interface will allow a user to view water levels, flow rates, valve positions and operational
 status as well as if the reuse system has an issue that needs to be addressed and trigger an alarm.
 The Interface will log all data to daily files as clear text. The data logging feature is specifically
-designed for research purposes of the user or in further troubleshooting of maintenance. It also
-allows advanced users to manually control the valve positions, stepper motors and power relays.
+designed for research purposes of the user or in further troubleshooting of maintenance company. It also
+allows advanced users to manually control the valve positions, stepper motors and electrical relays. 
+A schematic of this system can be seen in the SystemSchematic.png figure.
+
 
 1.5	References
-There are currently no references for this document.
+
+AdvancedUserView_MonitoringPowerAndTemperature.png
+AdvancedUserView_PressureAndFlow.png
+AdvancedUserView_SystemStatus.png
+AdvancedUserView_WaterLevels.png
+HomeownerView.png
+SystemSchematic.png
 
 2.	Overall Description
 2.1	Product Perspective
