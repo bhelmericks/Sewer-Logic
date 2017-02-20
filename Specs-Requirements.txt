@@ -1,5 +1,4 @@
-Software Specification and Requirements for
-Sewer Logic
+Software Specification and Requirements for Sewer Logic
 Version 1 unapproved
 Prepared by Brandon Helmericks and Hannah Tsunemori
 University of Alaska Anchorage
@@ -34,9 +33,8 @@ Revision History...................................................0
 5.	Other Nonfunctional Requirements...........................0
 	5.1	Performance Requirements...........................0
 	5.2	Safety Requirements................................0
-	5.3	Security Requirements..............................0
-	5.4	Software Quality Attributes........................0
-	5.5	Business Rules.....................................0
+	5.3	Software Quality Attributes........................0
+	5.4	Business Rules.....................................0
 6.	Other Requirements.........................................0
 Appendix A: Glossary...............................................0
 Appendix B: Analysis Models........................................0
@@ -60,7 +58,8 @@ hereafter referred to as "reuse system". The Interface will:
 
 1.2	Document Conventions
 
-There are no document conventions to note at this time.
+This document assumes there are no other graphical user interfaces used in conjunction with the reuse system.
+At time of writing, this is the singular graphical user interface that will be used for typical interactions with the reuse system.
 
 1.3	Intended Audience and Reading Suggestions
 This document is for the developers and Dotson Lab hereinafter referred to as "the user".
@@ -89,7 +88,7 @@ There are currently no references for this document.
 
 2.1	Product Perspective
 The Interface is to be used with the reuse system. It is to read information from the Arduino Mega chip that will 
-control and monitor and control the system on a hardware level. The interface will be constructed on a touchscreen 
+control and monitor the system on a hardware level. The interface will be constructed on a touchscreen 
 interface attached to a Raspberry Pi.
 
 
@@ -140,12 +139,11 @@ the user running on the Arduino Mega through a serial connection.
 
 2.5	Design and Implementation Constraints
 
-Problems include unknown code interactions in working in parallel with reuse system that is still in design.
+Problems include unknown code interactions in working in parallel with reuse system that is still in design phase.
 The Interface must interact with Arduino Mega code written for the reuse system.
 The Interface will communicate to the Arduino Mega through the GPIO ports on the Raspberry Pi.
 Data logging will be stored to memory in user provided SD card.
 There will be no databases as per client request. Data is to be stored in text files.
-A client side server has been made available at dotson.uaa.alaska.edu.
 User must be able to maintain and modify code as needed.
 Client side code will need modification as per request of user (consulting) during implementation of the Interface.
 
@@ -156,12 +154,10 @@ Readme files for user must also be included.
 
 2.7	Assumptions and Dependencies
 
-There is an assumed time constraint on advising client per week. This will be up to a maximum number of hours per week.
-The time constraint cannot be rolled over into the next week in the event it is not used.
 It is assumed the Interface development takes priority over consulting hours.
-Therefore, consulting hours per week will be less during Interface development.
-It is assumed data read into the Interface is correct data. Any adjustments can be taken care of in consulting.
-
+It is assumed data read into the Interface is correct data.
+It is assumed the admin user will be able to pull information from the SD card without further instructions.
+It is assumed the basic user will not attempt to use the "Manual" option in the "Advanced User" tab.
 
 3.	External Interface Requirements
 
@@ -193,14 +189,13 @@ to the Raspberry Pi via a DSI ribbon cable.
 
 This section cannot be fully defined until approximately 2/24/17 when the Arduino Mega is programmed.
 Questions to answer in this section include:
-How is the Interface interacting with the software written on the Arduino Mega? 
-What are Read/Write conventions? 
-What kind of data format will be Read/Written?
-
+The Interface will be recieving information pushed from the Arduino Mega at set intervals.
+The Interface will also be sending informations back to the Arduion Mega in the form of controls.
+The data will be stored in text documents and processed using Python.
 
 3.4	Communications Interfaces
 
-There aren't any communication interfaces in the scope of this project.
+The communications to and from the Arduino Mega will be through GPIO.
 
 4.	System Features
 
@@ -270,23 +265,15 @@ REQ-2:  Provide a graphical interface allowing the user to control the reuse sys
 
 This is the lowest Priority. This covers any consulting help the user may need during the developement of the Interface.
 The user will be allocated a specified number of hours per week to ask for consulting help on code that the user is writing
-for the reuse system. At the end date of this project, these hours will cease to be available by this contract.
+for the reuse system. The consulting hours cannot be rolled over into the next week in the event it is not used. At the end date of this
+project, these hours will cease to be available by this contract.
 
 4.4.2	Stimulus/Response Sequences
-<List the sequences of user actions and system responses that stimulate the behavior defined for this feature. These will 
-correspond to the dialog elements associated with use cases.>
+In the event the admin user runs into errors while programming the Arduino Mega or in extracting data from the Interface they will be
+given assistance.
 
 4.4.3	Functional Requirements
-<Itemize the detailed functional requirements associated with this feature. These are the software capabilities that 
-must be present in order for the user to carry out the services provided by the feature, or to execute the use case. 
-Include how the product should respond to anticipated error conditions or invalid inputs. Requirements should be 
-concise, complete, unambiguous, verifiable, and necessary. Use “TBD” as a placeholder to indicate when necessary 
-information is not yet available.>
-
-<Each requirement should be uniquely identified with a sequence number or a meaningful tag of some kind.>
-
-REQ-1:	
-REQ-2:
+This feature will allow the Reuse System Software to be integrated with the reuse system.
 
 
 5.	Other Nonfunctional Requirements
@@ -294,40 +281,21 @@ REQ-2:
 5.1	Performance Requirements
 
 The Interface must present data in a way the user can understand what they are reading.
-  
-<If there are performance requirements for the product under various circumstances, state them here and explain their 
-rationale, to help the developers understand the intent and make suitable design choices. Specify the timing 
-relationships for real time systems. Make such requirements as specific as possible. You may need to state performance 
-requirements for individual functional requirements or features.>
+The Interface will be formatted in a manner as shown in the "Homeowner View", "Advanced User System Status", "Advanced User Water
+Levels", "Advanced User Pressure and Flow", and "Advanced User Monitoring: Power and Temperature" Figures found in Section 4.3.
 
 5.2	Safety Requirements
-<Specify those requirements that are concerned with possible loss, damage, or harm that could result from the use of 
-the product. Define any safeguards or actions that must be taken, as well as actions that must be prevented. Refer to 
-any external policies or regulations that state safety issues that affect the product’s design or use. Define any 
-safety certifications that must be satisfied.>
+It is assumed that the basic user does not attempt to enter "Manual" mode of advanced users.
+In the event of required maintence, an alarm will be sounded and "Error: Maintence Required" will appear on the "Homeowner" screen.
 
-5.3	Security Requirements
-<Specify any requirements regarding security or privacy issues surrounding use of the product or protection of the data 
-used or created by the product. Define any user identity authentication requirements. Refer to any external policies or 
-regulations containing security issues that affect the product. Define any security or privacy certifications that must 
-be satisfied.>
 
-5.4	Software Quality Attributes
-<Specify any additional quality characteristics for the product that will be important to either the customers or the 
-developers. Some to consider are: adaptability, availability, correctness, flexibility, interoperability, 
-maintainability, portability, reliability, reusability, robustness, testability, and usability. Write these to be 
-specific, quantitative, and verifiable when possible. At the least, clarify the relative preferences for various 
-attributes, such as ease of use over ease of learning.>
+5.3	Software Quality Attributes
+The software will be written by admin user approved languages for future readability and modification.
+There will be an blank tab available for formatting at in a later version so that updates to the Interface can be made easily.
 
-5.5	Business Rules
-<List any operating principles about the product, such as which individuals or roles can perform which functions 
-under specific circumstances. These are not functional requirements in themselves, but they may imply certain functional 
-requirements to enforce the rules.>
+5.4	Business Rules
+Basic users should not enter the "Manual" mode under the "Advanced User" tab.
 
-6.	Other Requirements
-<Define any other requirements not covered elsewhere in the SRS. This might include database requirements, 
-internationalization requirements, legal requirements, reuse objectives for the project, and so on. Add any new 
-sections that are pertinent to the project.>
 
 Appendix A: Glossary
 <Define all the terms necessary to properly interpret the SRS, including acronyms and abbreviations. You may wish to 
