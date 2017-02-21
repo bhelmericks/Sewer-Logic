@@ -10,22 +10,22 @@ class Interface(tk.Tk):
         #Create base frame
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
-        #
-        homeOwnerButton = tk.Button(container, text="Homeowner", command=lambda: self.show_frame(Homeowner))
-        homeOwnerButton.place(x=0, y=440, width=400, height=40)
-        advUsrButton = tk.Button(container, text="Advanced User", command=lambda: self.show_frame(AdvUser))
-        advUsrButton.place(x=400, y=440, width=400, height=40)
+
+        self.homeOwnerButton = tk.Button(container, text="Homeowner", command=lambda: self.show_frame(Homeowner))
+        self.homeOwnerButton.place(x=0, y=440, width=400, height=40)
+        self.advUsrButton = tk.Button(container, text="Advanced User", command=lambda: self.show_frame(AdvUser))
+        self.advUsrButton.place(x=400, y=440, width=400, height=40)
 
         #Create large frames
         self.frames = {}
-        for F in (AdvUser, HomeOwner):
-            frame = F(frames[AdvUser], self)
+        for F in (AdvUser, Homeowner):
+            frame = F(container, self)
             self.frames[F] = frame
-            frame.place(x=0, y=40, width=800, height=440)
+            frame.place(x=0, y=0, width=800, height=440)
 
         #Create small frames
         for F in (Option, PowerAndTemp, FlowAndPressure, WaterLevel, SystemStatus):
-            frame = F(frames[AdvUser], self)
+            frame = F(self.frames[AdvUser], self)
             self.frames[F] = frame
             frame.place(x=0, y=40, width=800, height=400)
 
