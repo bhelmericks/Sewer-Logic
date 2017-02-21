@@ -7,17 +7,23 @@ class Interface(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+
         #Create base frame
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
 
-        self.homeOwnerButton = tk.Button(container, text="Homeowner", command=lambda: self.show_frame(Homeowner))
-        self.homeOwnerButton.place(x=0, y=440, width=400, height=40)
+        self.buttons = {} #Dictionary to find button objects from page names
+
+        self.homeownerButton = tk.Button(container, text="Homeowner", command=lambda: self.show_frame(Homeowner))
+        self.buttons[Homeowner] = self.homeownerButton
+        self.homeownerButton.place(x=0, y=440, width=400, height=40)
         self.advUsrButton = tk.Button(container, text="Advanced User", command=lambda: self.show_frame(AdvUser))
+        self.buttons[AdvUser] = self.advUsrButton
         self.advUsrButton.place(x=400, y=440, width=400, height=40)
 
+        self.frames = {} #Dictionary to find frame objects from page names
+
         #Create large frames
-        self.frames = {}
         for F in (AdvUser, Homeowner):
             frame = F(container, self)
             self.frames[F] = frame
@@ -31,10 +37,18 @@ class Interface(tk.Tk):
 
         self.show_frame(Homeowner) #Show default frame
 
+    #Bring selected frame to the front and enable/disable relevant buttons
     def show_frame(self, page_name):
-        '''Show a frame for the given page name'''
-        frame = self.frames[page_name]
-        frame.tkraise()
+        self.frames[page_name].tkraise() #Raise frame to top
+        if page_name == Homeowner:
+            self.buttons[AdvUser].config(state="active") #If Homeowner is selected reenable advUserButton
+        elif page_name == AdvUser:
+            self.buttons[Homeowner].config(state="active") #If AdvUser is selected reenable homeownerButton
+        else:
+            for F in (Option, PowerAndTemp, FlowAndPressure, WaterLevel, SystemStatus):
+                if page_name != F:
+                    self.buttons[F].config(state="active") #Enable unselected AdvUser buttons
+        self.buttons[page_name].config(state="disabled") #Disable selected button
 
 class Homeowner(tk.Frame):
 
@@ -48,21 +62,27 @@ class AdvUser(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        self.controller = controller
+        controller = controller
 
         optionButton = tk.Button(self, text="Options", command=lambda: controller.show_frame(Option))
+        controller.buttons[Option] = optionButton
         optionButton.place(x=640, y=0, width=160, height=40)
 
         tempButton = tk.Button(self, text="Power and Temperature", command=lambda: controller.show_frame(PowerAndTemp))
+        controller.buttons[PowerAndTemp] = tempButton
         tempButton.place(x=480, y=0, width=160, height=40)
 
         flowButton = tk.Button(self, text="Flow and Pressure", command=lambda: controller.show_frame(FlowAndPressure))
+        controller.buttons[FlowAndPressure] = flowButton
         flowButton.place(x=320, y=0, width=160, height=40)
 
         waterButton = tk.Button(self, text="Water Level", command=lambda: controller.show_frame(WaterLevel))
+        controller.buttons[WaterLevel] = waterButton
         waterButton.place(x=160, y=0, width=160, height=40)
 
         statusButton = tk.Button(self, text="System Status", command=lambda: controller.show_frame(SystemStatus))
+        statusButton.config(state="disabled") #statusButton is selected by default
+        controller.buttons[SystemStatus] = statusButton
         statusButton.place(x=0, y=0, width=160, height=40)
 
 class Option(tk.Frame):
