@@ -120,8 +120,19 @@ class WaterLevel(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="Water Levels Frame", font=TITLE_FONT)
-        label.pack(side="top", fill="x", pady=10)
+        canvas = tk.Canvas(self)
+        canvas.place(x=46, y=91, width=709, height=209)
+        self.drawTank(self, canvas, 4, 4, 200, 0.75, "Wash")
+        self.drawTank(self, canvas, 154, 4, 200, 0.5, "Grey")
+        self.drawTank(self, canvas, 304, 4, 200, 1, "NF Feed")
+        self.drawTank(self, canvas, 454, 4, 200, 1, "RO Feed")
+        self.drawTank(self, canvas, 604, 104, 100, 0.1, "Waste")
+
+    def drawTank(self, parent, canvas, x, y, size, fill, name):
+        canvas.create_rectangle(x, y, x+100, y+size, width=3, fill="grey")
+        canvas.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1, width=0, fill="blue")
+        label = tk.Label(parent, text=name, font=TITLE_FONT)
+        label.place(x=x+47, y=300, width=100, height=40)
 
 class SystemStatus(tk.Frame):
 
@@ -135,6 +146,7 @@ if __name__ == "__main__":
     app = Interface() #Create application
     app.wm_title("Interface") #Set application title
     #app.overrideredirect(1) #Force fullscreen, uncomment line when running on Raspberry Pi
+    #app.config(cursor="none") #Hide mouse pointer, uncomment line when running on Raspberry Pi
     app.resizable(width=False, height=False) #Disable application window resizing
     app.geometry('{}x{}'.format(800, 480)) #Set application window size
     app.mainloop()
