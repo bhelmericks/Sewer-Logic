@@ -181,7 +181,27 @@ class PowerAndTemp(tk.Frame):
         label = tk.Label(self, text="Power and Temperatures Frame",
                          font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=10)
-
+        renderer = Renderer(self, 800, 380)
+        fullLine = 'Temperature'
+        renderer.drawDataOutput(self, 40, 50, fullLine)
+        fullLine = 'Power'
+        renderer.drawDataOutput(self, 340, 50, fullLine)
+        for x in range(0, 3):
+            numberIn = x * (2 + x) + 20 + 0.5 - (0.2 * x)
+            if x is 0:
+                fullLine = 'Outside' + ':  ' + str(numberIn) + '  ' + 'F'
+            elif x is 1:
+                fullLine = 'AC Panel' + ':  ' + str(numberIn) + '  ' + 'F'
+            else:
+                fullLine = 'DC Panel' + ':  ' + str(numberIn) + '  ' + 'F'
+            renderer.drawDataOutput(self, 20, x * 40 + 100, fullLine)
+            numberIn = x * (2 + x) + 90
+            if x < 2:
+                fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'Watts'
+            else:
+                fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Watts'
+                numberIn = (x-1 * (2 + x-1) + 90)+(x-1 * (2 + x-1) + 90)
+            renderer.drawDataOutput(self, 320, x * 40 + 100, fullLine)
 
 class FlowAndPressure(tk.Frame):
     """Flows and pressures frame."""
@@ -208,7 +228,6 @@ class FlowAndPressure(tk.Frame):
 
 class WaterLevel(tk.Frame):
     """Water levels frame."""
-
     def __init__(self, parent, controller):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
@@ -306,7 +325,7 @@ class Renderer(tk.Canvas):
     def drawDataOutput(self, controller, x, y, fullLine):
         """Draw label of something at a value with units"""
         label = tk.Label(controller, text=fullLine, font=NOTIFICATION_FONT)
-        label.place(x=x, y=y, width=200, height=40)
+        label.place(x=x, y=y, width=250, height=40)
 
 class DataHandler():
     """Handles serial communications and data managment."""
