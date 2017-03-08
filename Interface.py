@@ -1,10 +1,10 @@
 """Blah blah blah."""
 import os.path
-import schedule
+# import schedule
 import serial
 import threading
 import time
-#import tkinter as tk   # python3
+# import tkinter as tk   # python3
 import Tkinter as tk   # python
 
 
@@ -95,19 +95,21 @@ class Homeowner(tk.Frame):
         self.controller = controller
         # label = tk.Label(self, text="Homeowner Frame", font=TITLE_FONT)
         # label.pack(side="top", fill="x", pady=10)
-        #find a way to make nowAsString retain value
+        # find a way to make nowAsString retain value
         nowAsString = time.strftime('%H:%M %m/%d/%Y')
-        washTank =  nowAsString+ ' NOTICE: add 1 gallon to Wash Tank'
+        washTank = nowAsString + ' NOTICE: add 1 gallon to Wash Tank'
         wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
         renderer = Renderer(self, 800, 430)
-        #logic to force into true values needed
+        # logic to force into true values needed
         renderer.drawFlag(self, 10, 30, 15, 'blue', 'green', washTank)
         renderer.drawFlag(self, 10, 70, 15, 'yellow', 'green', wasteTank)
-        renderer.drawFlag(self, 30, 150, 25, 'red', 'green', 'ERROR: Maintence Required')
+        renderer.drawFlag(self, 30, 150, 25, 'red', 'green',
+                          'ERROR: Maintence Required')
         # display water levels on Homeowner page
         renderer.drawTank(self, 360, 195, 180, 0.3, "Wash")
         renderer.drawTank(self, 470, 195, 180, 0.5, "Grey")
         renderer.drawTank(self, 580, 195+90, 90, 0.1, "Waste")
+
 
 class AdvUser(tk.Frame):
     """Advanced user frame."""
@@ -223,19 +225,22 @@ class SystemStatus(tk.Frame):
         # logic to force into true values needed
         valvePosition = []
         valveLabel = []
-        for x in range (0, 8):
+        for x in range(0, 8):
             # correct valve on/off logic
             if x is 4 or x is 5 or x is 7:
                 valvePosition.append('ON')
             else:
                 valvePosition.append('OFF')
             valveLabel.append(' ')
-            valveLabel[x] = ' ' + str(x + 1) + ' ' + valvePosition [x]
+            valveLabel[x] = ' ' + str(x + 1) + ' ' + valvePosition[x]
             xposition = 30 + x * 30
             if valvePosition[x] is'ON':
-                renderer.drawFlag(self, 10, xposition, 15, 'green', 'green', valveLabel[x])
+                renderer.drawFlag(self, 10, xposition, 15, 'green', 'green',
+                                  valveLabel[x])
             else:
-                renderer.drawFlag(self, 10, xposition, 15, 'red', 'green', valveLabel[x])
+                renderer.drawFlag(self, 10, xposition, 15, 'red', 'green',
+                                  valveLabel[x])
+
 
 class Renderer(tk.Canvas):
     """Renderer used to draw GUI objects."""
@@ -245,22 +250,22 @@ class Renderer(tk.Canvas):
         tk.Canvas.__init__(self, parent)
         self.place(x=0, y=0, width=width, height=height)
 
-    def drawFlag(self, controller, x, y, size, color0, color1, name):
+    def drawFlag(self, parent, x, y, size, color0, color1, name):
         """Draw a circle flag object with a label to the right."""
         self.create_oval(x+4, y+4, x+size+4, y+size+4, width=2, fill=color0)
-        label = tk.Label(controller, text=name, font=NOTIFICATION_FONT)
+        label = tk.Label(parent, text=name, font=NOTIFICATION_FONT)
         label.place(x=x+size+5, y=y+4, height=size)
 
-    def drawTank(self, controller, x, y, size, fill, name):
+    def drawTank(self, parent, x, y, size, fill, name):
         """Draw a tank GUI object with a label below and # gallons above."""
         self.create_rectangle(x, y, x+100, y+size, width=3, fill='grey')
         self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
                               width=0, fill='blue')
-        gals = tk.Label(controller, text=str(int(size*fill))+'/'+str(size)
-                        + 'gal', font=NOTIFICATION_FONT)
-        gals.place(x=x, y=y-20, width=100, height=20)
-        label = tk.Label(controller, text=name, font=TITLE_FONT)
-        label.place(x=x, y=y+size+10, width=100, height=40)
+        gals = tk.Label(parent, text=str(int(size*fill))+'/'+str(size)
+                        + 'g', font=NOTIFICATION_FONT)
+        gals.place(x=x, y=y-21, width=100, height=20)
+        label = tk.Label(parent, text=name, font=TITLE_FONT)
+        label.place(x=x, y=y+size+5, width=100, height=40)
 
 
 class DataHandler():
@@ -287,7 +292,7 @@ class DataHandler():
                          '2valveD': 'ROPOT\tROF\tROFT\tWWT\tWASTE\ttime\n'}})
         self.serialCom = serial.Serial('/dev/ttyACM0', 9600)
 
-    def RunAndLog(self):
+    def runAndLog(self):
         """Blah blah blah."""
         # Get current time
         message = self.serialCom.readline()
@@ -306,7 +311,7 @@ class DataHandler():
             file.flush()
             file.close()
 
-        # open file and save serial data from arduino
+        # Open file and save serial data from arduino
         file = open(fileName, "a")
         # message = serialCom.readline()
         # print('\t'.join(message))
@@ -317,7 +322,7 @@ class DataHandler():
 
 if __name__ == "__main__":
     # handler = DataHandler()
-    # serialListener = threading.Thread(target=handler.RunAndLog, args=())
+    # serialListener = threading.Thread(target=handler.runAndLog, args=())
     # serialListenerEvent = threading.Event()
     # serialListener.start()
     app = Interface()  # Create application
