@@ -106,9 +106,9 @@ class Homeowner(tk.Frame):
         renderer.drawFlag(self, 30, 150, 25, 'red', 'green',
                           'ERROR: Maintence Required')
         # display water levels on Homeowner page
-        renderer.drawTank(self, 360, 195, 180, 0.3, "Wash")
-        renderer.drawTank(self, 470, 195, 180, 0.5, "Grey")
-        renderer.drawTank(self, 580, 195+90, 90, 0.1, "Waste")
+        renderer.drawTank(self, 360, 195, 80, 0.3, "Wash")
+        renderer.drawTank(self, 470, 195, 80, 0.5, "Grey")
+        renderer.drawTank(self, 580, 195+80, 40, 0.1, "Waste")
 
 
 class AdvUser(tk.Frame):
@@ -183,7 +183,27 @@ class PowerAndTemp(tk.Frame):
         label = tk.Label(self, text="Power and Temperatures Frame",
                          font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=10)
-
+        renderer = Renderer(self, 800, 380)
+        fullLine = 'Temperature'
+        renderer.drawDataOutput(self, 40, 50, fullLine)
+        fullLine = 'Power'
+        renderer.drawDataOutput(self, 340, 50, fullLine)
+        for x in range(0, 3):
+            numberIn = x * (2 + x) + 20 + 0.5 - (0.2 * x)
+            if x is 0:
+                fullLine = 'Outside' + ':  ' + str(numberIn) + '  ' + 'F'
+            elif x is 1:
+                fullLine = 'AC Panel' + ':  ' + str(numberIn) + '  ' + 'F'
+            else:
+                fullLine = 'DC Panel' + ':  ' + str(numberIn) + '  ' + 'F'
+            renderer.drawDataOutput(self, 20, x * 40 + 100, fullLine)
+            numberIn = x * (2 + x) + 90
+            if x < 2:
+                fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'Watts'
+            else:
+                fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Watts'
+                numberIn = (x-1 * (2 + x-1) + 90)+(x-1 * (2 + x-1) + 90)
+            renderer.drawDataOutput(self, 320, x * 40 + 100, fullLine)
 
 class FlowAndPressure(tk.Frame):
     """Flows and pressures frame."""
@@ -195,21 +215,31 @@ class FlowAndPressure(tk.Frame):
         label = tk.Label(self, text="Flow and Pressure Frame",
                          font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=10)
-
+        renderer = Renderer(self, 800, 380)
+        fullLine='Pressure'
+        renderer.drawDataOutput(self, 40, 50,fullLine)
+        fullLine='Flow'
+        renderer.drawDataOutput(self, 340, 50, fullLine)
+        for x in range (0,5):
+            numberIn=x*(2+x)+20+0.532-(0.1*x)
+            fullLine=str(x)+':  '+str(numberIn)+'  '+'psi'
+            renderer.drawDataOutput(self, 20, x*40+100, fullLine)
+            numberIn = x * (2 + x) + 50+0.932-(0.1*x)
+            fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'm^3/sec'
+            renderer.drawDataOutput(self, 320, x*40+100, fullLine)
 
 class WaterLevel(tk.Frame):
     """Water levels frame."""
-
     def __init__(self, parent, controller):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
         renderer = Renderer(self, 800, 380)
-        renderer.drawTank(self, 50, 95, 200, 0.3, "Wash")
-        renderer.drawTank(self, 200, 95, 200, 0.5, "Grey")
-        renderer.drawTank(self, 350, 95, 200, 1, "NF Feed")
-        renderer.drawTank(self, 500, 95, 200, 1, "RO Feed")
-        renderer.drawTank(self, 650, 195, 100, 0.1, "Waste")
+        renderer.drawTank(self, 50, 95, 80, 0.3, "Wash")
+        renderer.drawTank(self, 200, 95, 80, 0.5, "Grey")
+        renderer.drawTank(self, 350, 95, 80, 1, "NF Feed")
+        renderer.drawTank(self, 500, 95, 80, 1, "RO Feed")
+        renderer.drawTank(self, 650, 95+80, 40, 0.1, "Waste")
 
 
 class SystemStatus(tk.Frame):
@@ -227,20 +257,35 @@ class SystemStatus(tk.Frame):
         valveLabel = []
         for x in range(0, 8):
             # correct valve on/off logic
-            if x is 4 or x is 5 or x is 7:
+            if x > 3:
+                xposition = 170
+                yposition = yposition = 30+40*(x-4)
+            else:
+                xposition = 10
+                yposition = 30 + 40 * x
+            if x is 4 or x is 7 or x is 2:
                 valvePosition.append('ON')
             else:
                 valvePosition.append('OFF')
             valveLabel.append(' ')
-            valveLabel[x] = ' ' + str(x + 1) + ' ' + valvePosition[x]
-            xposition = 30 + x * 30
-            if valvePosition[x] is'ON':
-                renderer.drawFlag(self, 10, xposition, 15, 'green', 'green',
-                                  valveLabel[x])
-            else:
-                renderer.drawFlag(self, 10, xposition, 15, 'red', 'green',
-                                  valveLabel[x])
 
+            valveLabel[x] = ' ' + str(x + 1) + ' ' + valvePosition [x]
+            if valvePosition[x] is'ON':
+                renderer.drawFlag(self, xposition, yposition, 15, 'green', 'green', valveLabel[x])
+            else:
+                renderer.drawFlag(self, xposition, yposition, 15, 'red', 'green', valveLabel[x])
+        #insert two variable valves
+        yposition = 30
+        color = 'green'
+        relay = []
+        relay.append('Bubbler')
+        relay.append('UV')
+        relay.append('Ozone')
+        relay.append('Ozone Pump')
+        relay.append('High Pressure Pump')
+        for x in range (0,5):
+            renderer.drawRelay(self, 600, yposition, 50, color, relay[x])
+            yposition = yposition+60
 
 class Renderer(tk.Canvas):
     """Renderer used to draw GUI objects."""
@@ -258,15 +303,33 @@ class Renderer(tk.Canvas):
 
     def drawTank(self, parent, x, y, size, fill, name):
         """Draw a tank GUI object with a label below and # gallons above."""
+        sizeLabel=size
+        size=size*2
         self.create_rectangle(x, y, x+100, y+size, width=3, fill='grey')
         self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
                               width=0, fill='blue')
+
         gals = tk.Label(parent, text=str(int(size*fill))+'/'+str(size)
                         + 'g', font=NOTIFICATION_FONT)
         gals.place(x=x, y=y-21, width=100, height=20)
         label = tk.Label(parent, text=name, font=TITLE_FONT)
         label.place(x=x, y=y+size+5, width=100, height=40)
 
+    def drawRelay(self, controller, x, y, size, color, name):
+        """Draw a button for relays with label to the left"""
+        self.create_rectangle(x, y, x + 100, y + size, width=3, fill=color)
+        relayLabel = tk.Label(controller, text=name, font=NOTIFICATION_FONT)
+        relayLabel.place(x=x-230, y=y+3, width=220, height=40)
+        if color is 'green':
+            label = tk.Label(controller, text='ACTIVE', font=NOTIFICATION_FONT, bg='green')
+        else:
+            label = tk.Label(controller, text='RUN', font=NOTIFICATION_FONT, bg='grey')
+        label.place(x=x+10, y=y+3, width=75, height=40)
+
+    def drawDataOutput(self, controller, x, y, fullLine):
+        """Draw label of something at a value with units"""
+        label = tk.Label(controller, text=fullLine, font=NOTIFICATION_FONT)
+        label.place(x=x, y=y, width=250, height=40)
 
 class DataHandler():
     """Handles serial communications and data managment."""
