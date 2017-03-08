@@ -1,11 +1,11 @@
 """Blah blah blah."""
 import os.path
-#import schedule
-#import serial
+import schedule
+import serial
 import threading
 import time
-import tkinter as tk   # python3
-#import Tkinter as tk   # python
+#import tkinter as tk   # python3
+import Tkinter as tk   # python
 
 
 TITLE_FONT = ("Helvetica", 18, "bold")
