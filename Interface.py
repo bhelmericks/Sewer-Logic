@@ -219,7 +219,23 @@ class SystemStatus(tk.Frame):
         self.controller = controller
         label = tk.Label(self, text="System Status Frame", font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=10)
-
+        renderer = Renderer(self, 800, 430)
+        # logic to force into true values needed
+        valvePosition = []
+        valveLabel = []
+        for x in range (0, 8):
+            # correct valve on/off logic
+            if x is 4 or x is 5 or x is 7:
+                valvePosition.append('ON')
+            else:
+                valvePosition.append('OFF')
+            valveLabel.append(' ')
+            valveLabel[x] = ' ' + str(x + 1) + ' ' + valvePosition [x]
+            xposition = 30 + x * 30
+            if valvePosition[x] is'ON':
+                renderer.drawFlag(self, 10, xposition, 15, 'green', 'green', valveLabel[x])
+            else:
+                renderer.drawFlag(self, 10, xposition, 15, 'red', 'green', valveLabel[x])
 
 class Renderer(tk.Canvas):
     """Renderer used to draw GUI objects."""
