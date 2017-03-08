@@ -1,8 +1,9 @@
 """Blah blah blah."""
+import os.path
+import schedule
 import serial
 import threading
 import time
-import os.path
 # import tkinter as tk   # python3
 import Tkinter as tk   # python
 
@@ -92,8 +93,11 @@ class Homeowner(tk.Frame):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="Homeowner Frame", font=TITLE_FONT)
-        label.pack(side="top", fill="x", pady=10)
+        # label = tk.Label(self, text="Homeowner Frame", font=TITLE_FONT)
+        # label.pack(side="top", fill="x", pady=10)
+
+        renderer = Renderer(self, 800, 430)
+        renderer.drawFlag(self, 0, 0, 20, 'red', 'green', 'Notification #1')
 
 
 class AdvUser(tk.Frame):
@@ -189,14 +193,12 @@ class WaterLevel(tk.Frame):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        canvas = tk.Canvas(self)
-        canvas.place(x=46, y=91, width=709, height=209)
-        renderer = Renderer()
-        renderer.drawTank(canvas, self, 4, 4, 200, 0, "Wash")
-        renderer.drawTank(canvas, self, 154, 4, 200, 0.5, "Grey")
-        renderer.drawTank(canvas, self, 304, 4, 200, 1, "NF Feed")
-        renderer.drawTank(canvas, self, 454, 4, 200, 1, "RO Feed")
-        renderer.drawTank(canvas, self, 604, 104, 100, 0.1, "Waste")
+        renderer = Renderer(self, 800, 380)
+        renderer.drawTank(self, 50, 95, 200, 0, "Wash")
+        renderer.drawTank(self, 200, 95, 200, 0.5, "Grey")
+        renderer.drawTank(self, 350, 95, 200, 1, "NF Feed")
+        renderer.drawTank(self, 500, 95, 200, 1, "RO Feed")
+        renderer.drawTank(self, 650, 195, 100, 0.1, "Waste")
 
 
 class SystemStatus(tk.Frame):
@@ -210,25 +212,30 @@ class SystemStatus(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
 
-class Renderer():
+class Renderer(tk.Canvas):
     """Renderer used to draw GUI objects."""
 
-    def drawCircle(self, canvas, controller, x, y, size, color, name):
-        """Draw a circle object."""
-        canvas.create_oval(x, y, x+size, y+size, width=3, fill=color)
-        label = tk.Label(controller, text=name, font=NOTIFICATION_FONT)
-        label.place(x=size+10, y=y, height=size)
+    def __init__(self, parent, width, height):
+        """."""
+        tk.Canvas.__init__(self, parent)
+        self.place(x=0, y=0, width=width, height=height)
 
-    def drawTank(self, canvas, controller, x, y, size, fill, name):
-        """Draw a tank GUI object."""
-        canvas.create_rectangle(x, y, x+100, y+size, width=3, fill='grey')
-        canvas.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
-                                width=0, fill='blue')
-        gals = tk.Label(controller, text=str(int(size*fill))+'/'+str(size)+'g',
-                        font=NOTIFICATION_FONT)
-        gals.place(x=x+47, y=y+70, width=100, height=20)
+    def drawFlag(self, controller, x, y, size, color0, color1, name):
+        """Draw a circle flag object with a label to the right."""
+        self.create_oval(x+4, y+4, x+size+4, y+size+4, width=2, fill=color0)
+        label = tk.Label(controller, text=name, font=NOTIFICATION_FONT)
+        label.place(x=x+size+5, y=y+4, height=size)
+
+    def drawTank(self, controller, x, y, size, fill, name):
+        """Draw a tank GUI object with a label below and # gallons above."""
+        self.create_rectangle(x, y, x+100, y+size, width=3, fill='grey')
+        self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
+                              width=0, fill='blue')
+        gals = tk.Label(controller, text=str(int(size*fill))+'/'+str(size)
+                        + 'g', font=NOTIFICATION_FONT)
+        gals.place(x=x, y=y-20, width=100, height=20)
         label = tk.Label(controller, text=name, font=TITLE_FONT)
-        label.place(x=x+47, y=300, width=100, height=40)
+        label.place(x=x, y=300, width=100, height=40)
 
 
 class DataHandler():
@@ -265,11 +272,8 @@ class DataHandler():
         message = parsedMessage
 
         now = time.localtime(time.time())
-        currentmonth = now.tm_mon
-        currentday = now.tm_mday
-        currentyear = now.tm_year
-        fileName = "{0}_{1}_{2}_" + self.mesHeadDict['fileName'][dictIndex] + \
-                   ".txt".format(currentyear, currentmonth, currentday)
+        fileName = "{0}_{1}_{2}_" + self.mesHeadDict['fileName'][dictIndex] \
+                   + ".txt".format(now.tm_year, now.tm_mon, now.tm_mday)
 
         if not (os.path.isfile(fileName)):
             file = open(fileName, "w")
