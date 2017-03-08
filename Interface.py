@@ -1,11 +1,11 @@
 """Blah blah blah."""
 import os.path
-import schedule
-import serial
+#import schedule
+#import serial
 import threading
 import time
-#import tkinter as tk   # python3
-import Tkinter as tk   # python
+import tkinter as tk   # python3
+#import Tkinter as tk   # python
 
 
 TITLE_FONT = ("Helvetica", 18, "bold")
@@ -218,6 +218,7 @@ class SystemStatus(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="System Status Frame", font=TITLE_FONT)
+        label.pack(side="top", fill="x", pady=10)
         renderer = Renderer(self, 800, 430)
         # logic to force into true values needed
         valvePosition = []
