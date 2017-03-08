@@ -4,7 +4,7 @@ import schedule
 import serial
 import threading
 import time
-# import tkinter as tk   # python3
+#import tkinter as tk   # python3
 import Tkinter as tk   # python
 
 
@@ -95,10 +95,19 @@ class Homeowner(tk.Frame):
         self.controller = controller
         # label = tk.Label(self, text="Homeowner Frame", font=TITLE_FONT)
         # label.pack(side="top", fill="x", pady=10)
-
+        #find a way to make nowAsString retain value
+        nowAsString = time.strftime('%H:%M %m/%d/%Y')
+        washTank =  nowAsString+ ' NOTICE: add 1 gallon to Wash Tank'
+        wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
         renderer = Renderer(self, 800, 430)
-        renderer.drawFlag(self, 0, 0, 20, 'red', 'green', 'Notification #1')
-
+        #logic to force into true values needed
+        renderer.drawFlag(self, 10, 30, 15, 'blue', 'green', washTank)
+        renderer.drawFlag(self, 10, 70, 15, 'yellow', 'green', wasteTank)
+        renderer.drawFlag(self, 30, 150, 25, 'red', 'green', 'ERROR: Maintence Required')
+        # display water levels on Homeowner page
+        renderer.drawTank(self, 360, 195, 180, 0.3, "Wash")
+        renderer.drawTank(self, 470, 195, 180, 0.5, "Grey")
+        renderer.drawTank(self, 580, 195+90, 90, 0.1, "Waste")
 
 class AdvUser(tk.Frame):
     """Advanced user frame."""
@@ -194,7 +203,7 @@ class WaterLevel(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         renderer = Renderer(self, 800, 380)
-        renderer.drawTank(self, 50, 95, 200, 0, "Wash")
+        renderer.drawTank(self, 50, 95, 200, 0.3, "Wash")
         renderer.drawTank(self, 200, 95, 200, 0.5, "Grey")
         renderer.drawTank(self, 350, 95, 200, 1, "NF Feed")
         renderer.drawTank(self, 500, 95, 200, 1, "RO Feed")
@@ -232,10 +241,10 @@ class Renderer(tk.Canvas):
         self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
                               width=0, fill='blue')
         gals = tk.Label(controller, text=str(int(size*fill))+'/'+str(size)
-                        + 'g', font=NOTIFICATION_FONT)
+                        + 'gal', font=NOTIFICATION_FONT)
         gals.place(x=x, y=y-20, width=100, height=20)
         label = tk.Label(controller, text=name, font=TITLE_FONT)
-        label.place(x=x, y=300, width=100, height=40)
+        label.place(x=x, y=y+size+10, width=100, height=40)
 
 
 class DataHandler():
