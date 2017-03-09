@@ -102,7 +102,8 @@ class Homeowner(tk.Frame):
         renderer = Renderer(self, 800, 430)
         # logic to force into true values needed
         renderer.drawFlag(self, 10, 30, 15, 'blue', 'green', washTank)
-        renderer.drawFlag(self, 10, 70, 15, 'yellow', 'green', wasteTank)
+
+        renderer.drawFlag(self, 10, 80, 15, 'yellow', 'green', wasteTank)
         renderer.drawFlag(self, 30, 150, 25, 'red', 'green',
                           'ERROR: Maintence Required')
         # display water levels on Homeowner page
@@ -201,8 +202,8 @@ class PowerAndTemp(tk.Frame):
             if x < 2:
                 fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'Watts'
             else:
-                fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Watts'
                 numberIn = (x-1 * (2 + x-1) + 90)+(x-1 * (2 + x-1) + 90)
+                fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Watts'
             renderer.drawDataOutput(self, 320, x * 40 + 100, fullLine)
 
 class FlowAndPressure(tk.Frame):
@@ -252,6 +253,7 @@ class SystemStatus(tk.Frame):
         label = tk.Label(self, text="System Status Frame", font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=10)
         renderer = Renderer(self, 800, 430)
+        renderer.drawDataOutput(self, 10, 20, 'Valves')
         # logic to force into true values needed
         valvePosition = []
         valveLabel = []
@@ -259,10 +261,10 @@ class SystemStatus(tk.Frame):
             # correct valve on/off logic
             if x > 3:
                 xposition = 170
-                yposition = yposition = 30+40*(x-4)
+                yposition = 70+40*(x-4)
             else:
                 xposition = 10
-                yposition = 30 + 40 * x
+                yposition = 70 + 40 * x
             if x is 4 or x is 7 or x is 2:
                 valvePosition.append('ON')
             else:
@@ -274,9 +276,19 @@ class SystemStatus(tk.Frame):
                 renderer.drawFlag(self, xposition, yposition, 15, 'green', 'green', valveLabel[x])
             else:
                 renderer.drawFlag(self, xposition, yposition, 15, 'red', 'green', valveLabel[x])
-        #insert two variable valves
-        yposition = 30
-        color = 'green'
+        #two variable valves
+        xposition = 20
+        yposition = yposition+40
+        number = yposition/30+13
+        fullLine = '1: '+str(int(number))+'% OPEN'
+        renderer.drawDataOutput(self, xposition, yposition, fullLine)
+        yposition = yposition+40
+        number = yposition / 30 - 3
+        fullLine = '2: '+str(int(number))+'% OPEN'
+        renderer.drawDataOutput(self, xposition, yposition, fullLine)
+        #relays
+        yposition = 70
+        renderer.drawDataOutput(self, 450, 20, 'Relays')
         relay = []
         relay.append('Bubbler')
         relay.append('UV')
@@ -284,6 +296,10 @@ class SystemStatus(tk.Frame):
         relay.append('Ozone Pump')
         relay.append('High Pressure Pump')
         for x in range (0,5):
+            if x is 2:
+                color = 'green'
+            else:
+                color = 'grey'
             renderer.drawRelay(self, 600, yposition, 50, color, relay[x])
             yposition = yposition+60
 
