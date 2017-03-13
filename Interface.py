@@ -1,12 +1,11 @@
 """Blah blah blah."""
 import os.path
-# import schedule
+import schedule
 import serial
 import threading
 import time
-# import tkinter as tk   # python3
+#import tkinter as tk   # python3
 import Tkinter as tk   # python
-
 
 TITLE_FONT = ("Helvetica", 18, "bold")
 BUTTON_FONT = ("Helvetica", 14)
@@ -63,6 +62,10 @@ class Interface(tk.Tk):
             frame = F(self.frames[AdvUser], self)
             self.frames[F] = frame
             frame.place(x=0, y=50, width=800, height=380)
+
+        # Create frame for relay buttons in SystemStatus
+        frame = Relays(self.frames[SystemStatus], self)
+        frame.place(x=600, y=75, width=100, height=300)
 
         self.show_frame(Homeowner)  # Show default frame
 
@@ -206,6 +209,7 @@ class PowerAndTemp(tk.Frame):
                 fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Watts'
             renderer.drawDataOutput(self, 320, x * 40 + 100, fullLine)
 
+
 class FlowAndPressure(tk.Frame):
     """Flows and pressures frame."""
 
@@ -229,6 +233,7 @@ class FlowAndPressure(tk.Frame):
             fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'm^3/sec'
             renderer.drawDataOutput(self, 320, x*40+100, fullLine)
 
+
 class WaterLevel(tk.Frame):
     """Water levels frame."""
     def __init__(self, parent, controller):
@@ -245,7 +250,6 @@ class WaterLevel(tk.Frame):
 
 class SystemStatus(tk.Frame):
     """System status frame."""
-
     def __init__(self, parent, controller):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
@@ -286,22 +290,71 @@ class SystemStatus(tk.Frame):
         number = yposition / 30 - 3
         fullLine = '2: '+str(int(number))+'% OPEN'
         renderer.drawDataOutput(self, xposition, yposition, fullLine)
-        #relays
-        yposition = 70
-        renderer.drawDataOutput(self, 450, 20, 'Relays')
         relay = []
         relay.append('Bubbler')
         relay.append('UV')
         relay.append('Ozone')
         relay.append('Ozone Pump')
         relay.append('High Pressure Pump')
-        for x in range (0,5):
-            if x is 2:
-                color = 'green'
+        yposition = 70
+        renderer.drawDataOutput(self, 450, 20, 'Relays')
+        for x in range(0, 5):
+            renderer.drawDataOutput(self, 300, yposition, relay[x])
+            yposition = yposition+50
+
+
+class Relays(tk.Frame):
+    """draw the buttons in the SystemStatus frame"""
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        # relays
+        manualOn = True
+        active = []
+        active.append(False)
+        active.append(False)
+        active.append(False)
+        active.append(False)
+        active.append(False)
+        self.displayRelays(controller, manualOn, active)
+
+    def displayRelays(self, controller, manualOn, active):
+        relayButton=[]
+        relayButton.clear()
+        for index in range(0, 5):
+            if manualOn:
+                    relayButton.append(
+                        self.makeRelayButton(controller, manualOn, "normal", active, index, relayButton))
             else:
-                color = 'grey'
-            renderer.drawRelay(self, 600, yposition, 50, color, relay[x])
-            yposition = yposition+60
+                if active[index]:
+                    relayButton = tk.Button(self, text='ACTIVE', font=NOTIFICATION_FONT, bg='green',
+                                            state="disabled")
+                else:
+                    relayButton = tk.Button(self, text='RUN', font=NOTIFICATION_FONT, bg='grey', state="disabled")
+            relayButton[index].pack(pady=8, side="top", fill="x")
+
+    # logic to interact with serial should go here
+    def makeRelayButton(self, controller, manualOn, stateIn, active, index, relayButton):
+        if active[index]:
+            color = 'green'
+            textIn = 'ACTIVE'
+        else:
+            color = 'grey'
+            textIn = 'RUN'
+        return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn,
+                         command = lambda: self.displayRelays(controller, manualOn, self.changeStatus(controller, active, index, relayButton)))
+
+    def changeStatus(self, controller, array, index, relayButton):
+
+        if array[index]:
+            array[index] = False
+        else:
+            array[index] = True
+        for index in range(0, 5):
+            relayButton[index].destroy()
+        relayButton.insert(index, self.makeRelayButton(controller, True, "normal", array, index, relayButton))
+        return array
 
 class Renderer(tk.Canvas):
     """Renderer used to draw GUI objects."""
@@ -325,26 +378,15 @@ class Renderer(tk.Canvas):
         self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
                               width=0, fill='blue')
 
-        gals = tk.Label(parent, text=str(int(size*fill))+'/'+str(size)
+        gals = tk.Label(parent, text=str(int(sizeLabel*fill))+'/'+str(sizeLabel)
                         + 'g', font=NOTIFICATION_FONT)
         gals.place(x=x, y=y-21, width=100, height=20)
         label = tk.Label(parent, text=name, font=TITLE_FONT)
         label.place(x=x, y=y+size+5, width=100, height=40)
 
-    def drawRelay(self, controller, x, y, size, color, name):
-        """Draw a button for relays with label to the left"""
-        self.create_rectangle(x, y, x + 100, y + size, width=3, fill=color)
-        relayLabel = tk.Label(controller, text=name, font=NOTIFICATION_FONT)
-        relayLabel.place(x=x-230, y=y+3, width=220, height=40)
-        if color is 'green':
-            label = tk.Label(controller, text='ACTIVE', font=NOTIFICATION_FONT, bg='green')
-        else:
-            label = tk.Label(controller, text='RUN', font=NOTIFICATION_FONT, bg='grey')
-        label.place(x=x+10, y=y+3, width=75, height=40)
-
-    def drawDataOutput(self, controller, x, y, fullLine):
+    def drawDataOutput(self, parent, x, y, fullLine):
         """Draw label of something at a value with units"""
-        label = tk.Label(controller, text=fullLine, font=NOTIFICATION_FONT)
+        label = tk.Label(parent, text=fullLine, font=NOTIFICATION_FONT)
         label.place(x=x, y=y, width=250, height=40)
 
 class DataHandler():
