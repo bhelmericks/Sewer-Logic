@@ -63,10 +63,6 @@ class Interface(tk.Tk):
             self.frames[F] = frame
             frame.place(x=0, y=50, width=800, height=380)
 
-        # Create frame for relay buttons in SystemStatus
-        frame = Relays(self.frames[SystemStatus], self)
-        frame.place(x=600, y=75, width=100, height=300)
-
         self.show_frame(Homeowner)  # Show default frame
 
     # Bring selected frame to the front and enable/disable relevant buttons
@@ -302,13 +298,6 @@ class SystemStatus(tk.Frame):
             renderer.drawDataOutput(self, 300, yposition, relay[x])
             yposition = yposition+50
 
-
-class Relays(tk.Frame):
-    """draw the buttons in the SystemStatus frame"""
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
         # relays
         manualOn = True
         active = []
@@ -319,6 +308,22 @@ class Relays(tk.Frame):
         active.append(False)
         self.displayRelays(controller, manualOn, active)
 
+    def displayGlobalManualButton(self,controller,  manualOn, active, relayButton):
+        manualButton = tk.Button(self, text='Manual', font=NOTIFICATION_FONT, bg='grey', state="normal",
+                                 command = lambda : self.changeGlobalManual(controller, self.invert(manualOn), active, relayButton))
+        manualButton.place(x = 700, y=40)
+
+    def invert(self, manualIn):
+        if manualIn:
+            return False
+        else:
+            return True
+
+    def changeGlobalManual(self,controller, manualIn, active, relayButton):
+        for index in range(0, 5):
+            relayButton[index].destroy()
+        self.displayRelays(controller, manualIn, active)
+
     def displayRelays(self, controller, manualOn, active):
         relayButton=[]
         relayButton.clear()
@@ -327,12 +332,10 @@ class Relays(tk.Frame):
                     relayButton.append(
                         self.makeRelayButton(controller, manualOn, "normal", active, index, relayButton))
             else:
-                if active[index]:
-                    relayButton = tk.Button(self, text='ACTIVE', font=NOTIFICATION_FONT, bg='green',
-                                            state="disabled")
-                else:
-                    relayButton = tk.Button(self, text='RUN', font=NOTIFICATION_FONT, bg='grey', state="disabled")
-            relayButton[index].pack(pady=8, side="top", fill="x")
+                relayButton.append(
+                    self.makeRelayButton(controller, manualOn, "disabled", active, index, relayButton))
+            relayButton[index].place(y=75+index*50, x=550, width=100)
+        self.displayGlobalManualButton(controller, manualOn, active, relayButton)
 
     # logic to interact with serial should go here
     def makeRelayButton(self, controller, manualOn, stateIn, active, index, relayButton):
@@ -355,6 +358,7 @@ class Relays(tk.Frame):
             relayButton[index].destroy()
         relayButton.insert(index, self.makeRelayButton(controller, True, "normal", array, index, relayButton))
         return array
+
 
 class Renderer(tk.Canvas):
     """Renderer used to draw GUI objects."""
