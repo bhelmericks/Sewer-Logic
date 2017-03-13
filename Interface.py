@@ -256,7 +256,7 @@ class SystemStatus(tk.Frame):
         renderer.drawDataOutput(self, 10, 20, 'Valves')
         # two variable valves
         xposition = 20
-        yposition = 240
+        yposition = 300
         number = yposition / 30 + 13
         fullLine = '1: ' + str(int(number)) + '% OPEN'
         renderer.drawDataOutput(self, xposition, yposition, fullLine)
@@ -265,15 +265,19 @@ class SystemStatus(tk.Frame):
         fullLine = '2: ' + str(int(number)) + '% OPEN'
         renderer.drawDataOutput(self, xposition, yposition, fullLine)
 
-        manualOn = True
+        manualOn = False
         # logic to force into true values needed
         valvePosition = []
         for x in range(0, 8):
             # correct valve on/off logic
-            if x is 4 or x is 7 or x is 2:
-                valvePosition.append('ON')
+            if x < 4:
+                valvePosition.append('OFF')
+                yposition = 75 + 50*x
+                renderer.drawDataOutput(self, -100, yposition, str(x+1))
             else:
                 valvePosition.append('OFF')
+                yposition = 75 + 50*(x-4)
+                renderer.drawDataOutput(self, 100, yposition, str(x+1))
         relay = []
         relay.append('Bubbler')
         relay.append('UV')
@@ -310,10 +314,6 @@ class SystemStatus(tk.Frame):
             return True
 
     def changeGlobalManual(self,controller, manualIn, active, relayButton, position, valveButton):
-        #for index in range(0, 5):
-        #    relayButton[index].destroy()
-        for index in range(0,8):
-            valveButton[index].destroy()
         self.displayRelays(controller, manualIn, active, relayButton, position, valveButton)
         self.displayValves(controller, manualIn, active, relayButton, position, valveButton)
 
@@ -365,9 +365,9 @@ class SystemStatus(tk.Frame):
                 valveButton.append(
                     self.makeValveButton(controller, manualOn, "disabled",active, relayButton, position, index, valveButton))
             if index < 4:
-                valveButton[index].place(y=75+index*50, x=10, width=75)
+                valveButton[index].place(y=75+index*50, x=50, width=50)
             else:
-                valveButton[index].place(y=75+(index-4)*50, x = 150, width = 75)
+                valveButton[index].place(y=75+(index-4)*50, x = 150, width = 50)
             self.displayGlobalManualButton(controller, manualOn, active, relayButton, position, valveButton)
 
     # logic to interact with serial should go here
