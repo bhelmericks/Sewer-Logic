@@ -71,18 +71,18 @@ class Interface(tk.Tk):
         self.frames[page_name].tkraise()  # Raise frame to top
         if page_name == Homeowner:
             # If Homeowner is selected reenable advUserButton
-            self.buttons[AdvUser].config(state="normal")
+            self.buttons[AdvUser].config(state="normal", bg='grey')
         elif page_name == AdvUser:
             # If AdvUser is selected reenable homeownerButton
-            self.buttons[Homeowner].config(state="normal")
+            self.buttons[Homeowner].config(state="normal", bg='grey')
         else:
             for F in (Option, PowerAndTemp, FlowAndPressure,
                       WaterLevel, SystemStatus):
                 if page_name != F:
                     # Enable unselected AdvUser buttons
-                    self.buttons[F].config(state="normal")
+                    self.buttons[F].config(state="normal", bg='grey')
         # Disable selected button
-        self.buttons[page_name].config(state="disabled")
+        self.buttons[page_name].config(state="disabled", disabledforeground='black', bg='grey95')
 
 
 class Homeowner(tk.Frame):
@@ -98,13 +98,13 @@ class Homeowner(tk.Frame):
         nowAsString = time.strftime('%H:%M %m/%d/%Y')
         washTank = nowAsString + ' NOTICE: add 1 gallon to Wash Tank'
         wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
-        renderer = Renderer(self, 800, 430)
+        renderer = Renderer(self, 800, 420)
         # logic to force into true values needed
         renderer.drawFlag(self, 10, 30, 15, 'blue', 'green', washTank)
 
         renderer.drawFlag(self, 10, 80, 15, 'yellow', 'green', wasteTank)
-        renderer.drawFlag(self, 30, 150, 25, 'red', 'green',
-                          'ERROR: Maintence Required')
+        label = tk.Label(self, text='ERROR: Maintenance Required', font=TITLE_FONT, fg='red')
+        label.place(x=10, y=150, height=25)
         # display water levels on Homeowner page
         renderer.drawTank(self, 360, 195, 80, 0.3, "Wash")
         renderer.drawTank(self, 470, 195, 80, 0.5, "Grey")
@@ -122,37 +122,37 @@ class AdvUser(tk.Frame):
         # Create AdvUser navigation buttons
         optionButton = tk.Button(self, text="Options",
                                  font=BUTTON_FONT, command=lambda:
-                                 controller.show_frame(Option))
+                                 controller.show_frame(Option), bg ='grey')
         # Add to navigation button dictionary
         controller.buttons[Option] = optionButton
         optionButton.place(x=640, y=0, width=160, height=50)
 
         tempButton = tk.Button(self, text="Power and \n Temperature",
                                font=BUTTON_FONT, command=lambda:
-                               controller.show_frame(PowerAndTemp))
+                               controller.show_frame(PowerAndTemp), bg ='grey')
         # Add to navigation button dictionary
         controller.buttons[PowerAndTemp] = tempButton
         tempButton.place(x=480, y=0, width=160, height=50)
 
         flowButton = tk.Button(self, text="Flow and \n Pressure",
                                font=BUTTON_FONT, command=lambda:
-                               controller.show_frame(FlowAndPressure))
+                               controller.show_frame(FlowAndPressure), bg ='grey')
         # Add to navigation button dictionary
         controller.buttons[FlowAndPressure] = flowButton
         flowButton.place(x=320, y=0, width=160, height=50)
 
         waterButton = tk.Button(self, text="Water Level",
                                 font=BUTTON_FONT, command=lambda:
-                                controller.show_frame(WaterLevel))
+                                controller.show_frame(WaterLevel), bg ='grey')
         # Add to navigation button dictionary
         controller.buttons[WaterLevel] = waterButton
         waterButton.place(x=160, y=0, width=160, height=50)
 
         statusButton = tk.Button(self, text="System Status",
                                  font=BUTTON_FONT, command=lambda:
-                                 controller.show_frame(SystemStatus))
+                                 controller.show_frame(SystemStatus), bg ='grey')
         # statusButton is selected by default
-        statusButton.config(state="disabled")
+        statusButton.config(state="disabled", disabledforeground='black', bg='grey95')
         # Add to navigation button dictionary
         controller.buttons[SystemStatus] = statusButton
         statusButton.place(x=0, y=0, width=160, height=50)
@@ -303,9 +303,13 @@ class SystemStatus(tk.Frame):
         self.displayValves(controller, manualOn, active, relayButton, valvePosition, valveButton)
 
     def displayGlobalManualButton(self,controller,  manualOn, active, relayButton, position, valveButton):
-        manualButton = tk.Button(self, text='Manual', font=NOTIFICATION_FONT, bg='grey', state="normal",
+        if manualOn:
+            displayText='Exit\nManual'
+        else:
+            displayText='Enter\nManual'
+        manualButton = tk.Button(self, text=displayText, font=NOTIFICATION_FONT, bg='grey', state="normal",
                                  command = lambda : self.changeGlobalManual(controller, self.invert(manualOn), active, relayButton, position, valveButton))
-        manualButton.place(x = 700, y=40)
+        manualButton.place(x = 700, y=40, width=100)
 
     def invert(self, manualIn):
         if manualIn:
@@ -332,16 +336,24 @@ class SystemStatus(tk.Frame):
 
     # logic to interact with serial should go here
     def makeRelayButton(self, controller, manualOn, stateIn, active, index, relayButtonIn, position, valveButton):
-        if active[index]:
-            color = 'green'
-            textIn = 'ACTIVE'
+        if manualOn:
+            if active[index]:
+                color = 'green'
+                textIn = 'ACTIVE'
+            else:
+                color = 'light grey'
+                textIn = 'RUN'
         else:
-            color = 'grey'
-            textIn = 'RUN'
-        return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn,
+            if active[index]:
+                color = 'darkgreen'
+                textIn = 'ACTIVE'
+            else:
+                color = 'dark grey'
+                textIn = 'RUN'
+        return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn, fg='black',
                          command = lambda: self.displayRelays(controller, manualOn,
                                                               self.changeRelayStatus(controller, active, index, relayButtonIn, position, valveButton),
-                                                              relayButtonIn, position, valveButton))
+                                                              relayButtonIn, position, valveButton), disabledforeground='black')
 
     def changeRelayStatus(self, controller, array, index, relayButton, position, valveButton):
 
@@ -372,16 +384,24 @@ class SystemStatus(tk.Frame):
 
     # logic to interact with serial should go here
     def makeValveButton(self, controller, manualOn, stateIn, active, relayButton, position, index, valveButton):
-        if position[index]:
-            color = 'green'
-            textIn = 'ON'
+        if manualOn:
+            if position[index]:
+                color = 'green'
+                textIn = 'ON'
+            else:
+                color = 'orangered'
+                textIn = 'OFF'
         else:
-            color = 'red'
-            textIn = 'OFF'
+            if position[index]:
+                color = 'darkgreen'
+                textIn = 'ON'
+            else:
+                color = 'orangered4'
+                textIn = 'OFF'
         return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn,
                          command = lambda: self.displayValves(controller, manualOn, active, relayButton,
                                                               self.changeValveStatus(controller, position, index, valveButton, active, relayButton),
-                                                              valveButton))
+                                                              valveButton), disabledforeground='black')
 
     def changeValveStatus(self, controller, array, index, valveButton,  active, relayButton):
         if array[index]:
@@ -413,10 +433,10 @@ class Renderer(tk.Canvas):
         size=size*2
         self.create_rectangle(x, y, x+100, y+size, width=3, fill='grey')
         self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
-                              width=0, fill='blue')
+                              width=0, fill='midnight blue')
 
         gals = tk.Label(parent, text=str(int(sizeLabel*fill))+'/'+str(sizeLabel)
-                        + 'g', font=NOTIFICATION_FONT)
+                        + 'gal', font=NOTIFICATION_FONT)
         gals.place(x=x, y=y-21, width=100, height=20)
         label = tk.Label(parent, text=name, font=TITLE_FONT)
         label.place(x=x, y=y+size+5, width=100, height=40)
