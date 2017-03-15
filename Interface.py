@@ -1,12 +1,11 @@
 """Blah blah blah."""
 import os.path
-# import schedule
+import schedule
 import serial
 import threading
 import time
-# import tkinter as tk   # python3
+#import tkinter as tk   # python3
 import Tkinter as tk   # python
-
 
 TITLE_FONT = ("Helvetica", 18, "bold")
 BUTTON_FONT = ("Helvetica", 14)
@@ -102,7 +101,8 @@ class Homeowner(tk.Frame):
         renderer = Renderer(self, 800, 430)
         # logic to force into true values needed
         renderer.drawFlag(self, 10, 30, 15, 'blue', 'green', washTank)
-        renderer.drawFlag(self, 10, 70, 15, 'yellow', 'green', wasteTank)
+
+        renderer.drawFlag(self, 10, 80, 15, 'yellow', 'green', wasteTank)
         renderer.drawFlag(self, 30, 150, 25, 'red', 'green',
                           'ERROR: Maintence Required')
         # display water levels on Homeowner page
@@ -201,9 +201,10 @@ class PowerAndTemp(tk.Frame):
             if x < 2:
                 fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'Watts'
             else:
-                fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Watts'
                 numberIn = (x-1 * (2 + x-1) + 90)+(x-1 * (2 + x-1) + 90)
+                fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Watts'
             renderer.drawDataOutput(self, 320, x * 40 + 100, fullLine)
+
 
 class FlowAndPressure(tk.Frame):
     """Flows and pressures frame."""
@@ -228,6 +229,7 @@ class FlowAndPressure(tk.Frame):
             fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'm^3/sec'
             renderer.drawDataOutput(self, 320, x*40+100, fullLine)
 
+
 class WaterLevel(tk.Frame):
     """Water levels frame."""
     def __init__(self, parent, controller):
@@ -244,7 +246,6 @@ class WaterLevel(tk.Frame):
 
 class SystemStatus(tk.Frame):
     """System status frame."""
-
     def __init__(self, parent, controller):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
@@ -252,40 +253,145 @@ class SystemStatus(tk.Frame):
         label = tk.Label(self, text="System Status Frame", font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=10)
         renderer = Renderer(self, 800, 430)
+        renderer.drawDataOutput(self, 10, 20, 'Valves')
+        # two variable valves
+        xposition = 20
+        yposition = 300
+        number = yposition / 30 + 13
+        fullLine = '1: ' + str(int(number)) + '% OPEN'
+        renderer.drawDataOutput(self, xposition, yposition, fullLine)
+        yposition = yposition + 40
+        number = yposition / 30 - 3
+        fullLine = '2: ' + str(int(number)) + '% OPEN'
+        renderer.drawDataOutput(self, xposition, yposition, fullLine)
+
+        manualOn = False
         # logic to force into true values needed
         valvePosition = []
-        valveLabel = []
         for x in range(0, 8):
             # correct valve on/off logic
-            if x > 3:
-                xposition = 170
-                yposition = yposition = 30+40*(x-4)
-            else:
-                xposition = 10
-                yposition = 30 + 40 * x
-            if x is 4 or x is 7 or x is 2:
-                valvePosition.append('ON')
+            if x < 4:
+                valvePosition.append('OFF')
+                yposition = 75 + 50*x
+                renderer.drawDataOutput(self, -100, yposition, str(x+1))
             else:
                 valvePosition.append('OFF')
-            valveLabel.append(' ')
-
-            valveLabel[x] = ' ' + str(x + 1) + ' ' + valvePosition [x]
-            if valvePosition[x] is'ON':
-                renderer.drawFlag(self, xposition, yposition, 15, 'green', 'green', valveLabel[x])
-            else:
-                renderer.drawFlag(self, xposition, yposition, 15, 'red', 'green', valveLabel[x])
-        #insert two variable valves
-        yposition = 30
-        color = 'green'
+                yposition = 75 + 50*(x-4)
+                renderer.drawDataOutput(self, 100, yposition, str(x+1))
         relay = []
         relay.append('Bubbler')
         relay.append('UV')
         relay.append('Ozone')
         relay.append('Ozone Pump')
         relay.append('High Pressure Pump')
-        for x in range (0,5):
-            renderer.drawRelay(self, 600, yposition, 50, color, relay[x])
-            yposition = yposition+60
+        yposition = 70
+        renderer.drawDataOutput(self, 450, 20, 'Relays')
+        for x in range(0, 5):
+            renderer.drawDataOutput(self, 300, yposition, relay[x])
+            yposition = yposition+50
+
+        # relays
+        active = []
+        active.append(False)
+        active.append(False)
+        active.append(False)
+        active.append(False)
+        active.append(False)
+        relayButton=[]
+        valveButton=[]
+        self.displayRelays(controller, manualOn, active, relayButton, valvePosition, valveButton)
+        self.displayValves(controller, manualOn, active, relayButton, valvePosition, valveButton)
+
+    def displayGlobalManualButton(self,controller,  manualOn, active, relayButton, position, valveButton):
+        manualButton = tk.Button(self, text='Manual', font=NOTIFICATION_FONT, bg='grey', state="normal",
+                                 command = lambda : self.changeGlobalManual(controller, self.invert(manualOn), active, relayButton, position, valveButton))
+        manualButton.place(x = 700, y=40)
+
+    def invert(self, manualIn):
+        if manualIn:
+            return False
+        else:
+            return True
+
+    def changeGlobalManual(self,controller, manualIn, active, relayButton, position, valveButton):
+        self.displayRelays(controller, manualIn, active, relayButton, position, valveButton)
+        self.displayValves(controller, manualIn, active, relayButton, position, valveButton)
+
+    def displayRelays(self, controller, manualOn, active, relayButtonIn, position, valveButton):
+        relayButton=[]
+        relayButton.clear()
+        for index in range(0, 5):
+            if manualOn:
+                    relayButton.append(
+                        self.makeRelayButton(controller, manualOn, "normal", active, index, relayButton, position, valveButton))
+            else:
+                relayButton.append(
+                    self.makeRelayButton(controller, manualOn, "disabled", active, index, relayButton, position, valveButton))
+            relayButton[index].place(y=75+index*50, x=550, width=100)
+        self.displayGlobalManualButton(controller, manualOn, active, relayButton, position, valveButton)
+
+    # logic to interact with serial should go here
+    def makeRelayButton(self, controller, manualOn, stateIn, active, index, relayButtonIn, position, valveButton):
+        if active[index]:
+            color = 'green'
+            textIn = 'ACTIVE'
+        else:
+            color = 'grey'
+            textIn = 'RUN'
+        return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn,
+                         command = lambda: self.displayRelays(controller, manualOn,
+                                                              self.changeRelayStatus(controller, active, index, relayButtonIn, position, valveButton),
+                                                              relayButtonIn, position, valveButton))
+
+    def changeRelayStatus(self, controller, array, index, relayButton, position, valveButton):
+
+        if array[index]:
+            array[index] = False
+        else:
+            array[index] = True
+        for index in range(0, 5):
+            relayButton[index].destroy()
+        relayButton.insert(index, self.makeRelayButton(controller, True, "normal", array, index, relayButton, position, valveButton))
+        return array
+
+    def displayValves(self, controller, manualOn, active, relayButton, position, valveButtonIn):
+        valveButton=[]
+        valveButton.clear()
+        for index in range(0, 8):
+            if manualOn:
+                valveButton.append(
+                        self.makeValveButton(controller, manualOn, "normal", active, relayButton, position, index, valveButton))
+            else:
+                valveButton.append(
+                    self.makeValveButton(controller, manualOn, "disabled",active, relayButton, position, index, valveButton))
+            if index < 4:
+                valveButton[index].place(y=75+index*50, x=50, width=50)
+            else:
+                valveButton[index].place(y=75+(index-4)*50, x = 150, width = 50)
+            self.displayGlobalManualButton(controller, manualOn, active, relayButton, position, valveButton)
+
+    # logic to interact with serial should go here
+    def makeValveButton(self, controller, manualOn, stateIn, active, relayButton, position, index, valveButton):
+        if position[index]:
+            color = 'green'
+            textIn = 'ON'
+        else:
+            color = 'red'
+            textIn = 'OFF'
+        return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn,
+                         command = lambda: self.displayValves(controller, manualOn, active, relayButton,
+                                                              self.changeValveStatus(controller, position, index, valveButton, active, relayButton),
+                                                              valveButton))
+
+    def changeValveStatus(self, controller, array, index, valveButton,  active, relayButton):
+        if array[index]:
+            array[index] = False
+        else:
+            array[index] = True
+        for index in range(0, 5):
+            valveButton[index].destroy()
+        valveButton.insert(index, self.makeValveButton(controller, True, "normal",  active, relayButton, array, index, valveButton))
+        return array
 
 class Renderer(tk.Canvas):
     """Renderer used to draw GUI objects."""
@@ -309,26 +415,15 @@ class Renderer(tk.Canvas):
         self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
                               width=0, fill='blue')
 
-        gals = tk.Label(parent, text=str(int(size*fill))+'/'+str(size)
+        gals = tk.Label(parent, text=str(int(sizeLabel*fill))+'/'+str(sizeLabel)
                         + 'g', font=NOTIFICATION_FONT)
         gals.place(x=x, y=y-21, width=100, height=20)
         label = tk.Label(parent, text=name, font=TITLE_FONT)
         label.place(x=x, y=y+size+5, width=100, height=40)
 
-    def drawRelay(self, controller, x, y, size, color, name):
-        """Draw a button for relays with label to the left"""
-        self.create_rectangle(x, y, x + 100, y + size, width=3, fill=color)
-        relayLabel = tk.Label(controller, text=name, font=NOTIFICATION_FONT)
-        relayLabel.place(x=x-230, y=y+3, width=220, height=40)
-        if color is 'green':
-            label = tk.Label(controller, text='ACTIVE', font=NOTIFICATION_FONT, bg='green')
-        else:
-            label = tk.Label(controller, text='RUN', font=NOTIFICATION_FONT, bg='grey')
-        label.place(x=x+10, y=y+3, width=75, height=40)
-
-    def drawDataOutput(self, controller, x, y, fullLine):
+    def drawDataOutput(self, parent, x, y, fullLine):
         """Draw label of something at a value with units"""
-        label = tk.Label(controller, text=fullLine, font=NOTIFICATION_FONT)
+        label = tk.Label(parent, text=fullLine, font=NOTIFICATION_FONT)
         label.place(x=x, y=y, width=250, height=40)
 
 class DataHandler():
