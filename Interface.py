@@ -191,18 +191,18 @@ class PowerAndTemp(tk.Frame):
         for x in range(0, 3):
             numberIn = x * (2 + x) + 20 + 0.5 - (0.2 * x)
             if x is 0:
-                fullLine = 'Outside' + ':  ' + str(numberIn) + '  ' + 'F'
+                fullLine = 'Outside' + ':  ' + str(numberIn) + '  ' + 'C'
             elif x is 1:
-                fullLine = 'AC Panel' + ':  ' + str(numberIn) + '  ' + 'F'
+                fullLine = 'AC Panel' + ':  ' + str(numberIn) + '  ' + 'C'
             else:
-                fullLine = 'DC Panel' + ':  ' + str(numberIn) + '  ' + 'F'
+                fullLine = 'DC Panel' + ':  ' + str(numberIn) + '  ' + 'C'
             renderer.drawDataOutput(self, 20, x * 40 + 100, fullLine)
             numberIn = x * (2 + x) + 90
             if x < 2:
-                fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'Watts'
+                fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'Amps'
             else:
                 numberIn = (x-1 * (2 + x-1) + 90)+(x-1 * (2 + x-1) + 90)
-                fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Watts'
+                fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Amps'
             renderer.drawDataOutput(self, 320, x * 40 + 100, fullLine)
 
 
@@ -223,10 +223,10 @@ class FlowAndPressure(tk.Frame):
         renderer.drawDataOutput(self, 340, 50, fullLine)
         for x in range (0,5):
             numberIn=x*(2+x)+20+0.532-(0.1*x)
-            fullLine=str(x)+':  '+str(numberIn)+'  '+'psi'
+            fullLine=str(x)+':  '+str("%.0f" % numberIn)+'  '+'psi'
             renderer.drawDataOutput(self, 20, x*40+100, fullLine)
             numberIn = x * (2 + x) + 50+0.932-(0.1*x)
-            fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'm^3/sec'
+            fullLine = str(x) + ':  ' + str("%.2f" % numberIn) + '  ' + 'gal/min'
             renderer.drawDataOutput(self, 320, x*40+100, fullLine)
 
 
