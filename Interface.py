@@ -20,7 +20,7 @@ class Interface(tk.Tk):
         tk.Tk.__init__(self)
 
         # Force fullscreen, uncomment on Raspberry Pi
-        # self.overrideredirect(1)
+        self.overrideredirect(1)
         # Hide mouse pointer, uncomment on Raspberry Pi
         # self.config(cursor="none")
         self.wm_title("Interface")  # Set application title
@@ -83,6 +83,13 @@ class Interface(tk.Tk):
                     self.buttons[F].config(state="normal", bg='grey')
         # Disable selected button
         self.buttons[page_name].config(state="disabled", disabledforeground='black', bg='grey95')
+
+    def _quit():
+        print 'Exiting...'
+        serialListenerEvent.set()
+        serialListener.join()  # wait for the thread to finish
+        app.quit()
+        app.destroy()
 
 
 class Homeowner(tk.Frame):
@@ -169,7 +176,7 @@ class Option(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         # Button to quit application
-        quitButton = tk.Button(self, text="Quit", command=lambda: app.quit())
+        quitButton = tk.Button(self, text="Quit", command=lambda: app._quit())
         quitButton.pack()
 
 
@@ -413,6 +420,7 @@ class SystemStatus(tk.Frame):
         valveButton.insert(index, self.makeValveButton(controller, True, "normal",  active, relayButton, array, index, valveButton))
         return array
 
+
 class Renderer(tk.Canvas):
     """Renderer used to draw GUI objects."""
 
@@ -442,9 +450,10 @@ class Renderer(tk.Canvas):
         label.place(x=x, y=y+size+5, width=100, height=40)
 
     def drawDataOutput(self, parent, x, y, fullLine):
-        """Draw label of something at a value with units"""
+        """Draw label of something at a value with units."""
         label = tk.Label(parent, text=fullLine, font=NOTIFICATION_FONT)
         label.place(x=x, y=y, width=250, height=40)
+
 
 class DataHandler():
     """Handles serial communications and data managment."""
@@ -472,7 +481,7 @@ class DataHandler():
 
     def runAndLog(self):
         """Blah blah blah."""
-        while True:
+        while not serialListenerEvent.isSet():
             # Get current time
             message = self.serialCom.readline()
             parsedMessage = message.split('\t')
@@ -502,10 +511,10 @@ class DataHandler():
 
 
 if __name__ == "__main__":
-    # handler = DataHandler()
-    # serialListener = threading.Thread(target=handler.runAndLog, args=())
-    # serialListenerEvent = threading.Event()
-    # serialListener.start()
+    handler = DataHandler()
+    serialListener = threading.Thread(target=handler.runAndLog, args=())
+    serialListenerEvent = threading.Event()
+    serialListener.start()
     app = Interface()  # Create application
     app.mainloop()
-    # serialListener.join()
+    serialListener.join()
