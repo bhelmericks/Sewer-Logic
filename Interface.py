@@ -323,7 +323,7 @@ class SystemStatus(tk.Frame):
 
     def displayRelays(self, controller, manualOn, active, relayButtonIn, position, valveButton):
         relayButton=[]
-        relayButton.clear()
+        # relayButton.clear()
         for index in range(0, 5):
             if manualOn:
                     relayButton.append(
@@ -368,7 +368,7 @@ class SystemStatus(tk.Frame):
 
     def displayValves(self, controller, manualOn, active, relayButton, position, valveButtonIn):
         valveButton=[]
-        valveButton.clear()
+        # valveButton.clear()
         for index in range(0, 8):
             if manualOn:
                 valveButton.append(
@@ -454,16 +454,16 @@ class DataHandler():
         self.mesHeadDict = (
          {'fileName': {'TANKD:': 'WWT-TankLevels',
                        'PRESSD:': 'WWT-Pressure',
-                       'IFLOW:': 'WWT-iFlow',
-                       'TFLOW:': 'WWT-tFlow',
+                       'IFLOWD:': 'WWT-iFlow',
+                       'TFLOWD:': 'WWT-tFlow',
                        'TandPD': 'WWT-TandPD',
                        'RelayD': 'WWT-Relays',
                        '1valveD': 'WWT-Valves1',
                        '2valveD': 'WWT-Valves2'},
           'fileHeader': {'TANKD:': 'WW\tROF\tNFF\tGW\tWASTE\ttime\n',
                          'PRESSD:': 'F\tC1\tC2\tNFR\tROR\ttime\n',
-                         'IFLOW:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
-                         'TFLOW:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
+                         'IFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
+                         'TFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
                          'TandPD': 'UT\tAC\tDC\tPWRR\tPWRB\ttime\n',
                          'RelayD': 'P\tBUB\tO3\tO3pump\tUV\ttime\n',
                          '1valveD': 'NFPOT\tNFF\tNFFT\tGW\tCFF\ttime\n',
@@ -472,30 +472,33 @@ class DataHandler():
 
     def runAndLog(self):
         """Blah blah blah."""
-        # Get current time
-        message = self.serialCom.readline()
-        parsedMessage = message.split('\t')
-        dictIndex = parsedMessage[0]
-        parsedMessage.remove(parsedMessage[0])
-        message = parsedMessage
+        while True:
+            # Get current time
+            message = self.serialCom.readline()
+            parsedMessage = message.split('\t')
+            print parsedMessage[0]
+            if parsedMessage[0] == 'TANKD:' or parsedMessage[0] == 'PRESSD:' or parsedMessage[0] == 'IFLOWD:' or parsedMessage[0] == 'TFLOWD:' or parsedMessage[0] == 'TandPD' or parsedMessage[0] == 'RelayD' or parsedMessage[0] == '1valveD' or parsedMessage[0] == '2valveD':
+                dictIndex = parsedMessage[0]
+                parsedMessage.remove(parsedMessage[0])
+                message = parsedMessage
 
-        now = time.localtime(time.time())
-        fileName = "{0}_{1}_{2}_" + self.mesHeadDict['fileName'][dictIndex] \
-                   + ".txt".format(now.tm_year, now.tm_mon, now.tm_mday)
+                now = time.localtime(time.time())
+                fileName = '{0}_{1}_{2}_' + self.mesHeadDict['fileName'][dictIndex] \
+                           + '.txt'.format(now.tm_year, now.tm_mon, now.tm_mday)
 
-        if not (os.path.isfile(fileName)):
-            file = open(fileName, "w")
-            file.write(self.mesHeadDict['fileHeader'][dictIndex])
-            file.flush()
-            file.close()
+                if not (os.path.isfile(fileName)):
+                    file = open(fileName, "w")
+                    file.write(self.mesHeadDict['fileHeader'][dictIndex])
+                    file.flush()
+                    file.close()
 
-        # Open file and save serial data from arduino
-        file = open(fileName, "a")
-        # message = serialCom.readline()
-        # print('\t'.join(message))
-        file.write('\t'.join(message))
-        file.flush()
-        file.close()
+                # Open file and save serial data from arduino
+                file = open(fileName, "a")
+                # message = serialCom.readline()
+                # print('\t'.join(message))
+                file.write('\t'.join(message))
+                file.flush()
+                file.close()
 
 
 if __name__ == "__main__":
