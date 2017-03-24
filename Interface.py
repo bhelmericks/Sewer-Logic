@@ -84,13 +84,6 @@ class Interface(tk.Tk):
         # Disable selected button
         self.buttons[page_name].config(state="disabled", disabledforeground='black', bg='grey95')
 
-    def _quit():
-        print 'Exiting...'
-        serialListenerEvent.set()
-        serialListener.join()  # wait for the thread to finish
-        app.quit()
-        app.destroy()
-
 
 class Homeowner(tk.Frame):
     """Homeowner frame."""
