@@ -474,7 +474,7 @@ class DataHandler():
             # Get current time
             message = self.serialCom.readline()
             parsedMessage = message.split('\t')
-            if parsedMessage[0] == 'TANKD:' or parsedMessage[0] == 'PRESSD:' or parsedMessage[0] == 'IFLOWD:' or parsedMessage[0] == 'TFLOWD:' or parsedMessage[0] == 'TandPD' or parsedMessage[0] == 'RelayD' or parsedMessage[0] == '1valveD' or parsedMessage[0] == '2valveD':
+            if parsedMessage[0] in self.mesHeadDict:
                 dictIndex = parsedMessage[0]
                 parsedMessage.remove(parsedMessage[0])
                 message = parsedMessage
