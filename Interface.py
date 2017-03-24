@@ -496,13 +496,13 @@ class DataHandler():
 
 
 if __name__ == "__main__":
-    handler = DataHandler()
-    serialListener = threading.Thread(target=handler.runAndLog, args=())
-    serialListenerEvent = threading.Event()
-    serialListener.start()
+    #handler = DataHandler()
+    #serialListener = threading.Thread(target=handler.runAndLog, args=())
+    #serialListenerEvent = threading.Event()
+    #serialListener.start()
     app = Interface()  # Create application
     app.mainloop()
     print 'Exiting...'
-    serialListenerEvent.set()
-    serialListener.join()  # wait for the thread to finish
+    #serialListenerEvent.set()
+    #serialListener.join()  # wait for the thread to finish
     app.destroy()
