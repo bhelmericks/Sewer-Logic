@@ -20,7 +20,7 @@ class Interface(tk.Tk):
         tk.Tk.__init__(self)
 
         # Force fullscreen, uncomment on Raspberry Pi
-        self.overrideredirect(1)
+        # self.overrideredirect(1)
         # Hide mouse pointer, uncomment on Raspberry Pi
         # self.config(cursor="none")
         self.wm_title("Interface")  # Set application title
@@ -63,7 +63,7 @@ class Interface(tk.Tk):
             self.frames[F] = frame
             frame.place(x=0, y=50, width=800, height=380)
 
-        self.show_frame(Homeowner)  # Show default frame
+        self.show_frame(AdvUser)  # Show default frame
 
     # Bring selected frame to the front and enable/disable relevant buttons
     def show_frame(self, page_name):
@@ -176,7 +176,7 @@ class Option(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         # Button to quit application
-        quitButton = tk.Button(self, text="Quit", command=lambda: app._quit())
+        quitButton = tk.Button(self, text="Quit", command=lambda: app.quit())
         quitButton.pack()
 
 
@@ -253,6 +253,7 @@ class WaterLevel(tk.Frame):
 
 class SystemStatus(tk.Frame):
     """System status frame."""
+
     def __init__(self, parent, controller):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
@@ -492,8 +493,7 @@ class DataHandler():
                 message = parsedMessage
 
                 now = time.localtime(time.time())
-                fileName = '{0}_{1}_{2}_' + self.mesHeadDict['fileName'][dictIndex] \
-                           + '.txt'.format(now.tm_year, now.tm_mon, now.tm_mday)
+                fileName = '{0}_{1}_{2}_'.format(now.tm_year, now.tm_mon, now.tm_mday) + self.mesHeadDict['fileName'][dictIndex] + '.txt'
 
                 if not (os.path.isfile(fileName)):
                     file = open(fileName, "w")
@@ -517,4 +517,7 @@ if __name__ == "__main__":
     serialListener.start()
     app = Interface()  # Create application
     app.mainloop()
-    serialListener.join()
+    print 'Exiting...'
+    serialListenerEvent.set()
+    serialListener.join()  # wait for the thread to finish
+    app.destroy()
