@@ -81,7 +81,8 @@ class Interface(tk.Tk):
                     # Enable unselected AdvUser buttons
                     self.buttons[F].config(state="normal", bg='grey')
         # Disable selected button
-        self.buttons[page_name].config(state="disabled", disabledforeground='black', bg='grey95')
+        self.buttons[page_name].config(state="disabled",
+                                       disabledforeground='black', bg='grey95')
 
 
 class Homeowner(tk.Frame):
@@ -102,7 +103,8 @@ class Homeowner(tk.Frame):
         renderer.drawFlag(self, 10, 30, 15, 'blue', 'green', washTank)
 
         renderer.drawFlag(self, 10, 80, 15, 'yellow', 'green', wasteTank)
-        label = tk.Label(self, text='ERROR: Maintenance Required', font=TITLE_FONT, fg='red')
+        label = tk.Label(self, text='ERROR: Maintenance Required',
+                         font=TITLE_FONT, fg='red')
         label.place(x=10, y=150, height=25)
         # display water levels on Homeowner page
         renderer.drawTank(self, 360, 195, 80, 0.3, "Wash")
@@ -121,37 +123,40 @@ class AdvUser(tk.Frame):
         # Create AdvUser navigation buttons
         optionButton = tk.Button(self, text="Options",
                                  font=BUTTON_FONT, command=lambda:
-                                 controller.show_frame(Option), bg ='grey')
+                                 controller.show_frame(Option), bg='grey')
         # Add to navigation button dictionary
         controller.buttons[Option] = optionButton
         optionButton.place(x=640, y=0, width=160, height=50)
 
         tempButton = tk.Button(self, text="Power and \n Temperature",
                                font=BUTTON_FONT, command=lambda:
-                               controller.show_frame(PowerAndTemp), bg ='grey')
+                               controller.show_frame(PowerAndTemp), bg='grey')
         # Add to navigation button dictionary
         controller.buttons[PowerAndTemp] = tempButton
         tempButton.place(x=480, y=0, width=160, height=50)
 
         flowButton = tk.Button(self, text="Flow and \n Pressure",
                                font=BUTTON_FONT, command=lambda:
-                               controller.show_frame(FlowAndPressure), bg ='grey')
+                               controller.show_frame(FlowAndPressure),
+                               bg='grey')
         # Add to navigation button dictionary
         controller.buttons[FlowAndPressure] = flowButton
         flowButton.place(x=320, y=0, width=160, height=50)
 
         waterButton = tk.Button(self, text="Water Level",
                                 font=BUTTON_FONT, command=lambda:
-                                controller.show_frame(WaterLevel), bg ='grey')
+                                controller.show_frame(WaterLevel), bg='grey')
         # Add to navigation button dictionary
         controller.buttons[WaterLevel] = waterButton
         waterButton.place(x=160, y=0, width=160, height=50)
 
         statusButton = tk.Button(self, text="System Status",
                                  font=BUTTON_FONT, command=lambda:
-                                 controller.show_frame(SystemStatus), bg ='grey')
+                                 controller.show_frame(SystemStatus),
+                                 bg='grey')
         # statusButton is selected by default
-        statusButton.config(state="disabled", disabledforeground='black', bg='grey95')
+        statusButton.config(state="disabled", disabledforeground='black',
+                            bg='grey95')
         # Add to navigation button dictionary
         controller.buttons[SystemStatus] = statusButton
         statusButton.place(x=0, y=0, width=160, height=50)
@@ -201,7 +206,8 @@ class PowerAndTemp(tk.Frame):
                 fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'Amps'
             else:
                 numberIn = (x-1 * (2 + x-1) + 90)+(x-1 * (2 + x-1) + 90)
-                fullLine = 'Total Power' + ':  ' + str(numberIn) + '  ' + 'Amps'
+                fullLine = ('Total Power' + ':  ' + str(numberIn)
+                            + '  ' + 'Amps')
             renderer.drawDataOutput(self, 320, x * 40 + 100, fullLine)
 
 
@@ -216,21 +222,23 @@ class FlowAndPressure(tk.Frame):
                          font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=10)
         renderer = Renderer(self, 800, 380)
-        fullLine='Pressure'
-        renderer.drawDataOutput(self, 40, 50,fullLine)
-        fullLine='Flow'
+        fullLine = 'Pressure'
+        renderer.drawDataOutput(self, 40, 50, fullLine)
+        fullLine = 'Flow'
         renderer.drawDataOutput(self, 340, 50, fullLine)
-        for x in range (0,5):
-            numberIn=x*(2+x)+20+0.532-(0.1*x)
-            fullLine=str(x)+':  '+str("%.0f" % numberIn)+'  '+'psi'
+        for x in range(0, 5):
+            numberIn = x*(2+x)+20+0.532-(0.1*x)
+            fullLine = str(x)+':  '+str("%.0f" % numberIn)+'  '+'psi'
             renderer.drawDataOutput(self, 20, x*40+100, fullLine)
             numberIn = x * (2 + x) + 50+0.932-(0.1*x)
-            fullLine = str(x) + ':  ' + str("%.2f" % numberIn) + '  ' + 'gal/min'
+            fullLine = (str(x) + ':  ' + str("%.2f" % numberIn)
+                        + '  ' + 'gal/min')
             renderer.drawDataOutput(self, 320, x*40+100, fullLine)
 
 
 class WaterLevel(tk.Frame):
     """Water levels frame."""
+
     def __init__(self, parent, controller):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
@@ -300,56 +308,76 @@ class SystemStatus(tk.Frame):
         active.append(False)
         active.append(False)
         active.append(False)
-        #display relays and valves
-        relayButtons = self.displayRelays( manualOn, active)
+        # display relays and valves
+        relayButtons = self.displayRelays(manualOn, active)
         valveButtons = self.displayValves(manualOn, valvePosition)
-        self.displayGlobalManualButton(controller, manualOn, relayButtons, valveButtons)
+        self.displayGlobalManualButton(controller, manualOn,
+                                       relayButtons, valveButtons)
 
-    #set manual button for valves and relay
-    def displayGlobalManualButton(self,controller,  manualOn, relayButton, valveButton):
+    # set manual button for valves and relay
+    def displayGlobalManualButton(self, controller,  manualOn,
+                                  relayButton, valveButton):
+        """Blah Blah Blah."""
         if manualOn:
-            displayText='Exit\nManual'
+            displayText = 'Exit\nManual'
         else:
-            displayText='Enter\nManual'
-        manualButton = tk.Button(self, text=displayText, font=NOTIFICATION_FONT, bg='grey', state="normal",
-                                 command = lambda : self.changeGlobalManual(controller, self.invert(manualOn), relayButton, valveButton))
-        manualButton.place(x = 675, y=40, width=100)
+            displayText = 'Enter\nManual'
+        manualButton = tk.Button(self, text=displayText,
+                                 font=NOTIFICATION_FONT, bg='grey',
+                                 state="normal", command=lambda:
+                                 self.changeGlobalManual(controller,
+                                                         self.invert(manualOn),
+                                                         relayButton,
+                                                         valveButton))
+        manualButton.place(x=675, y=40, width=100)
 
     def invert(self, manualIn):
+        """Blah Blah Blah."""
         if manualIn:
             return False
         else:
             return True
 
-    def changeGlobalManual(self,controller, manualIn, relayButton, valveButton):
+    def changeGlobalManual(self, controller, manualIn,
+                           relayButton, valveButton):
+        """Blah Blah Blah."""
         self.changeRelayManual(manualIn, relayButton)
         self.changeValveManual(manualIn, valveButton)
-        self.displayGlobalManualButton(controller, manualIn, relayButton, valveButton)
+        self.displayGlobalManualButton(controller, manualIn,
+                                       relayButton, valveButton)
 
-    def displayRelays(self,manualOn, active):
-        relayButton=[]
+    def displayRelays(self, manualOn, active):
+        """Blah Blah Blah."""
+        relayButton = []
         for index in range(0, 5):
             if manualOn:
                     relayButton.append(
-                        self.makeRelayButton("normal", active, index, relayButton))
+                        self.makeRelayButton("normal", active,
+                                             index, relayButton))
             else:
                 relayButton.append(
-                    self.makeRelayButton("disabled", active, index, relayButton))
+                    self.makeRelayButton("disabled", active,
+                                         index, relayButton))
             relayButton[index].place(y=70+index*55, x=500, width=100)
         return relayButton
 
     # logic to interact with serial should go here
     def makeRelayButton(self, stateIn, active, index, relayButtonIn):
+        """Blah Blah Blah."""
         if active[index]:
             color = 'green'
             textIn = 'ACTIVE'
         else:
             color = 'light grey'
             textIn = 'RUN'
-        return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn, fg='black', disabledforeground='grey25',
-                         command = lambda: self.changeRelayButton(active, index, relayButtonIn))
+        return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color,
+                         state=stateIn, fg='black',
+                         disabledforeground='grey25',
+                         command=lambda:
+                         self.changeRelayButton(active, index, relayButtonIn))
 
     def changeRelayButton(self, array, index, relayButton):
+        """Blah Blah Blah."""
         if array[index]:
             array[index] = False
             relayButton[index].config(bg='light grey', text='RUN')
@@ -359,6 +387,7 @@ class SystemStatus(tk.Frame):
         return array
 
     def changeRelayManual(self, manualIn, relayButton):
+        """Blah Blah Blah."""
         if manualIn:
             for index in range(0, 5):
                 relayButton[index].config(state='normal')
@@ -367,32 +396,39 @@ class SystemStatus(tk.Frame):
                 relayButton[index].config(state='disabled')
 
     def displayValves(self, manualOn, position):
-        valveButton=[]
+        """Blah Blah Blah."""
+        valveButton = []
         for index in range(0, 8):
             if manualOn:
                 valveButton.append(
-                        self.makeValveButton("normal", position, index, valveButton))
+                        self.makeValveButton("normal", position,
+                                             index, valveButton))
             else:
                 valveButton.append(
-                    self.makeValveButton("disabled", position, index, valveButton))
+                    self.makeValveButton("disabled", position,
+                                         index, valveButton))
             if index < 4:
                 valveButton[index].place(y=70+index*60, x=50, width=50)
             else:
-                valveButton[index].place(y=70+(index-4)*60, x = 150, width = 50)
+                valveButton[index].place(y=70+(index-4)*60, x=150, width=50)
         return valveButton
 
     # logic to interact with serial should go here
     def makeValveButton(self, stateIn, position, index, valveButton):
+        """Blah Blah Blah."""
         if position[index]:
             color = 'green'
             textIn = 'ON'
         else:
             color = 'orangered'
             textIn = 'OFF'
-        return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn,
-                         command = lambda: self.changeValveButton(position, index, valveButton), disabledforeground='grey25')
+        return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color,
+                         state=stateIn, command=lambda:
+                         self.changeValveButton(position, index, valveButton),
+                         disabledforeground='grey25')
 
     def changeValveButton(self, array, index, valveButton):
+        """Blah Blah Blah."""
         if array[index]:
             array[index] = False
             valveButton[index].config(text='OFF', bg='orangered')
@@ -402,6 +438,7 @@ class SystemStatus(tk.Frame):
         return array
 
     def changeValveManual(self, manualIn, valveButton):
+        """Blah Blah Blah."""
         if manualIn:
             for index in range(0, 8):
                 valveButton[index].config(state='normal')
@@ -426,13 +463,14 @@ class Renderer(tk.Canvas):
 
     def drawTank(self, parent, x, y, size, fill, name):
         """Draw a tank GUI object with a label below and # gallons above."""
-        sizeLabel=size
-        size=size*2
+        sizeLabel = size
+        size = size*2
         self.create_rectangle(x, y, x+100, y+size, width=3, fill='grey')
         self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
                               width=0, fill='midnight blue')
 
-        gals = tk.Label(parent, text=str(int(sizeLabel*fill))+'/'+str(sizeLabel)
+        gals = tk.Label(parent,
+                        text=str(int(sizeLabel*fill))+'/'+str(sizeLabel)
                         + 'gal', font=NOTIFICATION_FONT)
         gals.place(x=x, y=y-21, width=100, height=20)
         label = tk.Label(parent, text=name, font=TITLE_FONT)
@@ -486,7 +524,9 @@ class DataHandler():
                 message = parsedMessage
 
                 now = time.localtime(time.time())
-                fileName = '{0}_{1}_{2}_'.format(now.tm_year, now.tm_mon, now.tm_mday) + self.mesHeadDict['fileName'][dictIndex] + '.txt'
+                fileName = ('{0}_{1}_{2}_'.format(now.tm_year, now.tm_mon,
+                                                  now.tm_mday)
+                            + self.mesHeadDict['fileName'][dictIndex] + '.txt')
 
                 if not (os.path.isfile(fileName)):
                     file = open(fileName, "w")
