@@ -4,7 +4,6 @@ import schedule
 import serial
 import threading
 import time
-#import tkinter as tk   # python3
 import Tkinter as tk   # python
 
 TITLE_FONT = ("Helvetica", 18, "bold")
@@ -236,12 +235,13 @@ class WaterLevel(tk.Frame):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
+        data = currentData['TANKD:']
         renderer = Renderer(self, 800, 380)
-        renderer.drawTank(self, 50, 95, 80, 0.3, "Wash")
-        renderer.drawTank(self, 200, 95, 80, 0.5, "Grey")
-        renderer.drawTank(self, 350, 95, 80, 1, "NF Feed")
-        renderer.drawTank(self, 500, 95, 80, 1, "RO Feed")
-        renderer.drawTank(self, 650, 95+80, 40, 0.1, "Waste")
+        renderer.drawTank(self, 50, 95, 80, data[0]/80, "Wash")
+        renderer.drawTank(self, 200, 95, 80, data[1]/80, "Grey")
+        renderer.drawTank(self, 350, 95, 80, data[2]/80, "NF Feed")
+        renderer.drawTank(self, 500, 95, 80, data[3]/80, "RO Feed")
+        renderer.drawTank(self, 650, 95+80, 40, data[4]/40, "Waste")
 
 
 class SystemStatus(tk.Frame):
@@ -467,16 +467,22 @@ class DataHandler():
                          '1valveD': 'NFPOT\tNFF\tNFFT\tGW\tCFF\ttime\n',
                          '2valveD': 'ROPOT\tROF\tROFT\tWWT\tWASTE\ttime\n'}})
         self.serialCom = serial.Serial('/dev/ttyACM0', 9600)
+        self.serialListener = threading.Thread(target=self.runAndLog, args=())
+        self.serialListenerEvent = threading.Event()
+        self.serialListener.start()
+        print 'Serial listener thread started.'
 
     def runAndLog(self):
         """Blah blah blah."""
-        while not serialListenerEvent.isSet():
+        while not self.serialListenerEvent.isSet():
             # Get current time
             message = self.serialCom.readline()
             parsedMessage = message.split('\t')
             if parsedMessage[0] in self.mesHeadDict:
                 dictIndex = parsedMessage[0]
-                parsedMessage.remove(parsedMessage[0])
+                del parsedMessage[0]
+                global currentData
+                currentData[dictIndex] = parsedMessage
                 message = parsedMessage
 
                 now = time.localtime(time.time())
@@ -494,15 +500,27 @@ class DataHandler():
                 file.flush()
                 file.close()
 
+    def quit(self):
+        """Blah Blah Blah."""
+        self.serialListenerEvent.set()
+        self.serialListener.join()  # wait for the thread to finish
+        print 'Serial listener thread closed.'
+
 
 if __name__ == "__main__":
-    #handler = DataHandler()
-    #serialListener = threading.Thread(target=handler.runAndLog, args=())
-    #serialListenerEvent = threading.Event()
-    #serialListener.start()
+    global currentData
+    initialData = [0, 0, 0, 0, 0, 0]
+    currentData = ({'TANKD:': initialData,
+                    'PRESSD:': initialData,
+                    'IFLOWD:': initialData,
+                    'TFLOWD:': initialData,
+                    'TandPD': initialData,
+                    'RelayD': initialData,
+                    '1valveD': initialData,
+                    '2valveD': initialData})
+    handler = DataHandler()
     app = Interface()  # Create application
     app.mainloop()
     print 'Exiting...'
-    #serialListenerEvent.set()
-    #serialListener.join()  # wait for the thread to finish
+    handler.quit()
     app.destroy()
