@@ -63,7 +63,7 @@ class Interface(tk.Tk):
             self.frames[F] = frame
             frame.place(x=0, y=50, width=800, height=380)
 
-        self.show_frame(Homeowner)  # Show default frame
+        self.show_frame(AdvUser)  # Show default frame
 
     # Bring selected frame to the front and enable/disable relevant buttons
     def show_frame(self, page_name):
@@ -246,6 +246,7 @@ class WaterLevel(tk.Frame):
 
 class SystemStatus(tk.Frame):
     """System status frame."""
+
     def __init__(self, parent, controller):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
@@ -438,9 +439,10 @@ class Renderer(tk.Canvas):
         label.place(x=x, y=y+size+5, width=100, height=40)
 
     def drawDataOutput(self, parent, x, y, fullLine):
-        """Draw label of something at a value with units"""
+        """Draw label of something at a value with units."""
         label = tk.Label(parent, text=fullLine, font=NOTIFICATION_FONT)
         label.place(x=x, y=y, width=250, height=40)
+
 
 class DataHandler():
     """Handles serial communications and data managment."""
@@ -450,16 +452,16 @@ class DataHandler():
         self.mesHeadDict = (
          {'fileName': {'TANKD:': 'WWT-TankLevels',
                        'PRESSD:': 'WWT-Pressure',
-                       'IFLOW:': 'WWT-iFlow',
-                       'TFLOW:': 'WWT-tFlow',
+                       'IFLOWD:': 'WWT-iFlow',
+                       'TFLOWD:': 'WWT-tFlow',
                        'TandPD': 'WWT-TandPD',
                        'RelayD': 'WWT-Relays',
                        '1valveD': 'WWT-Valves1',
                        '2valveD': 'WWT-Valves2'},
           'fileHeader': {'TANKD:': 'WW\tROF\tNFF\tGW\tWASTE\ttime\n',
                          'PRESSD:': 'F\tC1\tC2\tNFR\tROR\ttime\n',
-                         'IFLOW:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
-                         'TFLOW:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
+                         'IFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
+                         'TFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
                          'TandPD': 'UT\tAC\tDC\tPWRR\tPWRB\ttime\n',
                          'RelayD': 'P\tBUB\tO3\tO3pump\tUV\ttime\n',
                          '1valveD': 'NFPOT\tNFF\tNFFT\tGW\tCFF\ttime\n',
@@ -468,37 +470,39 @@ class DataHandler():
 
     def runAndLog(self):
         """Blah blah blah."""
-        # Get current time
-        message = self.serialCom.readline()
-        parsedMessage = message.split('\t')
-        dictIndex = parsedMessage[0]
-        parsedMessage.remove(parsedMessage[0])
-        message = parsedMessage
+        while not serialListenerEvent.isSet():
+            # Get current time
+            message = self.serialCom.readline()
+            parsedMessage = message.split('\t')
+            if parsedMessage[0] in self.mesHeadDict:
+                dictIndex = parsedMessage[0]
+                parsedMessage.remove(parsedMessage[0])
+                message = parsedMessage
 
-        now = time.localtime(time.time())
-        fileName = "{0}_{1}_{2}_" + self.mesHeadDict['fileName'][dictIndex] \
-                   + ".txt".format(now.tm_year, now.tm_mon, now.tm_mday)
+                now = time.localtime(time.time())
+                fileName = '{0}_{1}_{2}_'.format(now.tm_year, now.tm_mon, now.tm_mday) + self.mesHeadDict['fileName'][dictIndex] + '.txt'
 
-        if not (os.path.isfile(fileName)):
-            file = open(fileName, "w")
-            file.write(self.mesHeadDict['fileHeader'][dictIndex])
-            file.flush()
-            file.close()
+                if not (os.path.isfile(fileName)):
+                    file = open(fileName, "w")
+                    file.write(self.mesHeadDict['fileHeader'][dictIndex])
+                    file.flush()
+                    file.close()
 
-        # Open file and save serial data from arduino
-        file = open(fileName, "a")
-        # message = serialCom.readline()
-        # print('\t'.join(message))
-        file.write('\t'.join(message))
-        file.flush()
-        file.close()
+                # Open file and save serial data from arduino
+                file = open(fileName, "a")
+                file.write('\t'.join(message))
+                file.flush()
+                file.close()
 
 
 if __name__ == "__main__":
-    # handler = DataHandler()
-    # serialListener = threading.Thread(target=handler.runAndLog, args=())
-    # serialListenerEvent = threading.Event()
-    # serialListener.start()
+    #handler = DataHandler()
+    #serialListener = threading.Thread(target=handler.runAndLog, args=())
+    #serialListenerEvent = threading.Event()
+    #serialListener.start()
     app = Interface()  # Create application
     app.mainloop()
-    # serialListener.join()
+    print 'Exiting...'
+    #serialListenerEvent.set()
+    #serialListener.join()  # wait for the thread to finish
+    app.destroy()
