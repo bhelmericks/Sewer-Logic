@@ -220,7 +220,8 @@ class Option(tk.Frame):
     def _exit(self):
         """Blah blah blah."""
         result = (tkMessageBox.askquestion('Exit WWT Interface Confirmation',
-                                           'Are You Sure?', icon='warning'))
+                                           'Are you sure you want to quit?',
+                                           icon='warning'))
         if result == 'yes':
             app.quit()
         else:
@@ -636,7 +637,7 @@ class DataHandler():
         """Blah blah blah."""
         result = tk.MessageBox.askquestion(
                     self.commandDict['confMessage'][command],
-                    'Are You Sure?', icon='warning')
+                    'Are you sure?', icon='warning')
         if result == 'yes':
             print 'MANUAL ACTIVATED: ' \
                   + self.commandDict['startMessage'][command]
