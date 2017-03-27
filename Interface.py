@@ -539,53 +539,48 @@ class DataHandler():
     def __init__(self):
         """Blah blah blah."""
         self.mesHeadDict = (
-         {'fileName':
-          {'TANKD:': 'WWT-TankLevels',
-           'PRESSD:': 'WWT-Pressure',
-           'IFLOWD:': 'WWT-iFlow',
-           'TFLOWD:': 'WWT-tFlow',
-           'TandPD': 'WWT-TandPD',
-           'RelayD': 'WWT-Relays',
-           '1valveD': 'WWT-Valves1',
-           '2valveD': 'WWT-Valves2'},
-          'fileHeader':
-          {'TANKD:': 'WW\tROF\tNFF\tGW\tWASTE\ttime\n',
-           'PRESSD:': 'F\tC1\tC2\tNFR\tROR\ttime\n',
-           'IFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
-           'TFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
-           'TandPD': 'UT\tAC\tDC\tPWRR\tPWRB\ttime\n',
-           'RelayD': 'P\tBUB\tO3\tO3pump\tUV\ttime\n',
-           '1valveD': 'NFPOT\tNFF\tNFFT\tGW\tCFF\ttime\n',
-           '2valveD': 'ROPOT\tROF\tROFT\tWWT\tWASTE\ttime\n'}})
+         {'fileName': {'TANKD:': 'WWT-TankLevels',
+                       'PRESSD:': 'WWT-Pressure',
+                       'IFLOWD:': 'WWT-iFlow',
+                       'TFLOWD:': 'WWT-tFlow',
+                       'TandPD': 'WWT-TandPD',
+                       'RelayD': 'WWT-Relays',
+                       '1valveD': 'WWT-Valves1',
+                       '2valveD': 'WWT-Valves2'},
+          'fileHeader': {'TANKD:': 'WW\tROF\tNFF\tGW\tWASTE\ttime\n',
+                         'PRESSD:': 'F\tC1\tC2\tNFR\tROR\ttime\n',
+                         'IFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
+                         'TFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
+                         'TandPD': 'UT\tAC\tDC\tPWRR\tPWRB\ttime\n',
+                         'RelayD': 'P\tBUB\tO3\tO3pump\tUV\ttime\n',
+                         '1valveD': 'NFPOT\tNFF\tNFFT\tGW\tCFF\ttime\n',
+                         '2valveD': 'ROPOT\tROF\tROFT\tWWT\tWASTE\ttime\n'}})
 
         self.commandDict = (
-         {'startMessage':
-          {'D\n': 'Regular Day',
-           'W\n': 'Waste Day',
-           'V\n': 'Cartridge Filter',
-           'C\n': 'Cartridge Filter without Rinse',
-           'M\n': 'Nanofilter',
-           'N\n': 'Nanofilter without Rinse',
-           'T\n': 'Reverse Osmosis',
-           'R\n': 'Reverse Osmosis without Rinse'},
-          'cancelMessage':
-          {'D\n': 'Regular Day Treatment Canceled',
-           'W\n': 'Waste Day Treatment Canceled',
-           'V\n': 'Cartridge Filter Treatment Step Canceled',
-           'C\n': 'Cartridge Filter without Rinse Treatment Step Canceled',
-           'M\n': 'Nanofilter Treatment Step Canceled',
-           'N\n': 'Nanofilter without Rinse Treatment Step Canceled',
-           'T\n': 'Reverse Osmosis Treatment Step Canceled',
-           'R\n': 'Reverse Osmosis without Rinse Treatment Step Canceled'},
-          'confMessage':
-          {'D\n': 'Regular Treatment Day Confirmation',
-           'W\n': 'Waste Treatment Day Confirmation',
-           'V\n': 'Cartridge Filter Step Confirmation',
-           'C\n': 'Cartridge Filter w/o Step Confirmation',
-           'M\n': 'Nanofilter Step Confirmation',
-           'N\n': 'Nanofilter w/o Step Confirmation',
-           'T\n': 'Reverse Osmosis Step Confirmation',
-           'R\n': 'Reverse Osmosis w/o Step Confirmation'}})
+        {'startMessage': {'D\n': 'Regular Day',
+                          'W\n': 'Waste Day',
+                          'V\n': 'Cartridge Filter',
+                          'C\n': 'Cartridge Filter without Rinse',
+                          'M\n': 'Nanofilter',
+                          'N\n': 'Nanofilter without Rinse',
+                          'T\n': 'Reverse Osmosis',
+                          'R\n': 'Reverse Osmosis without Rinse'},
+          'cancelMessage': {'D\n': 'Regular Day Treatment Canceled',
+                            'W\n': 'Waste Day Treatment Canceled',
+                            'V\n': 'Cartridge Filter Treatment Step Canceled',
+                            'C\n': 'Cartridge Filter without Rinse Treatment Step Canceled',
+                            'M\n': 'Nanofilter Treatment Step Canceled',
+                            'N\n': 'Nanofilter without Rinse Treatment Step Canceled',
+                            'T\n': 'Reverse Osmosis Treatment Step Canceled',
+                            'R\n': 'Reverse Osmosis without Rinse Treatment Step Canceled'},
+          'confMessage': {'D\n': 'Regular Treatment Day Confirmation',
+                          'W\n': 'Waste Treatment Day Confirmation',
+                          'V\n': 'Cartridge Filter Step Confirmation',
+                          'C\n': 'Cartridge Filter w/o Step Confirmation',
+                          'M\n': 'Nanofilter Step Confirmation',
+                          'N\n': 'Nanofilter w/o Step Confirmation',
+                          'T\n': 'Reverse Osmosis Step Confirmation',
+                          'R\n': 'Reverse Osmosis w/o Step Confirmation'}})
 
         self.serialCom = serial.Serial('/dev/ttyACM0', 9600)
 
@@ -610,6 +605,7 @@ class DataHandler():
             message = self.serialCom.readline()
             parsedMessage = message.split('\t')
             if parsedMessage[0] in self.mesHeadDict:
+                print parsedMessage[0]
                 dictIndex = parsedMessage[0]
                 del parsedMessage[0]
                 global currentData
