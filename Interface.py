@@ -219,7 +219,8 @@ class Option(tk.Frame):
 
     def _exit(self):
         """Blah blah blah."""
-        result = tkMessageBox.askquestion('Exit WWT Interface Confirmation', 'Are You Sure?', icon='warning')
+        result = (tkMessageBox.askquestion('Exit WWT Interface Confirmation',
+                                           'Are You Sure?', icon='warning'))
         if result == 'yes':
             app.quit()
         else:
@@ -599,9 +600,6 @@ class DataHandler():
         self.serialListenerEvent = threading.Event()
         self.serialListener.start()
         print 'Serial Listener Thread Started'
-
-    def foo(self):
-        print 'foo'
 
     def runAndLog(self):
         """Blah blah blah."""
