@@ -4,9 +4,11 @@ import schedule
 import serial
 import threading
 import time
-import Tkinter as tk   # python
+import tkMessageBox
+import Tkinter as tk
+from functools import partial
 
-TITLE_FONT = ("Helvetica", 18, "bold")
+TITLE_FONT = ("Helvetica", 17, "bold")
 BUTTON_FONT = ("Helvetica", 14)
 NOTIFICATION_FONT = ("Helvetica", 14)
 
@@ -169,12 +171,59 @@ class Option(tk.Frame):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="Options Frame", font=TITLE_FONT)
-        label.pack(side="top", fill="x", pady=10)
 
-        # Button to quit application
-        quitButton = tk.Button(self, text="Quit", command=lambda: app.quit())
-        quitButton.pack()
+        RegButton = (tk.Button(self, text='Regular Day',
+                     command=lambda: partial(handler.manualCommand('D\n'))))
+        RegButton.grid(row=0, column=4)
+        RegButton.config(height=5, width=16)
+
+        WasteButton = (tk.Button(self, text='Waste Day',
+                       command=lambda: partial(handler.manualCommand('W\n'))))
+        WasteButton.grid(row=1, column=4)
+        WasteButton.config(height=5, width=16)
+
+        QuitButton = (tk.Button(self, text='Quit',
+                      command=lambda: self._exit()))
+        QuitButton.grid(row=5, column=4)
+        QuitButton.config(height=5, width=16)
+
+        CFButton = (tk.Button(self, text='CF',
+                    command=lambda: handler.manualCommand('V\n')))
+        CFButton.grid(row=0, column=0)
+        CFButton.config(height=5, width=16)
+
+        CFWOButton = (tk.Button(self, text='CF wo R',
+                      command=lambda: handler.manualCommand('C\n')))
+        CFWOButton.grid(row=0, column=2)
+        CFWOButton.config(height=5, width=16)
+
+        NFButton = (tk.Button(self, text='NF',
+                    command=lambda: handler.manualCommand('M\n')))
+        NFButton.grid(row=1, column=0)
+        NFButton.config(height=5, width=16)
+
+        NFWOButton = (tk.Button(self, text='NF wo R',
+                      command=lambda: handler.manualCommand('N\n')))
+        NFWOButton.grid(row=1, column=2)
+        NFWOButton.config(height=5, width=16)
+
+        ROButton = (tk.Button(self, text='RO',
+                    command=lambda: handler.manualCommand('T\n')))
+        ROButton.grid(row=2, column=0)
+        ROButton.config(height=5, width=16)
+
+        ROWOButton = (tk.Button(self, text='RO wo R',
+                      command=lambda: handler.manualCommand('R\n')))
+        ROWOButton.grid(row=2, column=2)
+        ROWOButton.config(height=5, width=16)
+
+    def _exit(self):
+        """Blah blah blah."""
+        result = tkMessageBox.askquestion('Exit WWT Interface Confirmation', 'Are You Sure?', icon='warning')
+        if result == 'yes':
+            app.quit()
+        else:
+            print 'Exit Program Canceled'
 
 
 class PowerAndTemp(tk.Frame):
@@ -488,32 +537,77 @@ class DataHandler():
     def __init__(self):
         """Blah blah blah."""
         self.mesHeadDict = (
-         {'fileName': {'TANKD:': 'WWT-TankLevels',
-                       'PRESSD:': 'WWT-Pressure',
-                       'IFLOWD:': 'WWT-iFlow',
-                       'TFLOWD:': 'WWT-tFlow',
-                       'TandPD': 'WWT-TandPD',
-                       'RelayD': 'WWT-Relays',
-                       '1valveD': 'WWT-Valves1',
-                       '2valveD': 'WWT-Valves2'},
-          'fileHeader': {'TANKD:': 'WW\tROF\tNFF\tGW\tWASTE\ttime\n',
-                         'PRESSD:': 'F\tC1\tC2\tNFR\tROR\ttime\n',
-                         'IFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
-                         'TFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
-                         'TandPD': 'UT\tAC\tDC\tPWRR\tPWRB\ttime\n',
-                         'RelayD': 'P\tBUB\tO3\tO3pump\tUV\ttime\n',
-                         '1valveD': 'NFPOT\tNFF\tNFFT\tGW\tCFF\ttime\n',
-                         '2valveD': 'ROPOT\tROF\tROFT\tWWT\tWASTE\ttime\n'}})
+         {'fileName':
+          {'TANKD:': 'WWT-TankLevels',
+           'PRESSD:': 'WWT-Pressure',
+           'IFLOWD:': 'WWT-iFlow',
+           'TFLOWD:': 'WWT-tFlow',
+           'TandPD': 'WWT-TandPD',
+           'RelayD': 'WWT-Relays',
+           '1valveD': 'WWT-Valves1',
+           '2valveD': 'WWT-Valves2'},
+          'fileHeader':
+          {'TANKD:': 'WW\tROF\tNFF\tGW\tWASTE\ttime\n',
+           'PRESSD:': 'F\tC1\tC2\tNFR\tROR\ttime\n',
+           'IFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
+           'TFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
+           'TandPD': 'UT\tAC\tDC\tPWRR\tPWRB\ttime\n',
+           'RelayD': 'P\tBUB\tO3\tO3pump\tUV\ttime\n',
+           '1valveD': 'NFPOT\tNFF\tNFFT\tGW\tCFF\ttime\n',
+           '2valveD': 'ROPOT\tROF\tROFT\tWWT\tWASTE\ttime\n'}})
+
+        self.commandDict = (
+         {'startMessage':
+          {'D\n': 'Regular Day',
+           'W\n': 'Waste Day',
+           'V\n': 'Cartridge Filter',
+           'C\n': 'Cartridge Filter without Rinse',
+           'M\n': 'Nanofilter',
+           'N\n': 'Nanofilter without Rinse',
+           'T\n': 'Reverse Osmosis',
+           'R\n': 'Reverse Osmosis without Rinse'},
+          'cancelMessage':
+          {'D\n': 'Regular Day Treatment Canceled',
+           'W\n': 'Waste Day Treatment Canceled',
+           'V\n': 'Cartridge Filter Treatment Step Canceled',
+           'C\n': 'Cartridge Filter without Rinse Treatment Step Canceled',
+           'M\n': 'Nanofilter Treatment Step Canceled',
+           'N\n': 'Nanofilter without Rinse Treatment Step Canceled',
+           'T\n': 'Reverse Osmosis Treatment Step Canceled',
+           'R\n': 'Reverse Osmosis without Rinse Treatment Step Canceled'},
+          'confMessage':
+          {'D\n': 'Regular Treatment Day Confirmation',
+           'W\n': 'Waste Treatment Day Confirmation',
+           'V\n': 'Cartridge Filter Step Confirmation',
+           'C\n': 'Cartridge Filter w/o Step Confirmation',
+           'M\n': 'Nanofilter Step Confirmation',
+           'N\n': 'Nanofilter w/o Step Confirmation',
+           'T\n': 'Reverse Osmosis Step Confirmation',
+           'R\n': 'Reverse Osmosis w/o Step Confirmation'}})
+
         self.serialCom = serial.Serial('/dev/ttyACM0', 9600)
+
+        schedule.every().monday.at("9:00").do(self.scheduledCommand, 'D\n')
+        schedule.every().tuesday.at("9:00").do(self.scheduledCommand, 'D\n')
+        schedule.every().wednesday.at("9:00").do(self.scheduledCommand, 'D\n')
+        schedule.every().thursday.at("9:00").do(self.scheduledCommand, 'D\n')
+        schedule.every().friday.at("09:00").do(self.scheduledCommand, 'D\n')
+        schedule.every().saturday.at("9:00").do(self.scheduledCommand, 'D\n')
+        schedule.every().sunday.at("9:00").do(self.scheduledCommand, 'D\n')
+
         self.serialListener = threading.Thread(target=self.runAndLog, args=())
         self.serialListenerEvent = threading.Event()
         self.serialListener.start()
-        print 'Serial listener thread started.'
+        print 'Serial Listener Thread Started'
+
+    def foo(self):
+        print 'foo'
 
     def runAndLog(self):
         """Blah blah blah."""
         while not self.serialListenerEvent.isSet():
             # Get current time
+            schedule.run_pending()
             message = self.serialCom.readline()
             parsedMessage = message.split('\t')
             if parsedMessage[0] in self.mesHeadDict:
@@ -540,11 +634,30 @@ class DataHandler():
                 file.flush()
                 file.close()
 
-    def quit(self):
-        """Blah Blah Blah."""
+    def manualCommand(self, command):
+        """Blah blah blah."""
+        result = tk.MessageBox.askquestion(
+                    self.commandDict['confMessage'][command],
+                    'Are You Sure?', icon='warning')
+        if result == 'yes':
+            print 'MANUAL ACTIVATED: ' \
+                  + self.commandDict['startMessage'][command]
+            self.serialCom.write(command)
+        else:
+            print self.commandDict['cancelMessage'][command]
+
+    def scheduledCommand(self, command):
+        """Blah blah blah."""
+        print 'It is 9:00AM, Scheduled Treatment: ' \
+              + self.commandDict['startMessage'][command]
+        self.serialCom.write(command)
+
+    def exit(self):
+        """Blah blah blah."""
+        print 'Serial Listener Thread Closeing...'
         self.serialListenerEvent.set()
         self.serialListener.join()  # wait for the thread to finish
-        print 'Serial listener thread closed.'
+        print 'Closed'
 
 
 if __name__ == "__main__":
@@ -562,5 +675,5 @@ if __name__ == "__main__":
     app = Interface()  # Create application
     app.mainloop()
     print 'Exiting...'
-    handler.quit()
+    handler.exit()
     app.destroy()
