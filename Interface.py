@@ -294,11 +294,11 @@ class WaterLevel(tk.Frame):
         self.controller = controller
         data = currentData['TANKD:']
         renderer = Renderer(self, 800, 380)
-        renderer.drawTank(self, 50, 95, 80, data[0]/80, "Wash")
-        renderer.drawTank(self, 200, 95, 80, data[1]/80, "Grey")
-        renderer.drawTank(self, 350, 95, 80, data[2]/80, "NF Feed")
-        renderer.drawTank(self, 500, 95, 80, data[3]/80, "RO Feed")
-        renderer.drawTank(self, 650, 95+80, 40, data[4]/40, "Waste")
+        renderer.drawTank(self, 50, 95, 85, data[0]/85, "Wash")
+        renderer.drawTank(self, 200, 95, 85, data[1]/85, "Grey")
+        renderer.drawTank(self, 350, 95, 85, data[2]/85, "NF Feed")
+        renderer.drawTank(self, 500, 95, 85, data[3]/85, "RO Feed")
+        renderer.drawTank(self, 650, 95+85, 45, data[4]/45, "Waste")
 
 
 class SystemStatus(tk.Frame):
