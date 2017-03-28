@@ -539,73 +539,84 @@ class DataHandler():
     def __init__(self):
         """Blah blah blah."""
         self.mesHeadDict = (
-         {'fileName': {'TANKD:': 'WWT-TankLevels',
-                       'PRESSD:': 'WWT-Pressure',
-                       'IFLOWD:': 'WWT-iFlow',
-                       'TFLOWD:': 'WWT-tFlow',
-                       'TandPD': 'WWT-TandPD',
-                       'RelayD': 'WWT-Relays',
-                       '1valveD': 'WWT-Valves1',
-                       '2valveD': 'WWT-Valves2'},
-          'fileHeader': {'TANKD:': 'WW\tROF\tNFF\tGW\tWASTE\ttime\n',
-                         'PRESSD:': 'F\tC1\tC2\tNFR\tROR\ttime\n',
-                         'IFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
-                         'TFLOWD:': 'C\tNFP\tNFR\tROP\tROR\ttime\n',
-                         'TandPD': 'UT\tAC\tDC\tPWRR\tPWRB\ttime\n',
-                         'RelayD': 'P\tBUB\tO3\tO3pump\tUV\ttime\n',
-                         '1valveD': 'NFPOT\tNFF\tNFFT\tGW\tCFF\ttime\n',
-                         '2valveD': 'ROPOT\tROF\tROFT\tWWT\tWASTE\ttime\n'}})
+            {'TANKD:': {'fileName': 'WWT-TankLevels',
+                        'fileHead': 'WW\tROF\tNFF\tGW\tWASTE\ttime\n'},
+             'PRESSD:': {'fileName': 'WWT-Pressure',
+                         'fileHead': 'F\tC1\tC2\tNFR\tROR\ttime\n'},
+             'IFLOWD:': {'fileName': 'WWT-iFlow',
+                         'fileHead': 'C\tNFP\tNFR\tROP\tROR\ttime\n'},
+             'TFLOWD:': {'fileName': 'WWT-tFlow',
+                         'fileHead': 'C\tNFP\tNFR\tROP\tROR\ttime\n'},
+             'TandPD': {'fileName': 'WWT-TandPD',
+                        'fileHead': 'UT\tAC\tDC\tPWRR\tPWRB\ttime\n'},
+             'RelayD': {'fileName': 'WWT-Relays',
+                        'fileHead': 'P\tBUB\tO3\tO3pump\tUV\ttime\n'},
+             '1valveD': {'fileName': 'WWT-Valves1',
+                         'fileHead': 'NFPOT\tNFF\tNFFT\tGW\tCFF\ttime\n'},
+             '2valveD': {'fileName': 'WWT-Valves2',
+                         'fileHead': 'ROPOT\tROF\tROFT\tWWT\tWASTE\ttime\n'}})
 
         self.commandDict = (
-        {'startMessage': {'D\n': 'Regular Day',
-                          'W\n': 'Waste Day',
-                          'V\n': 'Cartridge Filter',
-                          'C\n': 'Cartridge Filter without Rinse',
-                          'M\n': 'Nanofilter',
-                          'N\n': 'Nanofilter without Rinse',
-                          'T\n': 'Reverse Osmosis',
-                          'R\n': 'Reverse Osmosis without Rinse'},
-          'cancelMessage': {'D\n': 'Regular Day Treatment Canceled',
-                            'W\n': 'Waste Day Treatment Canceled',
-                            'V\n': 'Cartridge Filter Treatment Step Canceled',
-                            'C\n': 'Cartridge Filter without Rinse Treatment Step Canceled',
-                            'M\n': 'Nanofilter Treatment Step Canceled',
-                            'N\n': 'Nanofilter without Rinse Treatment Step Canceled',
-                            'T\n': 'Reverse Osmosis Treatment Step Canceled',
-                            'R\n': 'Reverse Osmosis without Rinse Treatment Step Canceled'},
-          'confMessage': {'D\n': 'Regular Treatment Day Confirmation',
-                          'W\n': 'Waste Treatment Day Confirmation',
-                          'V\n': 'Cartridge Filter Step Confirmation',
-                          'C\n': 'Cartridge Filter w/o Step Confirmation',
-                          'M\n': 'Nanofilter Step Confirmation',
-                          'N\n': 'Nanofilter w/o Step Confirmation',
-                          'T\n': 'Reverse Osmosis Step Confirmation',
-                          'R\n': 'Reverse Osmosis w/o Step Confirmation'}})
+            {'RegularDay\n':
+                {'startMessage': 'Regular Day',
+                 'cancelMessage': 'Regular Day Treatment Canceled',
+                 'confMessage': 'Regular Treatment Day Confirmation'},
+             'FullWasteDay\n':
+                {'startMessage': 'Waste Day',
+                 'cancelMessage': 'Waste Day Treatment Canceled',
+                 'confMessage': 'Waste Treatment Day Confirmation'},
+             'HalfWasteDay\n':
+                 {'startMessage': 'Half Waste Day',
+                  'cancelMessage': '',
+                  'confMessage': ''},
+             'CFwithRinse\n':
+                 {'startMessage': 'Cartridge Filter',
+                  'cancelMessage': 'Cartridge Filter Treatment Step Canceled',
+                  'confMessage': 'Cartridge Filter Step Confirmation'},
+             'CFwoRinse\n':
+                 {'startMessage': 'Cartridge Filter without Rinse',
+                  'cancelMessage': 'Cartridge Filter without Rinse Treatment Step Canceled',
+                  'confMessage': 'Cartridge Filter w/o Step Confirmation'},
+             'NFwithRinse\n':
+                 {'startMessage': 'Nanofilter',
+                  'cancelMessage': 'Nanofilter Treatment Step Canceled',
+                  'confMessage': 'Nanofilter Step Confirmation'},
+             'NFwoRinse\n':
+                 {'startMessage': 'Nanofilter without Rinse',
+                  'cancelMessage': 'Nanofilter without Rinse Treatment Step Canceled',
+                  'confMessage': 'Nanofilter w/o Step Confirmation'},
+             'ROwithRinse\n':
+                 {'startMessage': 'Reverse Osmosis',
+                  'cancelMessage': 'Reverse Osmosis Treatment Step Canceled',
+                  'confMessage': 'Reverse Osmosis Step Confirmation'},
+             'ROwoRinse\n':
+                 {'startMessage': 'Reverse Osmosis without Rinse',
+                  'cancelMessage': 'Reverse Osmosis without Rinse Treatment Step Canceled',
+                  'confMessage': 'Reverse Osmosis w/o Step Confirmation'}})
 
         self.serialCom = serial.Serial('/dev/ttyACM0', 9600)
 
-        schedule.every().monday.at("9:00").do(self.scheduledCommand, 'D\n')
-        schedule.every().tuesday.at("9:00").do(self.scheduledCommand, 'D\n')
-        schedule.every().wednesday.at("9:00").do(self.scheduledCommand, 'D\n')
-        schedule.every().thursday.at("9:00").do(self.scheduledCommand, 'D\n')
-        schedule.every().friday.at("09:00").do(self.scheduledCommand, 'D\n')
-        schedule.every().saturday.at("9:00").do(self.scheduledCommand, 'D\n')
-        schedule.every().sunday.at("9:00").do(self.scheduledCommand, 'D\n')
+        schedule.every().monday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
+        schedule.every().tuesday.at("9:00").do(self.scheduledCommand, 'HalfWasteDay\n')
+        schedule.every().wednesday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
+        schedule.every().thursday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
+        schedule.every().friday.at("09:00").do(self.scheduledCommand, 'FullWasteDay\n')
+        schedule.every().saturday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
+        schedule.every().sunday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
 
         self.serialListener = threading.Thread(target=self.runAndLog, args=())
         self.serialListenerEvent = threading.Event()
         self.serialListener.start()
-        print 'Serial Listener Thread Started'
+        print 'Serial Com Thread Started'
 
     def runAndLog(self):
         """Blah blah blah."""
         while not self.serialListenerEvent.isSet():
             # Get current time
-            schedule.run_pending()
+            #schedule.run_pending()
             message = self.serialCom.readline()
             parsedMessage = message.split('\t')
             if parsedMessage[0] in self.mesHeadDict:
-                print parsedMessage[0]
                 dictIndex = parsedMessage[0]
                 del parsedMessage[0]
                 global currentData
@@ -615,11 +626,11 @@ class DataHandler():
                 now = time.localtime(time.time())
                 fileName = ('{0}_{1}_{2}_'.format(now.tm_year, now.tm_mon,
                                                   now.tm_mday)
-                            + self.mesHeadDict['fileName'][dictIndex] + '.txt')
+                            + self.mesHeadDict[dictIndex]['fileName'] + '.txt')
 
                 if not (os.path.isfile(fileName)):
                     file = open(fileName, "w")
-                    file.write(self.mesHeadDict['fileHeader'][dictIndex])
+                    file.write(self.mesHeadDict[dictIndex]['fileHead'])
                     file.flush()
                     file.close()
 
@@ -628,28 +639,29 @@ class DataHandler():
                 file.write('\t'.join(message))
                 file.flush()
                 file.close()
+                print 'Data saved!'
 
     def manualCommand(self, command):
         """Blah blah blah."""
         result = tk.MessageBox.askquestion(
-                    self.commandDict['confMessage'][command],
+                    self.commandDict[command]['confMessage'],
                     'Are you sure?', icon='warning')
         if result == 'yes':
             print 'MANUAL ACTIVATED: ' \
-                  + self.commandDict['startMessage'][command]
+                  + self.commandDict[command]['startMessage']
             self.serialCom.write(command)
         else:
-            print self.commandDict['cancelMessage'][command]
+            print self.commandDict[command]['cancelMessage']
 
     def scheduledCommand(self, command):
         """Blah blah blah."""
         print 'It is 9:00AM, Scheduled Treatment: ' \
-              + self.commandDict['startMessage'][command]
+              + self.commandDict[command]['startMessage']
         self.serialCom.write(command)
 
     def exit(self):
         """Blah blah blah."""
-        print 'Serial Listener Thread Closeing...'
+        print 'Serial Com Thread Closing...'
         self.serialListenerEvent.set()
         self.serialListener.join()  # wait for the thread to finish
         print 'Closed'
