@@ -173,51 +173,53 @@ class Option(tk.Frame):
         self.controller = controller
 
         RegButton = (tk.Button(self, text='Regular Day',
-                     command=lambda: partial(handler.manualCommand('D\n'))))
+                     command=lambda:
+                     partial(handler.manualCommand('RegularDay\n'))))
         RegButton.grid(row=0, column=4)
         RegButton.config(height=5, width=16)
 
         WasteButton = (tk.Button(self, text='Waste Day',
-                       command=lambda: partial(handler.manualCommand('W\n'))))
+                       command=lambda:
+                       partial(handler.manualCommand('FullWasteDay\n'))))
         WasteButton.grid(row=1, column=4)
         WasteButton.config(height=5, width=16)
 
         QuitButton = (tk.Button(self, text='Quit',
-                      command=lambda: self._exit()))
+                      command=lambda: self.exit()))
         QuitButton.grid(row=5, column=4)
         QuitButton.config(height=5, width=16)
 
         CFButton = (tk.Button(self, text='CF',
-                    command=lambda: handler.manualCommand('V\n')))
+                    command=lambda: handler.manualCommand('CFwithRinse\n')))
         CFButton.grid(row=0, column=0)
         CFButton.config(height=5, width=16)
 
         CFWOButton = (tk.Button(self, text='CF wo R',
-                      command=lambda: handler.manualCommand('C\n')))
+                      command=lambda: handler.manualCommand('CFwoRinse\n')))
         CFWOButton.grid(row=0, column=2)
         CFWOButton.config(height=5, width=16)
 
         NFButton = (tk.Button(self, text='NF',
-                    command=lambda: handler.manualCommand('M\n')))
+                    command=lambda: handler.manualCommand('NFwithRinse\n')))
         NFButton.grid(row=1, column=0)
         NFButton.config(height=5, width=16)
 
         NFWOButton = (tk.Button(self, text='NF wo R',
-                      command=lambda: handler.manualCommand('N\n')))
+                      command=lambda: handler.manualCommand('NFwoRinse\n')))
         NFWOButton.grid(row=1, column=2)
         NFWOButton.config(height=5, width=16)
 
         ROButton = (tk.Button(self, text='RO',
-                    command=lambda: handler.manualCommand('T\n')))
+                    command=lambda: handler.manualCommand('ROwithRinse\n')))
         ROButton.grid(row=2, column=0)
         ROButton.config(height=5, width=16)
 
         ROWOButton = (tk.Button(self, text='RO wo R',
-                      command=lambda: handler.manualCommand('R\n')))
+                      command=lambda: handler.manualCommand('ROwoRinse\n')))
         ROWOButton.grid(row=2, column=2)
         ROWOButton.config(height=5, width=16)
 
-    def _exit(self):
+    def exit(self):
         """Blah blah blah."""
         result = (tkMessageBox.askquestion('Exit WWT Interface Confirmation',
                                            'Are you sure you want to quit?',
@@ -575,7 +577,8 @@ class DataHandler():
                   'confMessage': 'Cartridge Filter Step Confirmation'},
              'CFwoRinse\n':
                  {'startMessage': 'Cartridge Filter without Rinse',
-                  'cancelMessage': 'Cartridge Filter without Rinse Treatment Step Canceled',
+                  'cancelMessage': 'Cartridge Filter without Rinse Treatment \
+                                    Step Canceled',
                   'confMessage': 'Cartridge Filter w/o Step Confirmation'},
              'NFwithRinse\n':
                  {'startMessage': 'Nanofilter',
@@ -583,7 +586,8 @@ class DataHandler():
                   'confMessage': 'Nanofilter Step Confirmation'},
              'NFwoRinse\n':
                  {'startMessage': 'Nanofilter without Rinse',
-                  'cancelMessage': 'Nanofilter without Rinse Treatment Step Canceled',
+                  'cancelMessage': 'Nanofilter without Rinse Treatment Step \
+                                    Canceled',
                   'confMessage': 'Nanofilter w/o Step Confirmation'},
              'ROwithRinse\n':
                  {'startMessage': 'Reverse Osmosis',
@@ -591,18 +595,26 @@ class DataHandler():
                   'confMessage': 'Reverse Osmosis Step Confirmation'},
              'ROwoRinse\n':
                  {'startMessage': 'Reverse Osmosis without Rinse',
-                  'cancelMessage': 'Reverse Osmosis without Rinse Treatment Step Canceled',
+                  'cancelMessage': 'Reverse Osmosis without Rinse Treatment \
+                                    Step Canceled',
                   'confMessage': 'Reverse Osmosis w/o Step Confirmation'}})
 
         self.serialCom = serial.Serial('/dev/ttyACM0', 9600)
 
-        schedule.every().monday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
-        schedule.every().tuesday.at("9:00").do(self.scheduledCommand, 'HalfWasteDay\n')
-        schedule.every().wednesday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
-        schedule.every().thursday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
-        schedule.every().friday.at("09:00").do(self.scheduledCommand, 'FullWasteDay\n')
-        schedule.every().saturday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
-        schedule.every().sunday.at("9:00").do(self.scheduledCommand, 'RegularDay\n')
+        schedule.every().monday.at("9:00").do(
+            self.scheduledCommand, 'RegularDay\n')
+        schedule.every().tuesday.at("9:00").do(
+            self.scheduledCommand, 'HalfWasteDay\n')
+        schedule.every().wednesday.at("9:00").do(
+            self.scheduledCommand, 'RegularDay\n')
+        schedule.every().thursday.at("9:00").do(
+            self.scheduledCommand, 'RegularDay\n')
+        schedule.every().friday.at("09:00").do(
+            self.scheduledCommand, 'FullWasteDay\n')
+        schedule.every().saturday.at("9:00").do(
+            self.scheduledCommand, 'RegularDay\n')
+        schedule.every().sunday.at("9:00").do(
+            self.scheduledCommand, 'RegularDay\n')
 
         self.serialListener = threading.Thread(target=self.runAndLog, args=())
         self.serialListenerEvent = threading.Event()
@@ -612,7 +624,6 @@ class DataHandler():
     def runAndLog(self):
         """Blah blah blah."""
         while not self.serialListenerEvent.isSet():
-            # Get current time
             #schedule.run_pending()
             message = self.serialCom.readline()
             parsedMessage = message.split('\t')
@@ -627,7 +638,7 @@ class DataHandler():
                 fileName = ('{0}_{1}_{2}_'.format(now.tm_year, now.tm_mon,
                                                   now.tm_mday)
                             + self.mesHeadDict[dictIndex]['fileName'] + '.txt')
-
+                # If file is not yet present create then add headers to file
                 if not (os.path.isfile(fileName)):
                     file = open(fileName, "w")
                     file.write(self.mesHeadDict[dictIndex]['fileHead'])
