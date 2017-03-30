@@ -115,9 +115,9 @@ class Homeowner(tk.Frame):
 
         # display water levels on Homeowner page
         # note: these are also under class WaterLevel
-        renderer.drawTank(self, 360, 195, 80, data[0]/85, "Wash")
-        renderer.drawTank(self, 470, 195, 80, data[1]/85, "Grey\nWater")
-        renderer.drawTank(self, 580, 195+80, 40, data[4]/40, "Waste\nWater")
+        renderer.drawTank(self, 360, 195, 85, data[0]/85, "Wash")
+        renderer.drawTank(self, 470, 195, 85, data[1]/85, "Grey\nWater")
+        renderer.drawTank(self, 580, 195+80, 45, data[4]/45, "Waste\nWater")
 
 
 class AdvUser(tk.Frame):
@@ -342,7 +342,7 @@ class WaterLevel(tk.Frame):
         renderer.drawTank(self, 200, 95, 85, data[1]/85, "Grey\nWater")
         renderer.drawTank(self, 350, 95, 85, data[2]/85, "NF Feed")
         renderer.drawTank(self, 500, 95, 85, data[3]/85, "RO Feed")
-        renderer.drawTank(self, 650, 95+85, 45, data[4]/40, "Waste\nWater")
+        renderer.drawTank(self, 650, 95+85, 45, data[4]/45, "Waste\nWater")
 
 
 class SystemStatus(tk.Frame):
@@ -558,6 +558,7 @@ class Renderer(tk.Canvas):
         """Draw a tank GUI object with a label below and # gallons above."""
         sizeLabel = size
         size = size*2
+        labelheight = 25
         self.create_rectangle(x, y, x+100, y+size, width=3, fill='grey')
         if fill < 1:
             self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
@@ -566,13 +567,16 @@ class Renderer(tk.Canvas):
                             text=str(int(sizeLabel * fill)) + '/' + str(sizeLabel)
                                  + 'gal', font=NOTIFICATION_FONT)
         else:
+            fill = 1
             self.create_rectangle(x + 2, y - fill * (size - 3) + size - 1, x + 99, y + size - 1,
                                   width=0, fill='red')
             gals = tk.Label(parent,
-                            text=str('OVERFLOW\n'+int(sizeLabel * fill)) + '/' + str(sizeLabel)
+                            text='OVERFLOW\n'+str(int(sizeLabel * fill)) + '/' + str(sizeLabel)
                                  + 'gal', font=NOTIFICATION_FONT)
 
-        gals.place(x=x, y=y-21, width=100, height=20)
+            labelheight = 45
+
+        gals.place(x=x, y=y-labelheight-1, width=120, height=labelheight)
         label = tk.Label(parent, text=name, font=TITLE_FONT)
         label.place(x=x, y=y+size+5, width=100)
 
