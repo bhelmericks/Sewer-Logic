@@ -335,14 +335,23 @@ class WaterLevel(tk.Frame):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        data = currentData['TANKD:']
-        renderer = Renderer(self, 800, 380)
+
         # note: 3 of these are also called under class Homeowner
-        renderer.drawTank(self, 50, 95, 85, data[0]/85, "Wash")
-        renderer.drawTank(self, 200, 95, 85, data[1]/85, "Grey\nWater")
-        renderer.drawTank(self, 350, 95, 85, data[2]/85, "NF Feed")
-        renderer.drawTank(self, 500, 95, 85, data[3]/85, "RO Feed")
-        renderer.drawTank(self, 650, 95+85, 45, data[4]/45, "Waste\nWater")
+
+        self.renderer = Renderer(self, 800, 380)
+        self.list = {}
+        self.list[0] = self.renderer.drawTank(self, 50, 95, 85, currentData['TANKD:'][0], "Wash")
+        self.list[1] = self.renderer.drawTank(self, 200, 95, 85, currentData['TANKD:'][1], "Grey\nWater")
+        self.list[2] = self.renderer.drawTank(self, 350, 95, 85, currentData['TANKD:'][2], "NF Feed")
+        self.list[3] = self.renderer.drawTank(self, 500, 95, 85, currentData['TANKD:'][3], "RO Feed")
+        self.list[4] = self.renderer.drawTank(self, 650, 95+85, 45, currentData['TANKD:'][4], "Waste\nWater")
+
+    def update(self):
+        self.renderer.coords(self.list[0], 52, 95-float(currentData['TANKD:'][0])/float(85)*(170-3)+170-1, 149, 264)
+        self.renderer.coords(self.list[1], 202, 95-float(currentData['TANKD:'][2])/float(85)*(170-3)+170-1, 299, 264)
+        self.renderer.coords(self.list[2], 352, 95-float(currentData['TANKD:'][3])/float(85)*(170-3)+170-1, 449, 264)
+        self.renderer.coords(self.list[3], 502, 95-float(currentData['TANKD:'][4])/float(85)*(170-3)+170-1, 599, 264)
+        self.renderer.coords(self.list[4], 652, 180-float(currentData['TANKD:'][4])/float(85)*(90-3)+90-1, 749, 269)
 
 
 class SystemStatus(tk.Frame):
@@ -556,29 +565,19 @@ class Renderer(tk.Canvas):
 
     def drawTank(self, parent, x, y, size, fill, name):
         """Draw a tank GUI object with a label below and # gallons above."""
-        sizeLabel = size
-        size = size*2
-        labelheight = 25
-        self.create_rectangle(x, y, x+100, y+size, width=3, fill='grey')
-        if fill < 1:
-            self.create_rectangle(x+2, y-fill*(size-3)+size-1, x+99, y+size-1,
-                              width=0, fill='midnight blue')
-            gals = tk.Label(parent,
-                            text=str(int(sizeLabel * fill)) + '/' + str(sizeLabel)
-                                 + 'gal', font=NOTIFICATION_FONT)
-        else:
-            fill = 1
-            self.create_rectangle(x + 2, y - fill * (size - 3) + size - 1, x + 99, y + size - 1,
-                                  width=0, fill='red')
-            gals = tk.Label(parent,
-                            text='OVERFLOW\n'+str(int(sizeLabel * fill)) + '/' + str(sizeLabel)
-                                 + 'gal', font=NOTIFICATION_FONT)
 
-            labelheight = 45
+        height = size*2
+        self.create_rectangle(x, y, x+100, y+height, width=3, fill='grey')
+        infill = self.create_rectangle(x+2, y-float(fill)/float(height)*(height-3)+height-1, x+99, y+height-1,
+                                     width=0, fill='midnight blue')
 
-        gals.place(x=x, y=y-labelheight-1, width=120, height=labelheight)
-        label = tk.Label(parent, text=name, font=TITLE_FONT)
-        label.place(x=x, y=y+size+5, width=100)
+        gals = tk.Label(self,
+                        text=str(int(fill))+'/'+str(size)
+                        + 'gal', font=NOTIFICATION_FONT)
+        gals.place(x=x, y=y-21, width=100, height=20)
+        label = tk.Label(self, text=name, font=TITLE_FONT)
+        label.place(x=x, y=y+height+5, width=100, height=40)
+        return infill
 
     def drawDataOutput(self, parent, x, y, fullLine):
         """Draw label of something at a value with units."""
@@ -740,9 +739,26 @@ if __name__ == "__main__":
                     'RelayD': initialData,
                     '1valveD': initialData,
                     '2valveD': initialData})
-    handler = DataHandler()
+
+    loop = True
+
+    def testSerial():
+        while loop:
+            time.sleep(5)
+            for i in range(0, 5):
+                currentData['TANKD:'][i] += 5
+                print currentData['TANKD:'][i]
+            app.frames[WaterLevel].update()
+
+    testListener = threading.Thread(target=testSerial, args=())
+    testListenerEvent = threading.Event()
+    testListener.start()
+
+    #handler = DataHandler()
     app = Interface()  # Create application
     app.mainloop()
     print 'Exiting...'
-    handler.exit()
+    #handler.exit()
+    loop = False
+    testListener.join()
     app.destroy()
