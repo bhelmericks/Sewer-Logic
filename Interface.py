@@ -42,7 +42,7 @@ class Interface(tk.Tk):
         self.buttons[Homeowner] = self.homeownerButton
         self.homeownerButton.place(x=0, y=430, width=400, height=50)
         # Create advanced user button
-        self.advUsrButton = tk.Button(container, text="Advanced User",
+        self.advUsrButton = tk.Button(container, text="Maintenance",
                                       font=BUTTON_FONT, command=lambda:
                                       self.show_frame(AdvUser))
         # Add advanced usre button navigation button dictionary
@@ -94,24 +94,30 @@ class Homeowner(tk.Frame):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
+        data = currentData['TANKD:']
         # label = tk.Label(self, text="Homeowner Frame", font=TITLE_FONT)
         # label.pack(side="top", fill="x", pady=10)
-        # find a way to make nowAsString retain value
-        nowAsString = time.strftime('%H:%M %m/%d/%Y')
-        washTank = nowAsString + ' NOTICE: add 1 gallon to Wash Tank'
-        wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
         renderer = Renderer(self, 800, 420)
-        # logic to force into true values needed
-        renderer.drawFlag(self, 10, 30, 15, 'blue', 'green', washTank)
 
-        renderer.drawFlag(self, 10, 80, 15, 'yellow', 'green', wasteTank)
+        # TO DO: save nowAsString in event of restart restarted
+        nowAsString = time.strftime('%H:%M %m/%d/%Y')
+        # TO DO: if statement for tank needing refilling
+        washTank = nowAsString + ' NOTICE: add 1 gallon to Wash Tank'
+        renderer.drawFlag(self, 10, 30, 30, 'blue', 'green', washTank)
+        # TO DO: if statement for tank needing to be emptied
+        wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
+        renderer.drawFlag(self, 10, 80, 30, 'yellow', 'green', wasteTank)
+        # TO DO: if statement for errors in system.
+        # May want to activiate a "shut down" mode here
         label = tk.Label(self, text='ERROR: Maintenance Required',
                          font=TITLE_FONT, fg='red')
         label.place(x=10, y=150, height=25)
+
         # display water levels on Homeowner page
-        renderer.drawTank(self, 360, 195, 80, 0.3, "Wash")
-        renderer.drawTank(self, 470, 195, 80, 0.5, "Grey")
-        renderer.drawTank(self, 580, 195+80, 40, 0.1, "Waste")
+        # note: these are also under class WaterLevel
+        renderer.drawTank(self, 360, 195, 85, data[0]/85, "Wash")
+        renderer.drawTank(self, 470, 195, 85, data[1]/85, "Grey\nWater")
+        renderer.drawTank(self, 580, 195+80, 45, data[4]/45, "Waste\nWater")
 
 
 class AdvUser(tk.Frame):
@@ -145,14 +151,14 @@ class AdvUser(tk.Frame):
         controller.buttons[FlowAndPressure] = flowButton
         flowButton.place(x=320, y=0, width=160, height=50)
 
-        waterButton = tk.Button(self, text="Water Level",
+        waterButton = tk.Button(self, text="Tank Level",
                                 font=BUTTON_FONT, command=lambda:
                                 controller.show_frame(WaterLevel), bg='grey')
         # Add to navigation button dictionary
         controller.buttons[WaterLevel] = waterButton
         waterButton.place(x=160, y=0, width=160, height=50)
 
-        statusButton = tk.Button(self, text="System Status",
+        statusButton = tk.Button(self, text="Valves and\nRelays",
                                  font=BUTTON_FONT, command=lambda:
                                  controller.show_frame(SystemStatus),
                                  bg='grey')
@@ -168,7 +174,7 @@ class Option(tk.Frame):
     """Options frame."""
 
     def __init__(self, parent, controller):
-        """Blah blah blah."""
+        """These are from Dotson Labs code."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
@@ -256,10 +262,10 @@ class PowerAndTemp(tk.Frame):
             renderer.drawDataOutput(self, 20, x * 40 + 100, fullLine)
             numberIn = x * (2 + x) + 90
             if x < 2:
-                fullLine = str(x) + ':  ' + str(numberIn) + '  ' + 'Amps'
+                fullLine = str(x) + ':  ' + str("%.1f" %numberIn) + '  ' + 'Amps'
             else:
                 numberIn = (x-1 * (2 + x-1) + 90)+(x-1 * (2 + x-1) + 90)
-                fullLine = ('Total Power' + ':  ' + str(numberIn)
+                fullLine = ('Total Power' + ':  ' + str("%.1f" %numberIn)
                             + '  ' + 'Amps')
             renderer.drawDataOutput(self, 320, x * 40 + 100, fullLine)
 
@@ -271,22 +277,55 @@ class FlowAndPressure(tk.Frame):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
+
         label = tk.Label(self, text="Flow and Pressure Frame",
                          font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=10)
         renderer = Renderer(self, 800, 380)
+
+        # labels for pressures and valves
+        names = []
+        names.append('Feed')
+        names.append('CF2')
+        names.append('CF3')
+        names.append('NF')
+        names.append('RO')
+
         fullLine = 'Pressure'
-        renderer.drawDataOutput(self, 40, 50, fullLine)
-        fullLine = 'Flow'
-        renderer.drawDataOutput(self, 340, 50, fullLine)
+        renderer.drawDataOutput(self, 20, 50, fullLine)
+
+        data = currentData['PRESSD:']
         for x in range(0, 5):
-            numberIn = x*(2+x)+20+0.532-(0.1*x)
-            fullLine = str(x)+':  '+str("%.0f" % numberIn)+'  '+'psi'
+            fullLine = names[x]+':  '+str("%.0f" % data[x])+'  '+'psi'
             renderer.drawDataOutput(self, 20, x*40+100, fullLine)
-            numberIn = x * (2 + x) + 50+0.932-(0.1*x)
-            fullLine = (str(x) + ':  ' + str("%.2f" % numberIn)
-                        + '  ' + 'gal/min')
-            renderer.drawDataOutput(self, 320, x*40+100, fullLine)
+
+        names.append('CF1')
+        names.append('CF2')
+        names.append('CF3')
+        names.append('NFX')
+        names.append('ROX')
+
+        fullLine = 'Differential\nPressure'
+        renderer.drawDataOutput(self, 200, 50, fullLine)
+        for x in range(0, 5):
+            fullLine = names[x+5]+':  '+str("%.0f" % data[x])+'  '+'psi'
+            renderer.drawDataOutput(self, 200, x*40+100, fullLine)
+
+        names.append('Feed')
+        names.append('CF')
+        names.append('NFP')
+        names.append('ROP')
+        names.append('NFR')
+        names.append('ROR')
+
+        fullLine = 'Flow'
+        renderer.drawDataOutput(self, 400, 50, fullLine)
+        data = currentData['IFLOWD:']
+        for x in range(0, 6):
+
+            fullLine = (names[x+10] + ':  ' + str("%.2f" % data[x])
+                        + '  ' + 'gpm')
+            renderer.drawDataOutput(self, 400, x*40+100, fullLine)
 
 
 class WaterLevel(tk.Frame):
@@ -296,13 +335,16 @@ class WaterLevel(tk.Frame):
         """Blah blah blah."""
         tk.Frame.__init__(self, parent)
         self.controller = controller
+
+        # note: 3 of these are also called under class Homeowner
+
         self.renderer = Renderer(self, 800, 380)
         self.list = {}
         self.list[0] = self.renderer.drawTank(self, 50, 95, 85, currentData['TANKD:'][0], "Wash")
-        self.list[1] = self.renderer.drawTank(self, 200, 95, 85, currentData['TANKD:'][1], "Grey")
+        self.list[1] = self.renderer.drawTank(self, 200, 95, 85, currentData['TANKD:'][1], "Grey\nWater")
         self.list[2] = self.renderer.drawTank(self, 350, 95, 85, currentData['TANKD:'][2], "NF Feed")
         self.list[3] = self.renderer.drawTank(self, 500, 95, 85, currentData['TANKD:'][3], "RO Feed")
-        self.list[4] = self.renderer.drawTank(self, 650, 95+85, 45, currentData['TANKD:'][4], "Waste")
+        self.list[4] = self.renderer.drawTank(self, 650, 95+85, 45, currentData['TANKD:'][4], "Waste\nWater")
 
     def update(self):
         self.renderer.coords(self.list[0], 52, 95-float(currentData['TANKD:'][0])/float(85)*(170-3)+170-1, 149, 264)
@@ -310,6 +352,7 @@ class WaterLevel(tk.Frame):
         self.renderer.coords(self.list[2], 352, 95-float(currentData['TANKD:'][3])/float(85)*(170-3)+170-1, 449, 264)
         self.renderer.coords(self.list[3], 502, 95-float(currentData['TANKD:'][4])/float(85)*(170-3)+170-1, 599, 264)
         self.renderer.coords(self.list[4], 652, 180-float(currentData['TANKD:'][4])/float(85)*(90-3)+90-1, 749, 269)
+
 
 class SystemStatus(tk.Frame):
     """System status frame."""
@@ -326,11 +369,11 @@ class SystemStatus(tk.Frame):
         xposition = 10
         yposition = 300
         number = yposition / 30 + 13
-        fullLine = '1: ' + str(int(number)) + '% OPEN'
+        fullLine = 'NF Fev: ' + str(int(number)) + '% OPEN'
         renderer.drawDataOutput(self, xposition, yposition, fullLine)
         yposition = yposition + 40
         number = yposition / 30 - 3
-        fullLine = '2: ' + str(int(number)) + '% OPEN'
+        fullLine = 'RO Fev: ' + str(int(number)) + '% OPEN'
         renderer.drawDataOutput(self, xposition, yposition, fullLine)
 
         manualOn = False
@@ -350,9 +393,9 @@ class SystemStatus(tk.Frame):
         # relay labels
         renderer.drawDataOutput(self, 350, 20, 'Relays')
         relay = []
-        relay.append('Bubbler')
-        relay.append('UV')
-        relay.append('Ozone')
+        relay.append('Soap Removal')
+        relay.append('UV Disinfection')
+        relay.append('Ozone Disinfection')
         relay.append('Ozone Pump')
         relay.append('High Pressure Pump')
         yposition = 70
@@ -378,9 +421,9 @@ class SystemStatus(tk.Frame):
                                   relayButton, valveButton):
         """Blah Blah Blah."""
         if manualOn:
-            displayText = 'Exit\nManual'
+            displayText = 'Manual\nMode Off'
         else:
-            displayText = 'Enter\nManual'
+            displayText = 'Manual\nMode'
         manualButton = tk.Button(self, text=displayText,
                                  font=NOTIFICATION_FONT, bg='grey',
                                  state="normal", command=lambda:
@@ -522,6 +565,7 @@ class Renderer(tk.Canvas):
 
     def drawTank(self, parent, x, y, size, fill, name):
         """Draw a tank GUI object with a label below and # gallons above."""
+
         height = size*2
         self.create_rectangle(x, y, x+100, y+height, width=3, fill='grey')
         infill = self.create_rectangle(x+2, y-float(fill)/float(height)*(height-3)+height-1, x+99, y+height-1,
