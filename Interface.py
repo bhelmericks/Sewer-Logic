@@ -347,7 +347,7 @@ class FlowAndPressure(tk.Frame):
         renderer.drawDataOutput(self, 400, 50, fullLine)
         self.flows = {}
         for x in range(0, 6):
-            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['TFLOWD:'][x])
+            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
             self.flows[x] = renderer.drawDataOutput(self, 400, x*40+100, fullLine)
 
@@ -356,7 +356,7 @@ class FlowAndPressure(tk.Frame):
             fullLine = self.names[x] + ':  ' + str("%.0f" % currentData['PRESSD:'][x]) + '  ' + 'psi'
             self.pressures[x].config(text=fullLine)
         for x in range(0, 6):
-            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['TFLOWD:'][x])
+            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
             self.flows[x].config(text=fullLine)
 
@@ -407,8 +407,8 @@ class SystemStatus(tk.Frame):
 
         self.valvePosition = []  # this holds the valve on/off positions
         self.valveButton = []
-        self.valveAdjust1 = valvedata1[5]
-        self.valveAdjust2 = valvedata2[5]
+        self.valveAdjust1 = valvedata1[0]
+        self.valveAdjust2 = valvedata2[0]
 
         self.active = []  # this holds the relay active/inactive status
         self.relayButton = []
@@ -418,11 +418,11 @@ class SystemStatus(tk.Frame):
 
         for x in range(0, 8):
             if x < 4:
-                self.valvePosition.append(valvedata1[x])
+                self.valvePosition.append(valvedata1[x+1])
                 yposition = 70 + 60*x
                 renderer.drawDataOutput(self, -100, yposition, str(x+1))
             else:
-                self.valvePosition.append(valvedata2[x-4])
+                self.valvePosition.append(valvedata2[x-3])
                 yposition = 70 + 60*(x-4)
                 renderer.drawDataOutput(self, 100, yposition, str(x+1))
         # relay labels
@@ -454,11 +454,11 @@ class SystemStatus(tk.Frame):
         xposition = 10
         yposition = 300
         number = yposition / 30 + 13
-        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][5])) + '% OPEN'
+        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
         self.valveAdjust1 = renderer.drawDataOutput(self, xposition, yposition, fullLine)
         yposition = yposition + 40
         number = yposition / 30 - 3
-        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][5])) + '% OPEN'
+        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
         self.valveAdjust2 = renderer.drawDataOutput(self, xposition, yposition, fullLine)
         data = currentData['RelayD']
         for x in range(0, len(data)):
@@ -573,11 +573,11 @@ class SystemStatus(tk.Frame):
         for x in range(0, 5):
             self.changeRelayButton(x, currentData['RelayD'][x])
             if x < 4:
-                self.changeValveButton(x, currentData['1valveD'][x])
-                self.changeValveButton((x+4), currentData['2valveD'][x])
-        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][5])) + '% OPEN'
+                self.changeValveButton(x, currentData['1valveD'][x+1])
+                self.changeValveButton((x+4), currentData['2valveD'][x+1])
+        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
         self.valveAdjust1.config(text=fullLine)
-        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][5])) + '% OPEN'
+        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
         self.valveAdjust2.config(text=fullLine)
 
     # these are called by the GlobalManual Button to enable/disable buttons
@@ -802,24 +802,24 @@ if __name__ == "__main__":
                 #print currentData['TANKD:'][i]
                 currentData['TandPD'][i] += 1.1
                 #print currentData['TandPD'][i]
-                currentData['TFLOWD:'][i] += 2.51
+                currentData['IFLOWD:'][i] += 2.51
                 currentData['PRESSD:'][i] += 3.52
-                if currentData['RelayD'][i]%3 is 0 and i < 5:
+                if currentData['RelayD'][i]%3 is 0:
                     currentData['RelayD'][i] = 0
-                    currentData['1valveD'][i] = 0
-                    currentData['2valveD'][i] = 0
+                    if i > 0:
+                        currentData['1valveD'][i] = 0
+                        currentData['2valveD'][i] = 0
                 else:
                     currentData['RelayD'][i] += 1
                     currentData['1valveD'][i] += 1
                     currentData['2valveD'][i] += 1
-                if i > 4:
-                    if currentData['1valveD'][i] < 100:
-                        currentData['1valveD'][i] += i*2.5
-                        currentData['2valveD'][i] += i*2.4
-                    else:
-                        currentData['1valveD'][i] = 0
-                        currentData['2valveD'][i] = 0
-                    print currentData['1valveD'][i]
+            if currentData['1valveD'][0] < 100:
+                currentData['1valveD'][0] += i*2.5
+                currentData['2valveD'][0] += i*2.4
+            else:
+                currentData['1valveD'][0] = 0
+                currentData['2valveD'][0] = 0
+            print currentData['1valveD'][0]
             app.frames[WaterLevel].update()
             app.frames[PowerAndTemp].update()
             app.frames[FlowAndPressure].update()
