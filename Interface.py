@@ -804,7 +804,7 @@ if __name__ == "__main__":
                 #print currentData['TandPD'][i]
                 currentData['TFLOWD:'][i] += 2.51
                 currentData['PRESSD:'][i] += 3.52
-                if currentData['RelayD'][i]%3 is 0:
+                if currentData['RelayD'][i]%3 is 0 and i < 5:
                     currentData['RelayD'][i] = 0
                     currentData['1valveD'][i] = 0
                     currentData['2valveD'][i] = 0
@@ -813,8 +813,13 @@ if __name__ == "__main__":
                     currentData['1valveD'][i] += 1
                     currentData['2valveD'][i] += 1
                 if i > 4:
-                    currentData['1valveD'][i] += i*5
-                    currentData['2valveD'][i] += i*4
+                    if currentData['1valveD'][i] < 100:
+                        currentData['1valveD'][i] += i*2.5
+                        currentData['2valveD'][i] += i*2.4
+                    else:
+                        currentData['1valveD'][i] = 0
+                        currentData['2valveD'][i] = 0
+                    print currentData['1valveD'][i]
             app.frames[WaterLevel].update()
             app.frames[PowerAndTemp].update()
             app.frames[FlowAndPressure].update()
