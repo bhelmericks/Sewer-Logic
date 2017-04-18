@@ -347,7 +347,7 @@ class FlowAndPressure(tk.Frame):
         renderer.drawDataOutput(self, 400, 50, fullLine)
         self.flows = {}
         for x in range(0, 6):
-            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['TFLOWD:'][x])
+            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
             self.flows[x] = renderer.drawDataOutput(self, 400, x*40+100, fullLine)
 
@@ -356,7 +356,7 @@ class FlowAndPressure(tk.Frame):
             fullLine = self.names[x] + ':  ' + str("%.0f" % currentData['PRESSD:'][x]) + '  ' + 'psi'
             self.pressures[x].config(text=fullLine)
         for x in range(0, 6):
-            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['TFLOWD:'][x])
+            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
             self.flows[x].config(text=fullLine)
 
@@ -400,16 +400,29 @@ class SystemStatus(tk.Frame):
 
         manualOn = False
 
+        valvedata1 = currentData['1valveD']
+        valvedata2 = currentData['2valveD']
+
+        relaydata = currentData['RelayD']
+
+        self.valvePosition = []  # this holds the valve on/off positions
+        self.valveButton = []
+        self.valveAdjust1 = valvedata1[0]
+        self.valveAdjust2 = valvedata2[0]
+
+        self.active = []  # this holds the relay active/inactive status
+        self.relayButton = []
+
         # initial valves and labels
         renderer.drawDataOutput(self, 10, 20, 'Valves')
-        self.valvePosition = []                             # this holds the valve on/off positions
+
         for x in range(0, 8):
             if x < 4:
-                self.valvePosition.append('OFF')
+                self.valvePosition.append(valvedata1[x+1])
                 yposition = 70 + 60*x
                 renderer.drawDataOutput(self, -100, yposition, str(x+1))
             else:
-                self.valvePosition.append('OFF')
+                self.valvePosition.append(valvedata2[x-3])
                 yposition = 70 + 60*(x-4)
                 renderer.drawDataOutput(self, 100, yposition, str(x+1))
         # relay labels
@@ -426,12 +439,9 @@ class SystemStatus(tk.Frame):
             yposition = yposition+55
 
         # initial relays
-        self.active = []                                # this holds the relay active/inactive status
-        self.active.append(False)
-        self.active.append(False)
-        self.active.append(False)
-        self.active.append(False)
-        self.active.append(False)
+
+        for x in range(0, 5):
+            self.active.append(relaydata[x])
 
         # display relays and valves
         relayButtons = self.displayRelays(manualOn, self.active)
@@ -444,12 +454,12 @@ class SystemStatus(tk.Frame):
         xposition = 10
         yposition = 300
         number = yposition / 30 + 13
-        fullLine = 'NF Fev: ' + str(int(number)) + '% OPEN'
-        renderer.drawDataOutput(self, xposition, yposition, fullLine)
+        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
+        self.valveAdjust1 = renderer.drawDataOutput(self, xposition, yposition, fullLine)
         yposition = yposition + 40
         number = yposition / 30 - 3
-        fullLine = 'RO Fev: ' + str(int(number)) + '% OPEN'
-        renderer.drawDataOutput(self, xposition, yposition, fullLine)
+        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
+        self.valveAdjust2 = renderer.drawDataOutput(self, xposition, yposition, fullLine)
         data = currentData['RelayD']
         for x in range(0, len(data)):
             self.changeRelayButton(data[x], relayButtons)
@@ -458,9 +468,9 @@ class SystemStatus(tk.Frame):
             self.changeValveButton(data[x], valveButtons)
 
         """
-         #MANUAL ON/OFF button not used
-            # set manual button for valves and relay
-            def displayGlobalManualButton(self, controller,  manualOn, relayButton, valveButton):
+        #MANUAL ON/OFF button not used
+        # set manual button for valves and relay
+    def displayGlobalManualButton(self, controller,  manualOn, relayButton, valveButton):
 
                 if manualOn:
                     displayText = 'Manual\nMode Off'
@@ -483,83 +493,92 @@ class SystemStatus(tk.Frame):
 
                 self.changeRelayManual(manualIn, relayButton)
                 self.changeValveManual(manualIn, valveButton)
-                self.displayGlobalManualButton(controller, manualIn, relayButton, valveButton)
+                self.displayGlobalManualButton(controller, manualIn, relayButton, valveButton)        
         """
 
     # display functions for button initialization
     def displayRelays(self, manualOn, active):
         """Blah Blah Blah."""
-        relayButton = []
         for index in range(0, 5):
             if manualOn:
-                    relayButton.append(self.makeRelayButton("normal", active, index, relayButton))
+                    self.relayButton.append(self.makeRelayButton("normal", active, index, self.relayButton))
             else:
-                relayButton.append(self.makeRelayButton("disabled", active, index, relayButton))
-            relayButton[index].place(y=70+index*55, x=500, width=100)
-        return relayButton
+                self.relayButton.append(self.makeRelayButton("disabled", active, index, self.relayButton))
+            self.relayButton[index].place(y=70+index*55, x=500, width=100)
+        return self.relayButton
 
     def displayValves(self, manualOn, position):
         """Blah Blah Blah."""
-        valveButton = []
         for index in range(0, 8):
             if manualOn:
-                valveButton.append(
+                self.valveButton.append(
                     self.makeValveButton("normal", position,
-                                         index, valveButton))
+                                         index, self.valveButton))
             else:
-                valveButton.append(
+                self.valveButton.append(
                     self.makeValveButton("disabled", position,
-                                         index, valveButton))
+                                         index, self.valveButton))
             if index < 4:
-                valveButton[index].place(y=70 + index * 60, x=50, width=50)
+                self.valveButton[index].place(y=70 + index * 60, x=50, width=50)
             else:
-                valveButton[index].place(y=70 + (index - 4) * 60, x=150, width=50)
-        return valveButton
+                self.valveButton[index].place(y=70 + (index - 4) * 60, x=150, width=50)
+        return self.valveButton
 
     # logic to interact with serial relays should go here
     def makeRelayButton(self, stateIn, active, index, relayButtonIn):
         """Blah Blah Blah."""
-        if active[index]:
+        if active[index] > 0:
             color = 'green'
             textIn = 'ACTIVE'
         else:
             color = 'light grey'
             textIn = 'RUN'
         return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn, fg='black',
-                        disabledforeground='grey25', command=lambda: self.changeRelayButton(index, relayButtonIn))
+                        disabledforeground='grey25', command=lambda: self.changeRelayButton(index, active[index]))
 
     # logic to interact with serial valves should go here
     def makeValveButton(self, stateIn, position, index, valveButton):
         """Blah Blah Blah."""
-        if position[index]:
+        if position[index] > 0:
             color = 'green'
             textIn = 'ON'
         else:
             color = 'orangered'
             textIn = 'OFF'
         return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn,
-                         command=lambda: self.changeValveButton(index, valveButton), disabledforeground='grey25')
+                         command=lambda: self.changeValveButton(index, position[index]), disabledforeground='grey25')
 
     # when manual is on, these allow the buttons to be turned on or off
-    def changeRelayButton(self, index, relayButton):
+    def changeRelayButton(self, index, stateIn):
         """Blah Blah Blah."""
-        if self.active[index]:
-            self.active[index] = False
-            relayButton[index].config(bg='light grey', text='RUN')
+        if self.active[index] > 0 or stateIn > 0:
+            self.active[index] = 0
+            self.relayButton[index].config(bg='light grey', text='RUN')
         else:
-            self.active[index] = True
-            relayButton[index].config(bg='green', text='ACTIVE')
+            self.active[index] = 1
+            self.relayButton[index].config(bg='green', text='ACTIVE')
         return self.active
 
-    def changeValveButton(self, index, valveButton):
+    def changeValveButton(self, index, stateIn):
         """Blah Blah Blah."""
-        if self.valvePosition[index]:
-            self.valvePosition[index] = False
-            valveButton[index].config(text='OFF', bg='orangered')
+        if self.valvePosition[index] > 0 or stateIn > 0:
+            self.valvePosition[index] = 0
+            self.valveButton[index].config(text='OFF', bg='orangered')
         else:
-            self.valvePosition[index] = True
-            valveButton[index].config(text='ON', bg='green')
+            self.valvePosition[index] = 1
+            self.valveButton[index].config(text='ON', bg='green')
         return self.valvePosition
+
+    def update(self):
+        for x in range(0, 5):
+            self.changeRelayButton(x, currentData['RelayD'][x])
+            if x < 4:
+                self.changeValveButton(x, currentData['1valveD'][x+1])
+                self.changeValveButton((x+4), currentData['2valveD'][x+1])
+        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
+        self.valveAdjust1.config(text=fullLine)
+        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
+        self.valveAdjust2.config(text=fullLine)
 
     # these are called by the GlobalManual Button to enable/disable buttons
     def changeRelayManual(self, manualIn, relayButton):
@@ -778,16 +797,33 @@ if __name__ == "__main__":
     def testSerial():
         while loop:
             time.sleep(5)
-            for i in range(0, 5):
+            for i in range(0, 6):
                 currentData['TANKD:'][i] += 5
                 #print currentData['TANKD:'][i]
                 currentData['TandPD'][i] += 1.1
                 #print currentData['TandPD'][i]
-                currentData['TFLOWD:'][i] += 2.51
+                currentData['IFLOWD:'][i] += 2.51
                 currentData['PRESSD:'][i] += 3.52
+                if currentData['RelayD'][i]%3 is 0:
+                    currentData['RelayD'][i] = 0
+                    if i > 0:
+                        currentData['1valveD'][i] = 0
+                        currentData['2valveD'][i] = 0
+                else:
+                    currentData['RelayD'][i] += 1
+                    currentData['1valveD'][i] += 1
+                    currentData['2valveD'][i] += 1
+            if currentData['1valveD'][0] < 100:
+                currentData['1valveD'][0] += i*2.5
+                currentData['2valveD'][0] += i*2.4
+            else:
+                currentData['1valveD'][0] = 0
+                currentData['2valveD'][0] = 0
+            print currentData['1valveD'][0]
             app.frames[WaterLevel].update()
             app.frames[PowerAndTemp].update()
             app.frames[FlowAndPressure].update()
+            app.frames[SystemStatus].update()
     testListener = threading.Thread(target=testSerial, args=())
     testListenerEvent = threading.Event()
     testListener.start()
