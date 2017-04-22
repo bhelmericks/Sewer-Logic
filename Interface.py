@@ -248,9 +248,9 @@ class PowerAndTemp(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
         renderer = Renderer(self, 800, 380)
         fullLine = 'Temperature'
-        renderer.drawDataOutput(self, 40, 50, fullLine)
+        renderer.drawDataOutput(self, 40, 50, fullLine, 250)
         fullLine = 'Power'
-        renderer.drawDataOutput(self, 340, 50, fullLine)
+        renderer.drawDataOutput(self, 340, 50, fullLine, 250)
         self.tempsandpower = {}
         # temps are: [0] Outside, [1] AC, [2] DC
         # power is: [0] One, [1] Two, [2] Total Power
@@ -271,9 +271,10 @@ class PowerAndTemp(tk.Frame):
                 fullLine = ('Total Power' + ':  ' + str("%.1f" %numberIn)
                             + '  ' + 'Amps')
             if x < 3:
-                self.tempsandpower[x] = renderer.drawDataOutput(self, 20, x * 40 + 100, fullLine)
+
+                self.tempsandpower[x] = renderer.drawDataOutput(self, 20, x * 40 + 100, fullLine,250)
             else:
-                self.tempsandpower[x] = renderer.drawDataOutput(self, 320, x * 40 - 20, fullLine)
+                self.tempsandpower[x] = renderer.drawDataOutput(self, 320, x * 40 - 20, fullLine,250)
 
     def update(self):
         for x in range(0, 6):
@@ -316,12 +317,12 @@ class FlowAndPressure(tk.Frame):
         self.names.append('RO')
 
         fullLine = 'Pressure'
-        renderer.drawDataOutput(self, 20, 50, fullLine)
+        renderer.drawDataOutput(self, 20, 50, fullLine,250)
 
         self.pressures = {}
         for x in range(0, 5):
             fullLine = self.names[x]+':  '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
-            self.pressures[x] = renderer.drawDataOutput(self, 20, x*40+100, fullLine)
+            self.pressures[x] = renderer.drawDataOutput(self, 20, x*40+100, fullLine,250)
 
         self.names.append('CF1')
         self.names.append('CF2')
@@ -330,11 +331,11 @@ class FlowAndPressure(tk.Frame):
         self.names.append('ROX')
 
         fullLine = 'Differential\nPressure'
-        renderer.drawDataOutput(self, 200, 50, fullLine)
+        renderer.drawDataOutput(self, 200, 50, fullLine,250)
         self.diffpressures = {}
         for x in range(0, 5):
             fullLine = self.names[x+5]+':  '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
-            self.diffpressures[x] = renderer.drawDataOutput(self, 200, x*40+100, fullLine)
+            self.diffpressures[x] = renderer.drawDataOutput(self, 200, x*40+100, fullLine,250)
 
         self.names.append('Feed')
         self.names.append('CF')
@@ -344,12 +345,12 @@ class FlowAndPressure(tk.Frame):
         self.names.append('ROR')
 
         fullLine = 'Flow'
-        renderer.drawDataOutput(self, 400, 50, fullLine)
+        renderer.drawDataOutput(self, 400, 50, fullLine,250)
         self.flows = {}
         for x in range(0, 6):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
-            self.flows[x] = renderer.drawDataOutput(self, 400, x*40+100, fullLine)
+            self.flows[x] = renderer.drawDataOutput(self, 400, x*40+100, fullLine,250)
 
     def update(self):
         for x in range(0, 5):
@@ -398,6 +399,9 @@ class SystemStatus(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
         renderer = Renderer(self, 800, 430)
 
+        renderer.drawDataOutput(self, 100, 20, 'Valves', 250)
+        renderer.drawDataOutput(self, 500, 20, 'Relays', 250)
+
         manualOn = False
 
         valvedata1 = currentData['1valveD']
@@ -414,19 +418,29 @@ class SystemStatus(tk.Frame):
         self.relayButton = []
 
         # initial valves and labels
-        renderer.drawDataOutput(self, 10, 20, 'Valves')
 
+
+        valve = []
+        valve.append('NF membrane')
+        valve.append('NF tank')
+        valve.append('GW tank')
+        valve.append('CF selection')
+
+        valve.append('RO memberane')
+        valve.append('RO feed tank')
+        valve.append('Wash tank')
+        valve.append('Waste selection')
         for x in range(0, 8):
             if x < 4:
                 self.valvePosition.append(valvedata1[x+1])
                 yposition = 70 + 60*x
-                renderer.drawDataOutput(self, -100, yposition, str(x+1))
+                renderer.drawJustifiedLabel(self, 0, yposition, valve[x],130,'e')
             else:
                 self.valvePosition.append(valvedata2[x-3])
                 yposition = 70 + 60*(x-4)
-                renderer.drawDataOutput(self, 100, yposition, str(x+1))
+                renderer.drawJustifiedLabel(self, 210, yposition, valve[x],150, 'e')
         # relay labels
-        renderer.drawDataOutput(self, 350, 20, 'Relays')
+
         relay = []
         relay.append('Soap Removal')
         relay.append('UV Disinfection')
@@ -435,7 +449,7 @@ class SystemStatus(tk.Frame):
         relay.append('High Pressure Pump')
         yposition = 70
         for x in range(0, 5):
-            renderer.drawDataOutput(self, 250, yposition, relay[x])
+            renderer.drawJustifiedLabel(self, 420, yposition, relay[x],250,'e')
             yposition = yposition+55
 
         # initial relays
@@ -453,13 +467,11 @@ class SystemStatus(tk.Frame):
         # two variable valves
         xposition = 10
         yposition = 300
-        number = yposition / 30 + 13
         fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
-        self.valveAdjust1 = renderer.drawDataOutput(self, xposition, yposition, fullLine)
+        self.valveAdjust1 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
         yposition = yposition + 40
-        number = yposition / 30 - 3
         fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
-        self.valveAdjust2 = renderer.drawDataOutput(self, xposition, yposition, fullLine)
+        self.valveAdjust2 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
         data = currentData['RelayD']
         for x in range(0, len(data)):
             self.changeRelayButton(data[x], relayButtons)
@@ -504,7 +516,7 @@ class SystemStatus(tk.Frame):
                     self.relayButton.append(self.makeRelayButton("normal", active, index, self.relayButton))
             else:
                 self.relayButton.append(self.makeRelayButton("disabled", active, index, self.relayButton))
-            self.relayButton[index].place(y=70+index*55, x=500, width=100)
+            self.relayButton[index].place(y=70+index*55, x=670, width=100)
         return self.relayButton
 
     def displayValves(self, manualOn, position):
@@ -519,9 +531,9 @@ class SystemStatus(tk.Frame):
                     self.makeValveButton("disabled", position,
                                          index, self.valveButton))
             if index < 4:
-                self.valveButton[index].place(y=70 + index * 60, x=50, width=50)
+                self.valveButton[index].place(y=70 + index * 60, x=150, width=50)
             else:
-                self.valveButton[index].place(y=70 + (index - 4) * 60, x=150, width=50)
+                self.valveButton[index].place(y=70 + (index - 4) * 60, x=380, width=50)
         return self.valveButton
 
     # logic to interact with serial relays should go here
@@ -630,10 +642,17 @@ class Renderer(tk.Canvas):
         label.place(x=x, y=y+height+5, width=100, height=40)
         return infill
 
-    def drawDataOutput(self, parent, x, y, fullLine):
+    def drawDataOutput(self, parent, x, y, fullLine, width):
         """Draw label of something at a value with units."""
         label = tk.Label(parent, text=fullLine, font=NOTIFICATION_FONT)
-        label.place(x=x, y=y, width=250, height=40)
+        label.place(x=x, y=y, width=width, height=40)
+        return  label
+
+    #same as above but can take in n, ne, e, se, s, sw, w, nw, center
+    def drawJustifiedLabel(self, parent, x, y, fullLine, width, justified):
+        """Draw label of something at a value with units."""
+        label = tk.Label(parent, text=fullLine, font=NOTIFICATION_FONT, anchor=justified)
+        label.place(x=x, y=y, width=width, height=40)
         return  label
 
 
@@ -836,3 +855,4 @@ if __name__ == "__main__":
     loop = False
     testListener.join()
     app.destroy()
+
