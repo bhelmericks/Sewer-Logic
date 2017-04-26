@@ -331,11 +331,11 @@ class FlowAndPressure(tk.Frame):
         self.names.append('ROX')
 
         fullLine = 'Differential\nPressure'
-        renderer.drawDataOutput(self, 200, 50, fullLine,250)
+        renderer.drawDataOutput(self, 250, 50, fullLine,250)
         self.diffpressures = {}
         for x in range(0, 5):
             fullLine = self.names[x+5]+':  '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
-            self.diffpressures[x] = renderer.drawDataOutput(self, 200, x*40+100, fullLine,250)
+            self.diffpressures[x] = renderer.drawDataOutput(self, 250, x*40+100, fullLine,250)
 
         self.names.append('Feed')
         self.names.append('CF')
@@ -345,12 +345,12 @@ class FlowAndPressure(tk.Frame):
         self.names.append('ROR')
 
         fullLine = 'Flow'
-        renderer.drawDataOutput(self, 400, 50, fullLine,250)
+        renderer.drawDataOutput(self, 450, 50, fullLine,250)
         self.flows = {}
         for x in range(0, 6):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
-            self.flows[x] = renderer.drawDataOutput(self, 400, x*40+100, fullLine,250)
+            self.flows[x] = renderer.drawDataOutput(self, 450, x*40+100, fullLine,250)
 
     def update(self):
         for x in range(0, 5):
@@ -855,4 +855,3 @@ if __name__ == "__main__":
     loop = False
     testListener.join()
     app.destroy()
-
