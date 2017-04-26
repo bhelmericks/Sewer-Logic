@@ -115,12 +115,16 @@ class Homeowner(tk.Frame):
 
         # TO DO: save nowAsString in event of restart restarted
         nowAsString = time.strftime('%H:%M %m/%d/%Y')
-        # TO DO: if statement for tank needing refilling
-        washTank = nowAsString + ' NOTICE: add 1 gallon to Wash Tank'
-        self.renderer.drawFlag(self, 10, 30, 30, 'blue', 'green', washTank)
-        # TO DO: if statement for tank needing to be emptied
-        wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
-        self.renderer.drawFlag(self, 10, 80, 30, 'yellow', 'green', wasteTank)
+        if data[0] is 0:
+            washTank = nowAsString + ' NOTICE: add 1 gallon to Wash Tank'
+        else:
+            washTank = ''
+        self.addwashwater = self.renderer.drawFlag(self, 10, 30, 30, 'blue', 'green', washTank)
+        if data[4] > 40:
+            wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
+        else:
+            wasteTank = ''
+        self.emtpytank = self.renderer.drawFlag(self, 10, 80, 30, 'yellow', 'green', wasteTank)
         # TO DO: if statement for errors in system.
         # May want to activiate a "shut down" mode here
         label = tk.Label(self, text='ERROR: Maintenance Required',
@@ -130,19 +134,29 @@ class Homeowner(tk.Frame):
         # display water levels on Homeowner page
         # note: these are also under class WaterLevel
         self.list = {}
-        self.list[0] = self.renderer.drawTank(self, 410, 195, 85, data[0], "Wash")
-        self.list[1] = self.renderer.drawTank(self, 520, 195, 85, data[1], "Grey\nWater")
-        self.list[2] = self.renderer.drawTank(self, 630, 195+80, 45, data[4], "Waste\nWater")
+        self.list[0] = self.renderer.drawTank(self, 410, 190, 85, data[0], "Wash")
+        self.list[1] = self.renderer.drawTank(self, 520, 190, 85, data[1], "Grey\nWater")
+        self.list[2] = self.renderer.drawTank(self, 630, 190+80, 45, data[4], "Waste\nWater")
 
     def update(self):
         """."""
-        self.renderer.coords(self.list[0][0], 412, 195+2*(85-currentData['TANKD:'][0]), 509, 364)
+        self.renderer.coords(self.list[0][0], 412, 190+2*(85-currentData['TANKD:'][0]), 509, 364)
         self.list[0][1].config(text=str(currentData['TANKD:'][2])+'/85' + 'gal')
-        self.renderer.coords(self.list[1][0], 522, 195+2*(85-currentData['TANKD:'][1]), 619, 364)
+        self.renderer.coords(self.list[1][0], 522, 190+2*(85-currentData['TANKD:'][1]), 619, 364)
         self.list[1][1].config(text=str(currentData['TANKD:'][3])+'/85' + 'gal')
-        self.renderer.coords(self.list[2][0], 632, 275+2*(45-currentData['TANKD:'][4]), 729, 364)
+        self.renderer.coords(self.list[2][0], 632, 270+2*(45-currentData['TANKD:'][4]), 729, 364)
         self.list[2][1].config(text=str(currentData['TANKD:'][4])+'/45' + 'gal')
-
+        nowAsString = time.strftime('%H:%M %m/%d/%Y')
+        if currentData['TANKD:'][0] is 0:
+            washTank = nowAsString + ' NOTICE: add 1 gallon to Wash Tank'
+        else:
+            washTank = ''
+        self.addwashwater.config(text = washTank)
+        if currentData['TANKD:'][4] > 40:
+            wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
+        else:
+            wasteTank = ''
+        self.emtpytank.config(text = wasteTank)
 
 class AdvUser(tk.Frame):
     """Advanced user frame."""
@@ -650,6 +664,7 @@ class Renderer(tk.Canvas):
         self.create_oval(x+4, y+4, x+size+4, y+size+4, width=2, fill=color0)
         label = tk.Label(parent, text=name, font=NOTIFICATION_FONT)
         label.place(x=x+size+5, y=y+4, height=size)
+        return label
 
     def drawTank(self, parent, x, y, size, fill, name):
         """Draw a tank GUI object with a label below and # gallons above."""
@@ -662,7 +677,7 @@ class Renderer(tk.Canvas):
                         + 'gal', font=NOTIFICATION_FONT)
         gals.place(x=x, y=y-25, width=100, height=20)
         label = tk.Label(self, text=name, font=TITLE_FONT)
-        label.place(x=x, y=y+size*2+5, width=100, height=40)
+        label.place(x=x, y=y+size*2+5, width=100)
         updateObjects = [infill, gals]
         return updateObjects
 
