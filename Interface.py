@@ -620,17 +620,6 @@ class SystemStatus(tk.Frame):
             self.valveButton[index].config(text='ON', bg='green')
         return self.valvePosition
 
-    def update(self):
-        for x in range(0, 5):
-            self.changeRelayButton(x, currentData['RelayD'][x])
-            if x < 4:
-                self.changeValveButton(x, currentData['1valveD'][x+1])
-                self.changeValveButton((x+4), currentData['2valveD'][x+1])
-        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
-        self.valveAdjust1.config(text=fullLine)
-        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
-        self.valveAdjust2.config(text=fullLine)
-
     # these are called by the GlobalManual Button to enable/disable buttons
     def changeRelayManual(self, manualIn, relayButton):
         """Blah Blah Blah."""
@@ -649,6 +638,25 @@ class SystemStatus(tk.Frame):
         else:
             for index in range(0, 8):
                 valveButton[index].config(state='disabled')
+
+    def update(self):
+        for x in range(0, 5):
+            if currentData['1valveD'][x+1] is 0:
+                self.valveButton[x].config(text='OFF', bg='orangered')
+            else:
+                self.valveButton[x].config(text='ON', bg='green')
+            if currentData['2valveD'][x+1] is 0:
+                self.valveButton[x+3].config(text='OFF', bg='orangered')
+            else:
+                self.valveButton[x+3].config(text='ON', bg='green')
+            if currentData['RelayD'][x] is 0:
+                self.relayButton[x].config(bg='light grey', text='RUN')
+            else:
+                self.relayButton[x].config(bg='green', text='ACTIVE')
+        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
+        self.valveAdjust1.config(text=fullLine)
+        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
+        self.valveAdjust2.config(text=fullLine)
 
 
 class Renderer(tk.Canvas):
@@ -860,7 +868,7 @@ if __name__ == "__main__":
                 #print currentData['TandPD'][i]
                 currentData['IFLOWD:'][i] += 2.51
                 currentData['PRESSD:'][i] += 3.52
-                if currentData['RelayD'][i]%3 is 0:
+                if currentData['RelayD'][i] is 3:
                     currentData['RelayD'][i] = 0
                     if i > 0:
                         currentData['1valveD'][i] = 0
