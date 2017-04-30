@@ -343,19 +343,19 @@ class FlowAndPressure(tk.Frame):
 
         # labels for pressures and valves
         self.names = []
-        self.names.append('Feed')
-        self.names.append('CF2')
-        self.names.append('CF3')
-        self.names.append('NF')
-        self.names.append('RO')
+        self.names.append('Feed')  #0
+        self.names.append('CF1')   #1
+        self.names.append('CF2')   #2
+        self.names.append('NF')    #3
+        self.names.append('RO')    #4
 
         fullLine = 'Pressure'
         renderer.drawDataOutput(self, 20, 50, fullLine,250)
 
         self.pressures = {}
         for x in range(0, 5):
-            fullLine = self.names[x]+':  '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
-            self.pressures[x] = renderer.drawDataOutput(self, 20, x*40+100, fullLine,250)
+            fullLine = self.names[x]+':    '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
+            self.pressures[x] = renderer.drawJustifiedLabel(self, 50, x*40+100, fullLine,250, 'w')
 
         self.names.append('CF1')
         self.names.append('CF2')
@@ -365,10 +365,16 @@ class FlowAndPressure(tk.Frame):
 
         fullLine = 'Differential\nPressure'
         renderer.drawDataOutput(self, 250, 50, fullLine,250)
+        self.diffpressuresText = {}
         self.diffpressures = {}
+        self.diffpressures[0] = currentData['PRESSD:'][0] - currentData['PRESSD:'][1]
+        self.diffpressures[1] = currentData['PRESSD:'][1] - currentData['PRESSD:'][2]
+        self.diffpressures[2] = currentData['PRESSD:'][2]
+        self.diffpressures[3] = currentData['PRESSD:'][0] - currentData['PRESSD:'][3]
+        self.diffpressures[4] = currentData['PRESSD:'][0] - currentData['PRESSD:'][4]
         for x in range(0, 5):
-            fullLine = self.names[x+5]+':  '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
-            self.diffpressures[x] = renderer.drawDataOutput(self, 250, x*40+100, fullLine,250)
+            fullLine = self.names[x+5]+':    '+str("%.0f" % self.diffpressures[x])+'  '+'psi'
+            self.diffpressuresText[x] = renderer.drawJustifiedLabel(self, 300, x*40+100, fullLine,250, 'w')
 
         self.names.append('Feed')
         self.names.append('CF')
@@ -378,17 +384,26 @@ class FlowAndPressure(tk.Frame):
         self.names.append('ROR')
 
         fullLine = 'Flow'
-        renderer.drawDataOutput(self, 450, 50, fullLine,250)
+        renderer.drawDataOutput(self, 450, 30, fullLine,250)
         self.flows = {}
         for x in range(0, 6):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
-            self.flows[x] = renderer.drawDataOutput(self, 450, x*40+100, fullLine,250)
+            self.flows[x] = renderer.drawJustifiedLabel(self, 500, x*40+80, fullLine,250, 'w')
 
     def update(self):
         for x in range(0, 5):
             fullLine = self.names[x] + ':  ' + str("%.0f" % currentData['PRESSD:'][x]) + '  ' + 'psi'
             self.pressures[x].config(text=fullLine)
+
+        self.diffpressures[0] = currentData['PRESSD:'][0] - currentData['PRESSD:'][1]
+        self.diffpressures[1] = currentData['PRESSD:'][1] - currentData['PRESSD:'][2]
+        self.diffpressures[2] = currentData['PRESSD:'][2]
+        self.diffpressures[3] = currentData['PRESSD:'][0] - currentData['PRESSD:'][3]
+        self.diffpressures[4] = currentData['PRESSD:'][0] - currentData['PRESSD:'][4]
+        for x in range(0, 5):
+            fullLine = self.names[x + 5] + ':  ' + str("%.0f" % self.diffpressures[x]) + '  ' + 'psi'
+            self.diffpressuresText[x].config(text = fullLine)
         for x in range(0, 6):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
@@ -867,7 +882,7 @@ if __name__ == "__main__":
                 currentData['TandPD'][i] += 1.1
                 #print currentData['TandPD'][i]
                 currentData['IFLOWD:'][i] += 2.51
-                currentData['PRESSD:'][i] += 3.52
+                currentData['PRESSD:'][i] += 3.52+i
                 if currentData['RelayD'][i] is 3:
                     currentData['RelayD'][i] = 0
                     if i > 0:
