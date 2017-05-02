@@ -162,10 +162,10 @@ class Interface(tk.Tk):
     def updateScreen(self):
         """."""
         app.frames[WaterLevel].update()
-        app.frames[PowerAndTemp].update()
-        app.frames[FlowAndPressure].update()
-        app.frames[SystemStatus].update()
-        app.frames[Homeowner].update()
+        #app.frames[PowerAndTemp].update()
+        #app.frames[FlowAndPressure].update()
+        #app.frames[SystemStatus].update()
+        #app.frames[Homeowner].update()
         self.after(1000, self.updateScreen)
 
     # Bring selected frame to the front and enable/disable relevant buttons
@@ -905,7 +905,7 @@ class DataHandler():
                 dictIndex = parsedMessage[0]
                 del parsedMessage[0]
                 global currentData
-                currentData[dictIndex] = float(parsedMessage)
+                currentData[dictIndex] = parsedMessage
                 message = parsedMessage
                 global lookUpError
                 lookUpError = ErrorCheck()
