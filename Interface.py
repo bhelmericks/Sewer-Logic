@@ -898,7 +898,7 @@ class DataHandler():
     def runAndLog(self):
         """Blah blah blah."""
         while not self.serialListenerEvent.isSet():
-            #schedule.run_pending()
+            schedule.run_pending()
             message = self.serialCom.readline()
             parsedMessage = message.split('\t')
             if parsedMessage[0] in self.mesHeadDict:
@@ -998,15 +998,15 @@ if __name__ == "__main__":
                 currentData['2valveD'][0] = 0
             #print currentData['1valveD'][0]
 
-    testListener = threading.Thread(target=testSerial, args=())
-    testListenerEvent = threading.Event()
-    testListener.start()
+    #testListener = threading.Thread(target=testSerial, args=())
+    #testListenerEvent = threading.Event()
+    #testListener.start()
 
-    #handler = DataHandler()
+    handler = DataHandler()
     app = Interface()  # Create application
     app.mainloop()
     print 'Exiting...'
-    #handler.exit()
-    testListenerEvent.set()
-    testListener.join()
+    handler.exit()
+    #testListenerEvent.set()
+    #testListener.join()
     #app.destroy()
