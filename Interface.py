@@ -520,15 +520,15 @@ class WaterLevel(tk.Frame):
         self.list[4] = self.renderer.drawTank(self, 650, 95+80, 45, currentData['TANKD:'][4], "Waste\nWater")
 
     def update(self):
-        self.renderer.coords(self.list[0][0], 52, 95+2*(85-currentData['TANKD:'][0]), 149, 264)
+        self.renderer.coords(self.list[0][0], 52, 95+2*(85-int(currentData['TANKD:'][0])), 149, 264)
         self.list[0][1].config(text=str(currentData['TANKD:'][0])+'/85' + 'gal')
-        self.renderer.coords(self.list[1][0], 202, 95+2*(85-currentData['TANKD:'][1]), 299, 264)
+        self.renderer.coords(self.list[1][0], 202, 95+2*(85-int(currentData['TANKD:'][1])), 299, 264)
         self.list[1][1].config(text=str(currentData['TANKD:'][1])+'/85' + 'gal')
-        self.renderer.coords(self.list[2][0], 352, 95+2*(85-currentData['TANKD:'][2]), 449, 264)
+        self.renderer.coords(self.list[2][0], 352, 95+2*(85-int(currentData['TANKD:'][2])), 449, 264)
         self.list[2][1].config(text=str(currentData['TANKD:'][2])+'/85' + 'gal')
-        self.renderer.coords(self.list[3][0], 502, 95+2*(85-currentData['TANKD:'][3]), 599, 264)
+        self.renderer.coords(self.list[3][0], 502, 95+2*(85-int(currentData['TANKD:'][3])), 599, 264)
         self.list[3][1].config(text=str(currentData['TANKD:'][3])+'/85' + 'gal')
-        self.renderer.coords(self.list[4][0], 652, 174+2*(45-currentData['TANKD:'][4]), 749, 264)
+        self.renderer.coords(self.list[4][0], 652, 174+2*(45-int(currentData['TANKD:'][4])), 749, 264)
         self.list[4][1].config(text=str(currentData['TANKD:'][4])+'/45' + 'gal')
 
 
