@@ -19,6 +19,9 @@ class ErrorCheck:
     def __init__(self):
         self.errorTime = {}
         self.error = {}
+        self.wasteTank = 0
+        self.amountToAdd = 0
+        self.reset = False
         self.error[0] = False   # checkEmptyWashTank
         self.error[1] = False   # checkFullWasteTank
         self.error[2] = False   # checkFilters
@@ -30,10 +33,33 @@ class ErrorCheck:
                 self.error[0] = True
                 self.errorTime[0] = nowAsString
             return (self.errorTime[0] + ' NOTICE: add 1 gallon to Wash Tank')
+
+
+        if self.amountToAdd > 0 and not self.reset:
+            if currentData['TANKD:'][4] < self.wasteTank:
+                self.amountToAdd = self.amountToAdd + self.wasteTank - currentData['TANKD:'][4]
+            self.wasteTank = currentData['TANKD:'][4]
+            return (self.errorTime[0] + ' NOTICE: add '+ str(self.amountToAdd) +' gallon to Wash Tank')
+        elif currentData['TANKD:'][4] < self.wasteTank and not self.reset:
+            if self.error[0] is False:
+                self.error[0] = True
+                self.errorTime[0] = nowAsString
+                self.amountToAdd = self.amountToAdd +self.wasteTank -currentData['TANKD:'][4]
+                self.wasteTank = currentData['TANKD:'][4]
+            return (self.errorTime[0] + ' NOTICE: add '+ str(self.amountToAdd) +' gallon to Wash Tank')
         else:
+            self.wasteTank = currentData['TANKD:'][4]
+            self.reset = False
             self.error[0] = False
+            self.amountToAdd = 0
             return ''
-    def checkFullWasteTank(self, currrentData):
+
+    # Used by add water button. Assumes full amount has been added
+    def resetButton(self):
+        self.reset = True
+
+    # If the Waste tank reaches 40 gallons a message appears to empty it
+    def checkFullWasteTank(self, currentData):
         nowAsString = time.strftime('%H:%M %m/%d/%Y')
         if currentData['TANKD:'][4] > 40:
             if self.error[1] is False:
@@ -44,6 +70,7 @@ class ErrorCheck:
             self.error[1] = False
             return ''
 
+    # Checks for conditions of when to replace filters
     def checkFilters(self, currentData):
         nowAsString = time.strftime('%H:%M %m/%d/%Y')
         errorString = ''
@@ -53,28 +80,29 @@ class ErrorCheck:
         diffpressures[2] = currentData['PRESSD:'][2]
         diffpressures[3] = currentData['PRESSD:'][0] - currentData['PRESSD:'][3]
         diffpressures[4] = currentData['PRESSD:'][0] - currentData['PRESSD:'][4]
-        if diffpressures[2] > 60:
+        if diffpressures[2] >= 60:
             if self.error[2] is False:
                 self.error[2] = True
                 self.errorTime[2] = nowAsString
-            errorString = errorString + self.errorTime[2] + ' NOTICE:\nReplace 0.2 Filter\n'
-        if diffpressures[1] > 60:
+            errorString = errorString + self.errorTime[2] + ' NOTICE:\nReplace 0.2um Filter\n'
+        if diffpressures[1] >= 60:
             if self.error[2] is False:
                 self.error[2] = True
                 self.errorTime[2] = nowAsString
-            errorString = errorString + self.errorTime[2] + ' NOTICE:\nReplace 0.45 Filter\n'
-        if diffpressures[0] - 15 > 15:
+            errorString = errorString + self.errorTime[2] + ' NOTICE:\nReplace 0.45um Filter\n'
+        if diffpressures[0] - 15 >= 15:
             if self.error[2] is False:
                 self.error[2] = True
                 self.errorTime[2] = nowAsString
-            errorString = errorString + self.errorTime[2] + ' NOTICE:\nReplace 1.00 Filter\n'
+            errorString = errorString + self.errorTime[2] + ' NOTICE:\nReplace 1.00um Filter\n'
         if self.error[2]:
             return errorString
         else:
-
             return ''
+
+    # NOTE: set fatal error conditions here!
     def redError(self, currentData):
-        # set error conditions here!
+
         return 'ERROR: Maintenance Required'
 
 class Interface(tk.Tk):
@@ -198,6 +226,9 @@ class Homeowner(tk.Frame):
         self.list[0] = self.renderer.drawTank(self, 410, 190, 85, data[0], "Wash")
         self.list[1] = self.renderer.drawTank(self, 520, 190, 85, data[1], "Grey\nWater")
         self.list[2] = self.renderer.drawTank(self, 630, 190+80, 45, data[4], "Waste\nWater")
+        self.resetButton = tk.Button(self, text='Added\nWater', font=BUTTON_FONT,
+                                     command=lambda: lookUpError.resetButton(), bg='grey')
+        self.resetButton.place(x=670, y=50, width=100, height=50)
 
     def update(self):
         """."""
@@ -216,6 +247,8 @@ class Homeowner(tk.Frame):
         self.filters.config(text=filterReplace)
         redErrorMessage = lookUpError.redError(currentData)
         self.redError.config(text=redErrorMessage)
+
+
 class AdvUser(tk.Frame):
     """Advanced user frame."""
 
@@ -939,7 +972,10 @@ if __name__ == "__main__":
         while not testListenerEvent.isSet():
             time.sleep(5)
             for i in range(0, 6):
-                currentData['TANKD:'][i] += 5
+                if currentData['TANKD:'][i] < 40:
+                    currentData['TANKD:'][i] += 5
+                else:
+                    currentData['TANKD:'][i] = 15
                 #print currentData['TANKD:'][i]
                 currentData['TandPD'][i] += 1.1
                 #print currentData['TandPD'][i]
