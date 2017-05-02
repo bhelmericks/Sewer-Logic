@@ -905,7 +905,7 @@ class DataHandler():
                 dictIndex = parsedMessage[0]
                 del parsedMessage[0]
                 global currentData
-                currentData[dictIndex] = parsedMessage
+                currentData[dictIndex] = float(parsedMessage)
                 message = parsedMessage
                 global lookUpError
                 lookUpError = ErrorCheck()
