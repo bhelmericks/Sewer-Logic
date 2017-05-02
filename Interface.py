@@ -12,6 +12,98 @@ TITLE_FONT = ("Helvetica", 17, "bold")
 BUTTON_FONT = ("Helvetica", 14)
 NOTIFICATION_FONT = ("Helvetica", 14)
 
+# These are available errors returned as strings.
+# To retrieve the string call in an update function: <variable> = lookUpError.<error function>(currentData)
+# Then output the string in appropriate place within update functions
+class ErrorCheck:
+    def __init__(self):
+        self.errorTime = {}
+        self.error = {}
+        self.wasteTank = 0
+        self.amountToAdd = 0
+        self.reset = False
+        self.error[0] = False   # checkEmptyWashTank
+        self.error[1] = False   # checkFullWasteTank
+        self.error[2] = False   # checkFilters
+
+    def checkEmptyWashTank(self,currentData):
+        nowAsString = time.strftime('%H:%M %m/%d/%Y')
+        if currentData['TANKD:'][0] is 0:
+            if self.error[0] is False:
+                self.error[0] = True
+                self.errorTime[0] = nowAsString
+            return (self.errorTime[0] + ' NOTICE: add 1 gallon to Wash Tank')
+
+
+        if self.amountToAdd > 0 and not self.reset:
+            if currentData['TANKD:'][4] < self.wasteTank:
+                self.amountToAdd = self.amountToAdd + self.wasteTank - currentData['TANKD:'][4]
+            self.wasteTank = currentData['TANKD:'][4]
+            return (self.errorTime[0] + ' NOTICE: add '+ str(self.amountToAdd) +' gallon to Wash Tank')
+        elif currentData['TANKD:'][4] < self.wasteTank and not self.reset:
+            if self.error[0] is False:
+                self.error[0] = True
+                self.errorTime[0] = nowAsString
+                self.amountToAdd = self.amountToAdd +self.wasteTank -currentData['TANKD:'][4]
+                self.wasteTank = currentData['TANKD:'][4]
+            return (self.errorTime[0] + ' NOTICE: add '+ str(self.amountToAdd) +' gallon to Wash Tank')
+        else:
+            self.wasteTank = currentData['TANKD:'][4]
+            self.reset = False
+            self.error[0] = False
+            self.amountToAdd = 0
+            return ''
+
+    # Used by add water button. Assumes full amount has been added
+    def resetButton(self):
+        self.reset = True
+
+    # If the Waste tank reaches 40 gallons a message appears to empty it
+    def checkFullWasteTank(self, currentData):
+        nowAsString = time.strftime('%H:%M %m/%d/%Y')
+        if currentData['TANKD:'][4] > 40:
+            if self.error[1] is False:
+                self.error[1] = True
+                self.errorTime[1] = nowAsString
+            return self.errorTime[1] + ' NOTICE: Waste Tank needs to be Emptied'
+        else:
+            self.error[1] = False
+            return ''
+
+    # Checks for conditions of when to replace filters
+    def checkFilters(self, currentData):
+        nowAsString = time.strftime('%H:%M %m/%d/%Y')
+        errorString = ''
+        diffpressures = {}
+        diffpressures[0] = currentData['PRESSD:'][0] - currentData['PRESSD:'][1]
+        diffpressures[1] = currentData['PRESSD:'][1] - currentData['PRESSD:'][2]
+        diffpressures[2] = currentData['PRESSD:'][2]
+        diffpressures[3] = currentData['PRESSD:'][0] - currentData['PRESSD:'][3]
+        diffpressures[4] = currentData['PRESSD:'][0] - currentData['PRESSD:'][4]
+        if diffpressures[2] >= 60:
+            if self.error[2] is False:
+                self.error[2] = True
+                self.errorTime[2] = nowAsString
+            errorString = errorString + self.errorTime[2] + ' NOTICE:\nReplace 0.2um Filter\n'
+        if diffpressures[1] >= 60:
+            if self.error[2] is False:
+                self.error[2] = True
+                self.errorTime[2] = nowAsString
+            errorString = errorString + self.errorTime[2] + ' NOTICE:\nReplace 0.45um Filter\n'
+        if diffpressures[0] - 15 >= 15:
+            if self.error[2] is False:
+                self.error[2] = True
+                self.errorTime[2] = nowAsString
+            errorString = errorString + self.errorTime[2] + ' NOTICE:\nReplace 1.00um Filter\n'
+        if self.error[2]:
+            return errorString
+        else:
+            return ''
+
+    # NOTE: set fatal error conditions here!
+    def redError(self, currentData):
+
+        return 'ERROR: Maintenance Required'
 
 class Interface(tk.Tk):
     """Interface GUI."""
@@ -114,22 +206,19 @@ class Homeowner(tk.Frame):
         self.renderer = Renderer(self, 800, 420)
 
         # TO DO: save nowAsString in event of restart restarted
-        nowAsString = time.strftime('%H:%M %m/%d/%Y')
-        if data[0] is 0:
-            washTank = nowAsString + ' NOTICE: add 1 gallon to Wash Tank'
-        else:
-            washTank = ''
+        washTank = lookUpError.checkEmptyWashTank(currentData)
         self.addwashwater = self.renderer.drawFlag(self, 10, 30, 30, 'blue', 'green', washTank)
-        if data[4] > 40:
-            wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
-        else:
-            wasteTank = ''
+        wasteTank = lookUpError.checkFullWasteTank(currentData)
         self.emtpytank = self.renderer.drawFlag(self, 10, 80, 30, 'yellow', 'green', wasteTank)
+
+        filterReplace = lookUpError.checkFilters(currentData)
+        self.filters = self.renderer.drawFlag(self, 10, 130, 30, 'yellow', 'green', filterReplace)
         # TO DO: if statement for errors in system.
         # May want to activiate a "shut down" mode here
-        label = tk.Label(self, text='ERROR: Maintenance Required',
+        redErrorMessage = lookUpError.redError(currentData)
+        self.redError = tk.Label(self, text=redErrorMessage,
                          font=TITLE_FONT, fg='red')
-        label.place(x=10, y=150, height=25)
+        self.redError.place(x=10, y=350, height=25)
 
         # display water levels on Homeowner page
         # note: these are also under class WaterLevel
@@ -137,6 +226,9 @@ class Homeowner(tk.Frame):
         self.list[0] = self.renderer.drawTank(self, 410, 190, 85, data[0], "Wash")
         self.list[1] = self.renderer.drawTank(self, 520, 190, 85, data[1], "Grey\nWater")
         self.list[2] = self.renderer.drawTank(self, 630, 190+80, 45, data[4], "Waste\nWater")
+        self.resetButton = tk.Button(self, text='Added\nWater', font=BUTTON_FONT,
+                                     command=lambda: lookUpError.resetButton(), bg='grey')
+        self.resetButton.place(x=670, y=50, width=100, height=50)
 
     def update(self):
         """."""
@@ -146,17 +238,16 @@ class Homeowner(tk.Frame):
         self.list[1][1].config(text=str(currentData['TANKD:'][3])+'/85' + 'gal')
         self.renderer.coords(self.list[2][0], 632, 270+2*(45-currentData['TANKD:'][4]), 729, 364)
         self.list[2][1].config(text=str(currentData['TANKD:'][4])+'/45' + 'gal')
-        nowAsString = time.strftime('%H:%M %m/%d/%Y')
-        if currentData['TANKD:'][0] is 0:
-            washTank = nowAsString + ' NOTICE: add 1 gallon to Wash Tank'
-        else:
-            washTank = ''
+        # ERROR CHECKING see function at top
+        washTank = lookUpError.checkEmptyWashTank(currentData)
         self.addwashwater.config(text = washTank)
-        if currentData['TANKD:'][4] > 40:
-            wasteTank = nowAsString + ' NOTICE: Waste Tank needs to be Emptied'
-        else:
-            wasteTank = ''
+        wasteTank = lookUpError.checkFullWasteTank(currentData)
         self.emtpytank.config(text = wasteTank)
+        filterReplace = lookUpError.checkFilters(currentData)
+        self.filters.config(text=filterReplace)
+        redErrorMessage = lookUpError.redError(currentData)
+        self.redError.config(text=redErrorMessage)
+
 
 class AdvUser(tk.Frame):
     """Advanced user frame."""
@@ -343,19 +434,19 @@ class FlowAndPressure(tk.Frame):
 
         # labels for pressures and valves
         self.names = []
-        self.names.append('Feed')
-        self.names.append('CF2')
-        self.names.append('CF3')
-        self.names.append('NF')
-        self.names.append('RO')
+        self.names.append('Feed')  #0
+        self.names.append('CF1')   #1
+        self.names.append('CF2')   #2
+        self.names.append('NF')    #3
+        self.names.append('RO')    #4
 
         fullLine = 'Pressure'
         renderer.drawDataOutput(self, 20, 50, fullLine,250)
 
         self.pressures = {}
         for x in range(0, 5):
-            fullLine = self.names[x]+':  '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
-            self.pressures[x] = renderer.drawDataOutput(self, 20, x*40+100, fullLine,250)
+            fullLine = self.names[x]+':    '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
+            self.pressures[x] = renderer.drawJustifiedLabel(self, 50, x*40+100, fullLine,250, 'w')
 
         self.names.append('CF1')
         self.names.append('CF2')
@@ -365,10 +456,16 @@ class FlowAndPressure(tk.Frame):
 
         fullLine = 'Differential\nPressure'
         renderer.drawDataOutput(self, 250, 50, fullLine,250)
+        self.diffpressuresText = {}
         self.diffpressures = {}
+        self.diffpressures[0] = currentData['PRESSD:'][0] - currentData['PRESSD:'][1]
+        self.diffpressures[1] = currentData['PRESSD:'][1] - currentData['PRESSD:'][2]
+        self.diffpressures[2] = currentData['PRESSD:'][2]
+        self.diffpressures[3] = currentData['PRESSD:'][0] - currentData['PRESSD:'][3]
+        self.diffpressures[4] = currentData['PRESSD:'][0] - currentData['PRESSD:'][4]
         for x in range(0, 5):
-            fullLine = self.names[x+5]+':  '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
-            self.diffpressures[x] = renderer.drawDataOutput(self, 250, x*40+100, fullLine,250)
+            fullLine = self.names[x+5]+':    '+str("%.0f" % self.diffpressures[x])+'  '+'psi'
+            self.diffpressuresText[x] = renderer.drawJustifiedLabel(self, 300, x*40+100, fullLine,250, 'w')
 
         self.names.append('Feed')
         self.names.append('CF')
@@ -378,17 +475,26 @@ class FlowAndPressure(tk.Frame):
         self.names.append('ROR')
 
         fullLine = 'Flow'
-        renderer.drawDataOutput(self, 450, 50, fullLine,250)
+        renderer.drawDataOutput(self, 450, 30, fullLine,250)
         self.flows = {}
         for x in range(0, 6):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
-            self.flows[x] = renderer.drawDataOutput(self, 450, x*40+100, fullLine,250)
+            self.flows[x] = renderer.drawJustifiedLabel(self, 500, x*40+80, fullLine,250, 'w')
 
     def update(self):
         for x in range(0, 5):
             fullLine = self.names[x] + ':  ' + str("%.0f" % currentData['PRESSD:'][x]) + '  ' + 'psi'
             self.pressures[x].config(text=fullLine)
+
+        self.diffpressures[0] = currentData['PRESSD:'][0] - currentData['PRESSD:'][1]
+        self.diffpressures[1] = currentData['PRESSD:'][1] - currentData['PRESSD:'][2]
+        self.diffpressures[2] = currentData['PRESSD:'][2]
+        self.diffpressures[3] = currentData['PRESSD:'][0] - currentData['PRESSD:'][3]
+        self.diffpressures[4] = currentData['PRESSD:'][0] - currentData['PRESSD:'][4]
+        for x in range(0, 5):
+            fullLine = self.names[x + 5] + ':  ' + str("%.0f" % self.diffpressures[x]) + '  ' + 'psi'
+            self.diffpressuresText[x].config(text = fullLine)
         for x in range(0, 6):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
                         + '  ' + 'gpm')
@@ -620,17 +726,6 @@ class SystemStatus(tk.Frame):
             self.valveButton[index].config(text='ON', bg='green')
         return self.valvePosition
 
-    def update(self):
-        for x in range(0, 5):
-            self.changeRelayButton(x, currentData['RelayD'][x])
-            if x < 4:
-                self.changeValveButton(x, currentData['1valveD'][x+1])
-                self.changeValveButton((x+4), currentData['2valveD'][x+1])
-        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
-        self.valveAdjust1.config(text=fullLine)
-        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
-        self.valveAdjust2.config(text=fullLine)
-
     # these are called by the GlobalManual Button to enable/disable buttons
     def changeRelayManual(self, manualIn, relayButton):
         """Blah Blah Blah."""
@@ -650,6 +745,25 @@ class SystemStatus(tk.Frame):
             for index in range(0, 8):
                 valveButton[index].config(state='disabled')
 
+    def update(self):
+        for x in range(0, 5):
+            if currentData['1valveD'][x+1] is 0:
+                self.valveButton[x].config(text='OFF', bg='orangered')
+            else:
+                self.valveButton[x].config(text='ON', bg='green')
+            if currentData['2valveD'][x+1] is 0:
+                self.valveButton[x+3].config(text='OFF', bg='orangered')
+            else:
+                self.valveButton[x+3].config(text='ON', bg='green')
+            if currentData['RelayD'][x] is 0:
+                self.relayButton[x].config(bg='light grey', text='RUN')
+            else:
+                self.relayButton[x].config(bg='green', text='ACTIVE')
+        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
+        self.valveAdjust1.config(text=fullLine)
+        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
+        self.valveAdjust2.config(text=fullLine)
+
 
 class Renderer(tk.Canvas):
     """Renderer used to draw GUI objects."""
@@ -663,7 +777,7 @@ class Renderer(tk.Canvas):
         """Draw a circle flag object with a label to the right."""
         self.create_oval(x+4, y+4, x+size+4, y+size+4, width=2, fill=color0)
         label = tk.Label(parent, text=name, font=NOTIFICATION_FONT)
-        label.place(x=x+size+5, y=y+4, height=size)
+        label.place(x=x+size+5, y=y+4)
         return label
 
     def drawTank(self, parent, x, y, size, fill, name):
@@ -793,6 +907,8 @@ class DataHandler():
                 global currentData
                 currentData[dictIndex] = parsedMessage
                 message = parsedMessage
+                global lookUpError
+                lookUpError = ErrorCheck()
 
                 now = time.localtime(time.time())
                 fileName = ('{0}_{1}_{2}_'.format(now.tm_year, now.tm_mon,
@@ -849,18 +965,23 @@ if __name__ == "__main__":
                     'RelayD': [0, 0, 0, 0, 0, 0],
                     '1valveD': [0, 0, 0, 0, 0, 0],
                     '2valveD': [0, 0, 0, 0, 0, 0]})
+    global lookUpError
+    lookUpError = ErrorCheck()
 
     def testSerial():
         while not testListenerEvent.isSet():
             time.sleep(5)
             for i in range(0, 6):
-                currentData['TANKD:'][i] += 5
+                if currentData['TANKD:'][i] < 40:
+                    currentData['TANKD:'][i] += 5
+                else:
+                    currentData['TANKD:'][i] = 15
                 #print currentData['TANKD:'][i]
                 currentData['TandPD'][i] += 1.1
                 #print currentData['TandPD'][i]
                 currentData['IFLOWD:'][i] += 2.51
-                currentData['PRESSD:'][i] += 3.52
-                if currentData['RelayD'][i]%3 is 0:
+                currentData['PRESSD:'][i] += 30.52-10*i
+                if currentData['RelayD'][i] is 3:
                     currentData['RelayD'][i] = 0
                     if i > 0:
                         currentData['1valveD'][i] = 0
