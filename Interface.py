@@ -618,10 +618,10 @@ class SystemStatus(tk.Frame):
         self.valveAdjust2 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
         data = currentData['RelayD']
         for x in range(0, len(data)):
-            self.changeRelayButton(int(data[x]), relayButtons)
+            self.changeRelayButton(data[x], relayButtons)
         data = currentData['1valveD']
         for x in range(0, len(data)):
-            self.changeValveButton(int(data[x]), valveButtons)
+            self.changeValveButton(data[x], valveButtons)
 
         """
         #MANUAL ON/OFF button not used
