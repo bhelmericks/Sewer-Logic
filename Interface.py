@@ -162,10 +162,10 @@ class Interface(tk.Tk):
     def updateScreen(self):
         """."""
         app.frames[WaterLevel].update()
-        #app.frames[PowerAndTemp].update()
-        #app.frames[FlowAndPressure].update()
-        #app.frames[SystemStatus].update()
-        #app.frames[Homeowner].update()
+        app.frames[PowerAndTemp].update()
+        app.frames[FlowAndPressure].update()
+        app.frames[SystemStatus].update()
+        app.frames[Homeowner].update()
         self.after(1000, self.updateScreen)
 
     # Bring selected frame to the front and enable/disable relevant buttons
@@ -232,11 +232,11 @@ class Homeowner(tk.Frame):
 
     def update(self):
         """."""
-        self.renderer.coords(self.list[0][0], 412, 190+2*(85-currentData['TANKD:'][0]), 509, 364)
+        self.renderer.coords(self.list[0][0], 412, 190+2*(85-int(currentData['TANKD:'][0])), 509, 364)
         self.list[0][1].config(text=str(currentData['TANKD:'][2])+'/85' + 'gal')
-        self.renderer.coords(self.list[1][0], 522, 190+2*(85-currentData['TANKD:'][1]), 619, 364)
+        self.renderer.coords(self.list[1][0], 522, 190+2*(85-int(currentData['TANKD:'][1])), 619, 364)
         self.list[1][1].config(text=str(currentData['TANKD:'][3])+'/85' + 'gal')
-        self.renderer.coords(self.list[2][0], 632, 270+2*(45-currentData['TANKD:'][4]), 729, 364)
+        self.renderer.coords(self.list[2][0], 632, 270+2*(45-int(currentData['TANKD:'][4])), 729, 364)
         self.list[2][1].config(text=str(currentData['TANKD:'][4])+'/45' + 'gal')
         # ERROR CHECKING see function at top
         washTank = lookUpError.checkEmptyWashTank(currentData)
@@ -413,7 +413,7 @@ class PowerAndTemp(tk.Frame):
             elif x < 5:
                 fullLine = str(x) + ':  ' + str("%.1f" %numberIn) + '  ' + 'Amps'
             else:
-                numberIn = currentData['TandPD'][3]+currentData['TandPD'][4]
+                numberIn = int(currentData['TandPD'][3])+int(currentData['TandPD'][4])
                 fullLine = ('Total Power' + ':  ' + str("%.1f" %numberIn)
                             + '  ' + 'Amps')
             self.tempsandpower[x].config(text=fullLine)
@@ -487,11 +487,11 @@ class FlowAndPressure(tk.Frame):
             fullLine = self.names[x] + ':  ' + str("%.0f" % currentData['PRESSD:'][x]) + '  ' + 'psi'
             self.pressures[x].config(text=fullLine)
 
-        self.diffpressures[0] = currentData['PRESSD:'][0] - currentData['PRESSD:'][1]
-        self.diffpressures[1] = currentData['PRESSD:'][1] - currentData['PRESSD:'][2]
-        self.diffpressures[2] = currentData['PRESSD:'][2]
-        self.diffpressures[3] = currentData['PRESSD:'][0] - currentData['PRESSD:'][3]
-        self.diffpressures[4] = currentData['PRESSD:'][0] - currentData['PRESSD:'][4]
+        self.diffpressures[0] = int(currentData['PRESSD:'][0]) - int(currentData['PRESSD:'][1])
+        self.diffpressures[1] = int(currentData['PRESSD:'][1]) - int(currentData['PRESSD:'][2])
+        self.diffpressures[2] = int(currentData['PRESSD:'][2])
+        self.diffpressures[3] = int(currentData['PRESSD:'][0]) - int(currentData['PRESSD:'][3])
+        self.diffpressures[4] = int(currentData['PRESSD:'][0]) - int(currentData['PRESSD:'][4])
         for x in range(0, 5):
             fullLine = self.names[x + 5] + ':  ' + str("%.0f" % self.diffpressures[x]) + '  ' + 'psi'
             self.diffpressuresText[x].config(text = fullLine)
@@ -747,15 +747,15 @@ class SystemStatus(tk.Frame):
 
     def update(self):
         for x in range(0, 5):
-            if currentData['1valveD'][x+1] is 0:
+            if int(currentData['1valveD'][x+1]) is 0:
                 self.valveButton[x].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x].config(text='ON', bg='green')
-            if currentData['2valveD'][x+1] is 0:
+            if int(currentData['2valveD'][x+1]) is 0:
                 self.valveButton[x+3].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x+3].config(text='ON', bg='green')
-            if currentData['RelayD'][x] is 0:
+            if int(currentData['RelayD'][x]) is 0:
                 self.relayButton[x].config(bg='light grey', text='RUN')
             else:
                 self.relayButton[x].config(bg='green', text='ACTIVE')
