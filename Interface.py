@@ -232,11 +232,11 @@ class Homeowner(tk.Frame):
 
     def update(self):
         """."""
-        self.renderer.coords(self.list[0][0], 412, 190+2*(85-currentData['TANKD:'][0]), 509, 364)
+        self.renderer.coords(self.list[0][0], 412, 190+2*(85-int(currentData['TANKD:'][0])), 509, 364)
         self.list[0][1].config(text=str(int(currentData['TANKD:'][2]))+'/85' + 'gal')
-        self.renderer.coords(self.list[1][0], 522, 190+2*(85-currentData['TANKD:'][1]), 619, 364)
+        self.renderer.coords(self.list[1][0], 522, 190+2*(85-int(currentData['TANKD:'][1])), 619, 364)
         self.list[1][1].config(text=str(int(currentData['TANKD:'][3]))+'/85' + 'gal')
-        self.renderer.coords(self.list[2][0], 632, 270+2*(45-currentData['TANKD:'][4]), 729, 364)
+        self.renderer.coords(self.list[2][0], 632, 270+2*(45-int(currentData['TANKD:'][4])), 729, 364)
         self.list[2][1].config(text=str(int(currentData['TANKD:'][4]))+'/45' + 'gal')
         # ERROR CHECKING see function at top
         washTank = lookUpError.checkEmptyWashTank(currentData)
