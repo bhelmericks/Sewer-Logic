@@ -379,7 +379,7 @@ class PowerAndTemp(tk.Frame):
         # power is: [0] One, [1] Two, [2] Total Power
         for x in range(0, 6):
             if x < 5:
-                numberIn = currentData['TandPD'][x]
+                numberIn = float(currentData['TandPD'][x])
             if x is 0:
                 fullLine = 'Outside' + ':  ' + str("%.0f" %numberIn) + '  ' + 'C'
                 #print numberIn
@@ -390,7 +390,7 @@ class PowerAndTemp(tk.Frame):
             elif x < 5:
                 fullLine = str(x) + ':  ' + str("%.1f" %numberIn) + '  ' + 'Amps'
             else:
-                numberIn = currentData['TandPD'][3]+currentData['TandPD'][4]
+                numberIn = float(currentData['TandPD'][3])+float(currentData['TandPD'][4])
                 fullLine = ('Total Power' + ':  ' + str("%.1f" %numberIn)
                             + '  ' + 'Amps')
             if x < 3:
@@ -402,7 +402,7 @@ class PowerAndTemp(tk.Frame):
     def update(self):
         for x in range(0, 6):
             if x < 5:
-                numberIn = currentData['TandPD'][x]
+                numberIn = float(currentData['TandPD'][x])
             if x is 0:
                 fullLine = 'Outside' + ':  ' + str("%.0f" %numberIn) + '  ' + 'C'
                 #print numberIn
@@ -413,7 +413,8 @@ class PowerAndTemp(tk.Frame):
             elif x < 5:
                 fullLine = str(x) + ':  ' + str("%.1f" %numberIn) + '  ' + 'Amps'
             else:
-                numberIn = int(currentData['TandPD'][3])+int(currentData['TandPD'][4])
+                numberIn = float(currentData['TandPD'][3])+float(currentData['TandPD'][4])
+
                 fullLine = ('Total Power' + ':  ' + str("%.1f" %numberIn)
                             + '  ' + 'Amps')
             self.tempsandpower[x].config(text=fullLine)
@@ -445,7 +446,7 @@ class FlowAndPressure(tk.Frame):
 
         self.pressures = {}
         for x in range(0, 5):
-            fullLine = self.names[x]+':    '+str("%.0f" % currentData['PRESSD:'][x])+'  '+'psi'
+            fullLine = self.names[x]+':    '+str("%.0f" % float(currentData['PRESSD:'][x]))+'  '+'psi'
             self.pressures[x] = renderer.drawJustifiedLabel(self, 50, x*40+100, fullLine,250, 'w')
 
         self.names.append('CF1')
@@ -458,11 +459,11 @@ class FlowAndPressure(tk.Frame):
         renderer.drawDataOutput(self, 250, 50, fullLine,250)
         self.diffpressuresText = {}
         self.diffpressures = {}
-        self.diffpressures[0] = currentData['PRESSD:'][0] - currentData['PRESSD:'][1]
-        self.diffpressures[1] = currentData['PRESSD:'][1] - currentData['PRESSD:'][2]
-        self.diffpressures[2] = currentData['PRESSD:'][2]
-        self.diffpressures[3] = currentData['PRESSD:'][0] - currentData['PRESSD:'][3]
-        self.diffpressures[4] = currentData['PRESSD:'][0] - currentData['PRESSD:'][4]
+        self.diffpressures[0] = float(currentData['PRESSD:'][0]) - float(currentData['PRESSD:'][1])
+        self.diffpressures[1] = float(currentData['PRESSD:'][1]) - float(currentData['PRESSD:'][2])
+        self.diffpressures[2] = float(currentData['PRESSD:'][2])
+        self.diffpressures[3] = float(currentData['PRESSD:'][0]) - float(currentData['PRESSD:'][3])
+        self.diffpressures[4] = float(currentData['PRESSD:'][0]) - float(currentData['PRESSD:'][4])
         for x in range(0, 5):
             fullLine = self.names[x+5]+':    '+str("%.0f" % self.diffpressures[x])+'  '+'psi'
             self.diffpressuresText[x] = renderer.drawJustifiedLabel(self, 300, x*40+100, fullLine,250, 'w')
@@ -478,25 +479,27 @@ class FlowAndPressure(tk.Frame):
         renderer.drawDataOutput(self, 450, 30, fullLine,250)
         self.flows = {}
         for x in range(0, 6):
-            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
+            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % float(currentData['IFLOWD:'][x]))
                         + '  ' + 'gpm')
             self.flows[x] = renderer.drawJustifiedLabel(self, 500, x*40+80, fullLine,250, 'w')
 
     def update(self):
         for x in range(0, 5):
-            fullLine = self.names[x] + ':  ' + str("%.0f" % currentData['PRESSD:'][x]) + '  ' + 'psi'
+            fullLine = self.names[x] + ':  ' + str("%.0f" % float(currentData['PRESSD:'][x])) + '  ' + 'psi'
             self.pressures[x].config(text=fullLine)
 
-        self.diffpressures[0] = int(currentData['PRESSD:'][0]) - int(currentData['PRESSD:'][1])
-        self.diffpressures[1] = int(currentData['PRESSD:'][1]) - int(currentData['PRESSD:'][2])
-        self.diffpressures[2] = int(currentData['PRESSD:'][2])
-        self.diffpressures[3] = int(currentData['PRESSD:'][0]) - int(currentData['PRESSD:'][3])
-        self.diffpressures[4] = int(currentData['PRESSD:'][0]) - int(currentData['PRESSD:'][4])
+
+        self.diffpressures[0] = float(currentData['PRESSD:'][0]) - float(currentData['PRESSD:'][1])
+        self.diffpressures[1] = float(currentData['PRESSD:'][1]) - float(currentData['PRESSD:'][2])
+        self.diffpressures[2] = float(currentData['PRESSD:'][2])
+        self.diffpressures[3] = float(currentData['PRESSD:'][0]) - float(currentData['PRESSD:'][3])
+        self.diffpressures[4] = float(currentData['PRESSD:'][0]) - float(currentData['PRESSD:'][4])
+
         for x in range(0, 5):
             fullLine = self.names[x + 5] + ':  ' + str("%.0f" % self.diffpressures[x]) + '  ' + 'psi'
             self.diffpressuresText[x].config(text = fullLine)
         for x in range(0, 6):
-            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % currentData['IFLOWD:'][x])
+            fullLine = (self.names[x+10] + ':  ' + str("%.2f" % float(currentData['IFLOWD:'][x]))
                         + '  ' + 'gpm')
             self.flows[x].config(text=fullLine)
 
