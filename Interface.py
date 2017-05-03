@@ -586,11 +586,12 @@ class SystemStatus(tk.Frame):
         # relay labels
 
         relay = []
+        relay.append('High Pressure Pump')
         relay.append('Soap Removal')
-        relay.append('UV Disinfection')
         relay.append('Ozone Disinfection')
         relay.append('Ozone Pump')
-        relay.append('High Pressure Pump')
+        relay.append('UV Disinfection')
+
         yposition = 70
         for x in range(0, 5):
             renderer.drawJustifiedLabel(self, 420, yposition, relay[x],250,'e')
