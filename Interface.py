@@ -514,8 +514,8 @@ class WaterLevel(tk.Frame):
         self.list = {}
         self.list[0] = self.renderer.drawTank(self, 50, 95, 85, currentData['TANKD:'][0], "Wash")
         self.list[1] = self.renderer.drawTank(self, 200, 95, 85, currentData['TANKD:'][1], "Grey\nWater")
-        self.list[2] = self.renderer.drawTank(self, 350, 95, 85, currentData['TANKD:'][2], "NF Feed")
-        self.list[3] = self.renderer.drawTank(self, 500, 95, 85, currentData['TANKD:'][3], "RO Feed")
+        self.list[2] = self.renderer.drawTank(self, 350, 95, 85, currentData['TANKD:'][2], "NF\nFeed")
+        self.list[3] = self.renderer.drawTank(self, 500, 95, 85, currentData['TANKD:'][3], "RO\nFeed")
         self.list[4] = self.renderer.drawTank(self, 650, 95+80, 45, currentData['TANKD:'][4], "Waste\nWater")
 
     def update(self):
@@ -586,11 +586,12 @@ class SystemStatus(tk.Frame):
         # relay labels
 
         relay = []
+        relay.append('High Pressure Pump')
         relay.append('Soap Removal')
-        relay.append('UV Disinfection')
         relay.append('Ozone Disinfection')
         relay.append('Ozone Pump')
-        relay.append('High Pressure Pump')
+        relay.append('UV Disinfection')
+
         yposition = 70
         for x in range(0, 5):
             renderer.drawJustifiedLabel(self, 420, yposition, relay[x],250,'e')
@@ -611,10 +612,10 @@ class SystemStatus(tk.Frame):
         # two variable valves
         xposition = 10
         yposition = 300
-        fullLine = 'NF Fev: ' + str(float(currentData['1valveD'][0])) + '% OPEN'
+        fullLine = 'NF Fev: ' + str(float(currentData['1valveD'][0])/1024) + '% OPEN'
         self.valveAdjust1 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
         yposition = yposition + 40
-        fullLine = 'RO Fev: ' + str(float(currentData['2valveD'][0])) + '% OPEN'
+        fullLine = 'RO Fev: ' + str(float(currentData['2valveD'][0])/1024) + '% OPEN'
         self.valveAdjust2 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
         data = currentData['RelayD']
         for x in range(0, len(data)):
@@ -746,21 +747,21 @@ class SystemStatus(tk.Frame):
 
     def update(self):
         for x in range(0, 5):
-            if int(currentData['1valveD'][x+1]) is 0:
+            if float(currentData['1valveD'][x+1]) < 1:
                 self.valveButton[x].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x].config(text='ON', bg='green')
-            if int(currentData['2valveD'][x+1]) is 0:
+            if float(currentData['2valveD'][x+1]) < 1:
                 self.valveButton[x+3].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x+3].config(text='ON', bg='green')
-            if int(currentData['RelayD'][x]) is 0:
+            if float(currentData['RelayD'][x]) < 1:
                 self.relayButton[x].config(bg='light grey', text='RUN')
             else:
                 self.relayButton[x].config(bg='green', text='ACTIVE')
-        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
+        fullLine = 'NF Fev: ' + str(float(currentData['1valveD'][0])/1024) + '% OPEN'
         self.valveAdjust1.config(text=fullLine)
-        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
+        fullLine = 'RO Fev: ' + str(float(currentData['2valveD'][0])/1024) + '% OPEN'
         self.valveAdjust2.config(text=fullLine)
 
 
