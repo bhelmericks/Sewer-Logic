@@ -617,12 +617,10 @@ class SystemStatus(tk.Frame):
         yposition = yposition + 40
         fullLine = 'RO Fev: ' + str(float(currentData['2valveD'][0])/1024) + '% OPEN'
         self.valveAdjust2 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
-        data = currentData['RelayD']
-        for x in range(0, len(data)):
-            self.changeRelayButton(data[x], relayButtons)
-        data = currentData['1valveD']
-        for x in range(0, len(data)):
-            self.changeValveButton(data[x], valveButtons)
+        for x in range(0, len(currentData['RelayD'])):
+            self.changeRelayButton(int(currentData['RelayD'][x]), relayButtons)
+        for x in range(0, len(currentData['1valveD'])):
+            self.changeValveButton(int(currentData['1valveD'][x]), valveButtons)
 
         """
         #MANUAL ON/OFF button not used
