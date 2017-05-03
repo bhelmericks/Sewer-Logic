@@ -759,9 +759,9 @@ class SystemStatus(tk.Frame):
                 self.relayButton[x].config(bg='light grey', text='RUN')
             else:
                 self.relayButton[x].config(bg='green', text='ACTIVE')
-        fullLine = 'NF Fev: ' + str("%.0f" % float(currentData['1valveD'][0])/(1024/100)) + '% OPEN'
+        fullLine = 'NF Fev: ' + str("%.0f" % (float(currentData['1valveD'][0])/(1024.0/100.0))) + '% OPEN'
         self.valveAdjust1.config(text=fullLine)
-        fullLine = 'RO Fev: ' + str("%.0f" % float(currentData['2valveD'][0])/(1024/100)) + '% OPEN'
+        fullLine = 'RO Fev: ' + str("%.0f" % (float(currentData['2valveD'][0])/(1024.0/100.0))) + '% OPEN'
         self.valveAdjust2.config(text=fullLine)
 
 
