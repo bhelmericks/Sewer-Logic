@@ -28,7 +28,7 @@ class ErrorCheck:
 
     def checkEmptyWashTank(self,currentData):
         nowAsString = time.strftime('%H:%M %m/%d/%Y')
-        if currentData['TANKD:'][0] is 0:
+        if int(currentData['TANKD:'][0]) is 0:
             if self.error[0] is False:
                 self.error[0] = True
                 self.errorTime[0] = nowAsString
@@ -36,19 +36,19 @@ class ErrorCheck:
 
 
         if self.amountToAdd > 0 and not self.reset:
-            if currentData['TANKD:'][4] < self.wasteTank:
-                self.amountToAdd = self.amountToAdd + self.wasteTank - currentData['TANKD:'][4]
+            if int(currentData['TANKD:'][4]) < self.wasteTank:
+                self.amountToAdd = self.amountToAdd + self.wasteTank - int(currentData['TANKD:'][4])
             self.wasteTank = currentData['TANKD:'][4]
             return (self.errorTime[0] + ' NOTICE: add '+ str(self.amountToAdd) +' gallon to Wash Tank')
-        elif currentData['TANKD:'][4] < self.wasteTank and not self.reset:
+        elif int(currentData['TANKD:'][4]) < self.wasteTank and not self.reset:
             if self.error[0] is False:
                 self.error[0] = True
                 self.errorTime[0] = nowAsString
-                self.amountToAdd = self.amountToAdd +self.wasteTank -currentData['TANKD:'][4]
-                self.wasteTank = currentData['TANKD:'][4]
+                self.amountToAdd = self.amountToAdd +self.wasteTank - int(currentData['TANKD:'][4])
+                self.wasteTank = int(currentData['TANKD:'][4])
             return (self.errorTime[0] + ' NOTICE: add '+ str(self.amountToAdd) +' gallon to Wash Tank')
         else:
-            self.wasteTank = currentData['TANKD:'][4]
+            self.wasteTank = int(currentData['TANKD:'][4])
             self.reset = False
             self.error[0] = False
             self.amountToAdd = 0
@@ -61,7 +61,7 @@ class ErrorCheck:
     # If the Waste tank reaches 40 gallons a message appears to empty it
     def checkFullWasteTank(self, currentData):
         nowAsString = time.strftime('%H:%M %m/%d/%Y')
-        if currentData['TANKD:'][4] > 40:
+        if int(currentData['TANKD:'][4]) > 40:
             if self.error[1] is False:
                 self.error[1] = True
                 self.errorTime[1] = nowAsString
@@ -75,11 +75,11 @@ class ErrorCheck:
         nowAsString = time.strftime('%H:%M %m/%d/%Y')
         errorString = ''
         diffpressures = {}
-        diffpressures[0] = currentData['PRESSD:'][0] - currentData['PRESSD:'][1]
-        diffpressures[1] = currentData['PRESSD:'][1] - currentData['PRESSD:'][2]
-        diffpressures[2] = currentData['PRESSD:'][2]
-        diffpressures[3] = currentData['PRESSD:'][0] - currentData['PRESSD:'][3]
-        diffpressures[4] = currentData['PRESSD:'][0] - currentData['PRESSD:'][4]
+        diffpressures[0] = int(currentData['PRESSD:'][0]) - int(currentData['PRESSD:'][1])
+        diffpressures[1] = int(currentData['PRESSD:'][1]) - int(currentData['PRESSD:'][2])
+        diffpressures[2] = int(currentData['PRESSD:'][2])
+        diffpressures[3] = int(currentData['PRESSD:'][0]) - int(currentData['PRESSD:'][3])
+        diffpressures[4] = int(currentData['PRESSD:'][0]) - int(currentData['PRESSD:'][4])
         if diffpressures[2] >= 60:
             if self.error[2] is False:
                 self.error[2] = True
