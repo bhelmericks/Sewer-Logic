@@ -514,8 +514,8 @@ class WaterLevel(tk.Frame):
         self.list = {}
         self.list[0] = self.renderer.drawTank(self, 50, 95, 85, currentData['TANKD:'][0], "Wash")
         self.list[1] = self.renderer.drawTank(self, 200, 95, 85, currentData['TANKD:'][1], "Grey\nWater")
-        self.list[2] = self.renderer.drawTank(self, 350, 95, 85, currentData['TANKD:'][2], "NF Feed")
-        self.list[3] = self.renderer.drawTank(self, 500, 95, 85, currentData['TANKD:'][3], "RO Feed")
+        self.list[2] = self.renderer.drawTank(self, 350, 95, 85, currentData['TANKD:'][2], "NF\nFeed")
+        self.list[3] = self.renderer.drawTank(self, 500, 95, 85, currentData['TANKD:'][3], "RO\nFeed")
         self.list[4] = self.renderer.drawTank(self, 650, 95+80, 45, currentData['TANKD:'][4], "Waste\nWater")
 
     def update(self):
