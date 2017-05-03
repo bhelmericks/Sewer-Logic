@@ -402,7 +402,7 @@ class PowerAndTemp(tk.Frame):
     def update(self):
         for x in range(0, 6):
             if x < 5:
-                numberIn = currentData['TandPD'][x]
+                numberIn = float(currentData['TandPD'][x])
             if x is 0:
                 fullLine = 'Outside' + ':  ' + str("%.0f" %numberIn) + '  ' + 'C'
                 #print numberIn
