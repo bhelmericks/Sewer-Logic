@@ -747,21 +747,21 @@ class SystemStatus(tk.Frame):
 
     def update(self):
         for x in range(0, 5):
-            if float(currentData['1valveD'][x+1]) < 1:
+            if int(currentData['1valveD'][x+1]) < 1:
                 self.valveButton[x].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x].config(text='ON', bg='green')
-            if float(currentData['2valveD'][x+1]) < 1:
+            if int(currentData['2valveD'][x+1]) < 1:
                 self.valveButton[x+3].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x+3].config(text='ON', bg='green')
-            if float(currentData['RelayD'][x]) < 1:
+            if int(currentData['RelayD'][x]) < 1:
                 self.relayButton[x].config(bg='light grey', text='RUN')
             else:
                 self.relayButton[x].config(bg='green', text='ACTIVE')
-        fullLine = 'NF Fev: ' + str(float(currentData['1valveD'][0])/1024) + '% OPEN'
+        fullLine = 'NF Fev: ' + str("%.0f" % float(currentData['1valveD'][0])/(1024/100)) + '% OPEN'
         self.valveAdjust1.config(text=fullLine)
-        fullLine = 'RO Fev: ' + str(float(currentData['2valveD'][0])/1024) + '% OPEN'
+        fullLine = 'RO Fev: ' + str("%.0f" % float(currentData['2valveD'][0])/(1024/100)) + '% OPEN'
         self.valveAdjust2.config(text=fullLine)
 
 
