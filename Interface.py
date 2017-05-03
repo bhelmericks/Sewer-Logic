@@ -467,7 +467,6 @@ class FlowAndPressure(tk.Frame):
             fullLine = self.names[x+5]+':    '+str("%.0f" % self.diffpressures[x])+'  '+'psi'
             self.diffpressuresText[x] = renderer.drawJustifiedLabel(self, 300, x*40+100, fullLine,250, 'w')
 
-        self.names.append('Feed')
         self.names.append('CF')
         self.names.append('NFP')
         self.names.append('ROP')
@@ -477,7 +476,7 @@ class FlowAndPressure(tk.Frame):
         fullLine = 'Flow'
         renderer.drawDataOutput(self, 450, 30, fullLine,250)
         self.flows = {}
-        for x in range(0, 6):
+        for x in range(0, 5):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % float(currentData['IFLOWD:'][x]))
                         + '  ' + 'gpm')
             self.flows[x] = renderer.drawJustifiedLabel(self, 500, x*40+80, fullLine,250, 'w')
@@ -495,7 +494,7 @@ class FlowAndPressure(tk.Frame):
         for x in range(0, 5):
             fullLine = self.names[x + 5] + ':  ' + str("%.0f" % self.diffpressures[x]) + '  ' + 'psi'
             self.diffpressuresText[x].config(text = fullLine)
-        for x in range(0, 6):
+        for x in range(0, 5):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % float(currentData['IFLOWD:'][x]))
                         + '  ' + 'gpm')
             self.flows[x].config(text=fullLine)
@@ -747,15 +746,15 @@ class SystemStatus(tk.Frame):
 
     def update(self):
         for x in range(0, 5):
-            if currentData['1valveD'][x+1] is 0:
+            if int(currentData['1valveD'][x+1]) is 0:
                 self.valveButton[x].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x].config(text='ON', bg='green')
-            if currentData['2valveD'][x+1] is 0:
+            if int(currentData['2valveD'][x+1]) is 0:
                 self.valveButton[x+3].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x+3].config(text='ON', bg='green')
-            if currentData['RelayD'][x] is 0:
+            if int(currentData['RelayD'][x]) is 0:
                 self.relayButton[x].config(bg='light grey', text='RUN')
             else:
                 self.relayButton[x].config(bg='green', text='ACTIVE')
