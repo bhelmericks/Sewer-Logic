@@ -612,10 +612,10 @@ class SystemStatus(tk.Frame):
         # two variable valves
         xposition = 10
         yposition = 300
-        fullLine = 'NF Fev: ' + str(float(currentData['1valveD'][0])) + '% OPEN'
+        fullLine = 'NF Fev: ' + str(float(currentData['1valveD'][0])/1024) + '% OPEN'
         self.valveAdjust1 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
         yposition = yposition + 40
-        fullLine = 'RO Fev: ' + str(float(currentData['2valveD'][0])) + '% OPEN'
+        fullLine = 'RO Fev: ' + str(float(currentData['2valveD'][0])/1024) + '% OPEN'
         self.valveAdjust2 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
         data = currentData['RelayD']
         for x in range(0, len(data)):
@@ -747,21 +747,21 @@ class SystemStatus(tk.Frame):
 
     def update(self):
         for x in range(0, 5):
-            if int(currentData['1valveD'][x+1]) is 0:
+            if float(currentData['1valveD'][x+1]) < 1:
                 self.valveButton[x].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x].config(text='ON', bg='green')
-            if int(currentData['2valveD'][x+1]) is 0:
+            if float(currentData['2valveD'][x+1]) < 1:
                 self.valveButton[x+3].config(text='OFF', bg='orangered')
             else:
                 self.valveButton[x+3].config(text='ON', bg='green')
-            if int(currentData['RelayD'][x]) is 0:
+            if float(currentData['RelayD'][x]) < 1:
                 self.relayButton[x].config(bg='light grey', text='RUN')
             else:
                 self.relayButton[x].config(bg='green', text='ACTIVE')
-        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
+        fullLine = 'NF Fev: ' + str(float(currentData['1valveD'][0])/1024) + '% OPEN'
         self.valveAdjust1.config(text=fullLine)
-        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
+        fullLine = 'RO Fev: ' + str(float(currentData['2valveD'][0])/1024) + '% OPEN'
         self.valveAdjust2.config(text=fullLine)
 
 
