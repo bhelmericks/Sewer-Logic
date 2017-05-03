@@ -162,10 +162,10 @@ class Interface(tk.Tk):
     def updateScreen(self):
         """."""
         app.frames[WaterLevel].update()
-        app.frames[PowerAndTemp].update()
-        app.frames[FlowAndPressure].update()
-        app.frames[SystemStatus].update()
-        app.frames[Homeowner].update()
+        #app.frames[PowerAndTemp].update()
+        #app.frames[FlowAndPressure].update()
+        #app.frames[SystemStatus].update()
+        #app.frames[Homeowner].update()
         self.after(1000, self.updateScreen)
 
     # Bring selected frame to the front and enable/disable relevant buttons
@@ -520,15 +520,15 @@ class WaterLevel(tk.Frame):
         self.list[4] = self.renderer.drawTank(self, 650, 95+80, 45, currentData['TANKD:'][4], "Waste\nWater")
 
     def update(self):
-        self.renderer.coords(self.list[0][0], 52, 95+2*(85-currentData['TANKD:'][0]), 149, 264)
+        self.renderer.coords(self.list[0][0], 52, 95+2*(85-int(currentData['TANKD:'][0])), 149, 264)
         self.list[0][1].config(text=str(currentData['TANKD:'][0])+'/85' + 'gal')
-        self.renderer.coords(self.list[1][0], 202, 95+2*(85-currentData['TANKD:'][1]), 299, 264)
+        self.renderer.coords(self.list[1][0], 202, 95+2*(85-int(currentData['TANKD:'][1])), 299, 264)
         self.list[1][1].config(text=str(currentData['TANKD:'][1])+'/85' + 'gal')
-        self.renderer.coords(self.list[2][0], 352, 95+2*(85-currentData['TANKD:'][2]), 449, 264)
+        self.renderer.coords(self.list[2][0], 352, 95+2*(85-int(currentData['TANKD:'][2])), 449, 264)
         self.list[2][1].config(text=str(currentData['TANKD:'][2])+'/85' + 'gal')
-        self.renderer.coords(self.list[3][0], 502, 95+2*(85-currentData['TANKD:'][3]), 599, 264)
+        self.renderer.coords(self.list[3][0], 502, 95+2*(85-int(currentData['TANKD:'][3])), 599, 264)
         self.list[3][1].config(text=str(currentData['TANKD:'][3])+'/85' + 'gal')
-        self.renderer.coords(self.list[4][0], 652, 174+2*(45-currentData['TANKD:'][4]), 749, 264)
+        self.renderer.coords(self.list[4][0], 652, 174+2*(45-int(currentData['TANKD:'][4])), 749, 264)
         self.list[4][1].config(text=str(currentData['TANKD:'][4])+'/45' + 'gal')
 
 
@@ -898,7 +898,7 @@ class DataHandler():
     def runAndLog(self):
         """Blah blah blah."""
         while not self.serialListenerEvent.isSet():
-            #schedule.run_pending()
+            schedule.run_pending()
             message = self.serialCom.readline()
             parsedMessage = message.split('\t')
             if parsedMessage[0] in self.mesHeadDict:
@@ -998,15 +998,15 @@ if __name__ == "__main__":
                 currentData['2valveD'][0] = 0
             #print currentData['1valveD'][0]
 
-    testListener = threading.Thread(target=testSerial, args=())
-    testListenerEvent = threading.Event()
-    testListener.start()
+    #testListener = threading.Thread(target=testSerial, args=())
+    #testListenerEvent = threading.Event()
+    #testListener.start()
 
-    #handler = DataHandler()
+    handler = DataHandler()
     app = Interface()  # Create application
     app.mainloop()
     print 'Exiting...'
-    #handler.exit()
-    testListenerEvent.set()
-    testListener.join()
+    handler.exit()
+    #testListenerEvent.set()
+    #testListener.join()
     #app.destroy()
