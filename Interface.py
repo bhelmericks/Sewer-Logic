@@ -233,11 +233,11 @@ class Homeowner(tk.Frame):
     def update(self):
         """."""
         self.renderer.coords(self.list[0][0], 412, 190+2*(85-int(currentData['TANKD:'][0])), 509, 364)
-        self.list[0][1].config(text=str(currentData['TANKD:'][2])+'/85' + 'gal')
+        self.list[0][1].config(text=str(int(currentData['TANKD:'][2]))+'/85' + 'gal')
         self.renderer.coords(self.list[1][0], 522, 190+2*(85-int(currentData['TANKD:'][1])), 619, 364)
-        self.list[1][1].config(text=str(currentData['TANKD:'][3])+'/85' + 'gal')
+        self.list[1][1].config(text=str(int(currentData['TANKD:'][3]))+'/85' + 'gal')
         self.renderer.coords(self.list[2][0], 632, 270+2*(45-int(currentData['TANKD:'][4])), 729, 364)
-        self.list[2][1].config(text=str(currentData['TANKD:'][4])+'/45' + 'gal')
+        self.list[2][1].config(text=str(int(currentData['TANKD:'][4]))+'/45' + 'gal')
         # ERROR CHECKING see function at top
         washTank = lookUpError.checkEmptyWashTank(currentData)
         self.addwashwater.config(text = washTank)
@@ -414,7 +414,6 @@ class PowerAndTemp(tk.Frame):
                 fullLine = str(x) + ':  ' + str("%.1f" %numberIn) + '  ' + 'Amps'
             else:
                 numberIn = float(currentData['TandPD'][3])+float(currentData['TandPD'][4])
-
                 fullLine = ('Total Power' + ':  ' + str("%.1f" %numberIn)
                             + '  ' + 'Amps')
             self.tempsandpower[x].config(text=fullLine)
@@ -468,7 +467,6 @@ class FlowAndPressure(tk.Frame):
             fullLine = self.names[x+5]+':    '+str("%.0f" % self.diffpressures[x])+'  '+'psi'
             self.diffpressuresText[x] = renderer.drawJustifiedLabel(self, 300, x*40+100, fullLine,250, 'w')
 
-        self.names.append('Feed')
         self.names.append('CF')
         self.names.append('NFP')
         self.names.append('ROP')
@@ -478,7 +476,7 @@ class FlowAndPressure(tk.Frame):
         fullLine = 'Flow'
         renderer.drawDataOutput(self, 450, 30, fullLine,250)
         self.flows = {}
-        for x in range(0, 6):
+        for x in range(0, 5):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % float(currentData['IFLOWD:'][x]))
                         + '  ' + 'gpm')
             self.flows[x] = renderer.drawJustifiedLabel(self, 500, x*40+80, fullLine,250, 'w')
@@ -488,17 +486,15 @@ class FlowAndPressure(tk.Frame):
             fullLine = self.names[x] + ':  ' + str("%.0f" % float(currentData['PRESSD:'][x])) + '  ' + 'psi'
             self.pressures[x].config(text=fullLine)
 
-
         self.diffpressures[0] = float(currentData['PRESSD:'][0]) - float(currentData['PRESSD:'][1])
         self.diffpressures[1] = float(currentData['PRESSD:'][1]) - float(currentData['PRESSD:'][2])
         self.diffpressures[2] = float(currentData['PRESSD:'][2])
         self.diffpressures[3] = float(currentData['PRESSD:'][0]) - float(currentData['PRESSD:'][3])
         self.diffpressures[4] = float(currentData['PRESSD:'][0]) - float(currentData['PRESSD:'][4])
-
         for x in range(0, 5):
             fullLine = self.names[x + 5] + ':  ' + str("%.0f" % self.diffpressures[x]) + '  ' + 'psi'
             self.diffpressuresText[x].config(text = fullLine)
-        for x in range(0, 6):
+        for x in range(0, 5):
             fullLine = (self.names[x+10] + ':  ' + str("%.2f" % float(currentData['IFLOWD:'][x]))
                         + '  ' + 'gpm')
             self.flows[x].config(text=fullLine)
@@ -559,8 +555,8 @@ class SystemStatus(tk.Frame):
 
         self.valvePosition = []  # this holds the valve on/off positions
         self.valveButton = []
-        self.valveAdjust1 = valvedata1[0]
-        self.valveAdjust2 = valvedata2[0]
+        self.valveAdjust1 = float(valvedata1[0])
+        self.valveAdjust2 = float(valvedata2[0])
 
         self.active = []  # this holds the relay active/inactive status
         self.relayButton = []
@@ -580,11 +576,11 @@ class SystemStatus(tk.Frame):
         valve.append('Waste selection')
         for x in range(0, 8):
             if x < 4:
-                self.valvePosition.append(valvedata1[x+1])
+                self.valvePosition.append(int(valvedata1[x+1]))
                 yposition = 70 + 60*x
                 renderer.drawJustifiedLabel(self, 0, yposition, valve[x],130,'e')
             else:
-                self.valvePosition.append(valvedata2[x-3])
+                self.valvePosition.append(int(valvedata2[x-3]))
                 yposition = 70 + 60*(x-4)
                 renderer.drawJustifiedLabel(self, 210, yposition, valve[x],150, 'e')
         # relay labels
@@ -615,17 +611,17 @@ class SystemStatus(tk.Frame):
         # two variable valves
         xposition = 10
         yposition = 300
-        fullLine = 'NF Fev: ' + str(int(currentData['1valveD'][0])) + '% OPEN'
+        fullLine = 'NF Fev: ' + str(float(currentData['1valveD'][0])) + '% OPEN'
         self.valveAdjust1 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
         yposition = yposition + 40
-        fullLine = 'RO Fev: ' + str(int(currentData['2valveD'][0])) + '% OPEN'
+        fullLine = 'RO Fev: ' + str(float(currentData['2valveD'][0])) + '% OPEN'
         self.valveAdjust2 = renderer.drawDataOutput(self, xposition, yposition, fullLine,250)
         data = currentData['RelayD']
         for x in range(0, len(data)):
-            self.changeRelayButton(data[x], relayButtons)
+            self.changeRelayButton(int(data[x]), relayButtons)
         data = currentData['1valveD']
         for x in range(0, len(data)):
-            self.changeValveButton(data[x], valveButtons)
+            self.changeValveButton(int(data[x]), valveButtons)
 
         """
         #MANUAL ON/OFF button not used
@@ -694,7 +690,7 @@ class SystemStatus(tk.Frame):
             color = 'light grey'
             textIn = 'RUN'
         return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn, fg='black',
-                        disabledforeground='grey25', command=lambda: self.changeRelayButton(index, active[index]))
+                        disabledforeground='black', command=lambda: self.changeRelayButton(index, active[index]))
 
     # logic to interact with serial valves should go here
     def makeValveButton(self, stateIn, position, index, valveButton):
@@ -706,7 +702,7 @@ class SystemStatus(tk.Frame):
             color = 'orangered'
             textIn = 'OFF'
         return tk.Button(self, text=textIn, font=NOTIFICATION_FONT, bg=color, state=stateIn,
-                         command=lambda: self.changeValveButton(index, position[index]), disabledforeground='grey25')
+                         command=lambda: self.changeValveButton(index, position[index]), disabledforeground='black')
 
     # when manual is on, these allow the buttons to be turned on or off
     def changeRelayButton(self, index, stateIn):
