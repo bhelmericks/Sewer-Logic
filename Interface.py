@@ -1000,11 +1000,11 @@ if __name__ == "__main__":
     #testListenerEvent = threading.Event()
     #testListener.start()
 
-    handler = DataHandler()
+    #handler = DataHandler()
     app = Interface()  # Create application
     app.mainloop()
     print 'Exiting...'
-    handler.exit()
+    #handler.exit()
     #testListenerEvent.set()
     #testListener.join()
     #app.destroy()
